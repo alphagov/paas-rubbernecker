@@ -63,6 +63,15 @@
                     overLimit: false
                 }); %>
             <% }); %>
+
+            <% reviewOutOfSlot.forEach(function(story) { %>
+                <%- include('story/summary', {
+                    story: story,
+                    status: "finished",
+                    message: "In Review",
+                    overLimit: true
+                }); %>
+            <% }); %>
         </div>
 
         <div class="<%= colclass %>">
@@ -73,12 +82,21 @@
                 </small>
             </h2>
 
-            <% finishedStory.forEach(function(story, key) { %>
+            <% finishedStory.slice(0, reviewSlotsLimit).forEach(function(story) { %>
                 <%- include('story/summary', {
                     story: story,
                     status: "finished",
                     message: "In Review",
-                    overLimit: reviewSlotsLimit < (key + 1)
+                    overLimit: false
+                }); %>
+            <% }); %>
+
+            <% approveOutOfSlot.forEach(function(story) { %>
+                <%- include('story/summary', {
+                    story: story,
+                    status: "delivered",
+                    message: "In Approving",
+                    overLimit: true
                 }); %>
             <% }); %>
         </div>
@@ -91,12 +109,12 @@
                 </small>
             </h2>
 
-            <% deliveredStory.forEach(function(story, key) { %>
+            <% deliveredStory.slice(0, approveSlotsLimit).forEach(function(story) { %>
                 <%- include('story/summary', {
                     story: story,
                     status: "delivered",
                     message: "In Approving",
-                    overLimit: approveSlotsLimit < (key + 1)
+                    overLimit: false
                 }); %>
             <% }); %>
         </div>

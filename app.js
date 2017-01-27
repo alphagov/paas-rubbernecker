@@ -75,7 +75,7 @@ app.set('pivotalProjectId', pivotalProjectId);
 var reviewSlotsLimit = process.env.REVIEW_SLOTS_LIMIT || 4;
 app.set('reviewSlotsLimit', reviewSlotsLimit);
 
-var signOffSlotsLimit = process.env.REVIEW_SLOTS_LIMIT || 5;
+var signOffSlotsLimit = process.env.APPROVE_SLOTS_LIMIT || 5;
 app.set('signOffSlotsLimit', signOffSlotsLimit);
 
 module.exports = app;
