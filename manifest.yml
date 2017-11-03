@@ -4,4 +4,4 @@ applications:
   command: npm start
   memory: 128M
   disk_quota: 128M
-  buildpack: nodejs_buildpack
+  buildpack: go_buildpack
