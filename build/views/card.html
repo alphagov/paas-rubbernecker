@@ -1,0 +1,29 @@
+{{define "card"}}
+<div id="{{.ID}}" class="card {{.Status}}">
+  <header class="card-header">
+    <a href="{{.URL}}" target="_blank">{{.Title}}</a>
+    <span>{{.Elapsed}} day{{if ne .Elapsed 1}}s{{end}}</span>
+  </header>
+
+  <main class="card-body">
+    {{if gt (len .Assignees) 0}}
+      <h4>Assignee{{if ne (len .Assignees) 1}}s{{end}}</h4>
+
+      <ul>
+        {{range .Assignees}}
+          <li>{{.Name}}</li>
+        {{end}}
+      </ul>
+    {{else}}
+      <h4 class="text-danger">Nobody is working on this</h4>
+      <p>Sad times.</p>
+    {{end}}
+  </main>
+
+  <footer class="container">
+    {{range .Stickers}}
+      {{template "sticker" .}}
+    {{end}}
+  </footer>
+</div>
+{{end}}

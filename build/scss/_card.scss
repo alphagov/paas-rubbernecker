@@ -1,0 +1,95 @@
+.card {
+  margin: 15px 0;
+
+  .card-header {
+    a {
+      &:hover,
+      &:link,
+      &:visited {
+        color: $black;
+      }
+    }
+  }
+
+  &.approving,
+  &.doing,
+  &.done,
+  &.rejected,
+  &.reviewing {
+    .card-header {
+      color: #fff;
+
+      a {
+        &:hover,
+        &:link,
+        &:visited {
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  &.doing {
+    border-color: $dark;
+    .card-header {
+      background-color: $dark;
+    }
+  }
+
+  &.reviewing {
+    border-color: $blue;
+    .card-header {
+      background-color: $blue;
+    }
+  }
+
+  &.approving {
+    border-color: $orange;
+    .card-header {
+      background-color: $orange;
+    }
+  }
+
+  &.rejected {
+    border-color: $red;
+    .card-header {
+      background-color: $red;
+    }
+  }
+
+  &.done {
+    border-color: $green;
+    .card-header {
+      background-color: $green;
+    }
+  }
+
+  .card-body ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline;
+
+      &:not(:last-of-type):after {
+        content: ", ";
+      }
+    }
+  }
+
+  .card-footer {
+    .image {
+      padding-left: 0;
+
+      img {
+        max-height: 48px;
+        max-width: 100%;
+      }
+    }
+
+    .description {
+      padding: 0;
+    }
+  }
+}
