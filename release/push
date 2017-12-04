@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -eu
+
+echo "Creating manifest"
+ruby -ryaml -e "
+  secrets = YAML.load_file('../secrets/${SECRETS_FILE}')
+  env = {
+    'PIVOTAL_PROJECT_ID' => secrets.fetch('pivotal_project_id'),
+    'PIVOTAL_API_KEY' => secrets.fetch('pivotal_api_key'),
+    'PAGERDUTY_API_TOKEN' => secrets.fetch('pagerduty_api_token'),
+  }
+  manifest = YAML.load_file('manifest.yml')
+  manifest['applications'].each { |app|
+    app['env'] = {} unless app['env']
+    app['env'].merge!(env)
+  }
+  File.write('manifest.yml', manifest.to_yaml)
+"
+
+echo "Deploy with zero downtime"
+cf blue-green-deploy rubbernecker
+
+echo "Delete left over app"
+cf delete -f rubbernecker-old
