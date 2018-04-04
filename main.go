@@ -20,10 +20,11 @@ import (
 )
 
 var (
-	etag    time.Time
-	cards   *rubbernecker.Cards
-	members *rubbernecker.Members
-	support *rubbernecker.SupportRota
+	etag      time.Time
+	cards     *rubbernecker.Cards
+	doneCards *rubbernecker.Cards
+	members   *rubbernecker.Members
+	support   *rubbernecker.SupportRota
 
 	verbose = kingpin.Flag("verbose", "Will enable the DEBUG logging level.").Default("false").Short('v').OverrideDefaultFromEnvar("DEBUG").Bool()
 	port    = kingpin.Flag("port", "Port the application should listen for the traffic on.").Default("8080").Short('p').OverrideDefaultFromEnvar("PORT").Int64()
@@ -46,6 +47,18 @@ func setupLogger() {
 	log.SetFormatter(formatter)
 }
 
+func combineCards(collections ...*rubbernecker.Cards) *rubbernecker.Cards {
+	var all = rubbernecker.Cards{}
+
+	for _, collection := range collections {
+		for _, card := range *collection {
+			all = append(all, card)
+		}
+	}
+
+	return &all
+}
+
 func fetchStories(pt *pivotal.Tracker) error {
 	if members == nil {
 		return fmt.Errorf("rubbernecker: could not find any members")
@@ -57,6 +70,16 @@ func fetchStories(pt *pivotal.Tracker) error {
 	}
 
 	c, err := pt.FlattenStories()
+	if err != nil {
+		return err
+	}
+
+	err = pt.FetchCards(rubbernecker.StatusDone)
+	if err != nil {
+		return err
+	}
+
+	d, err := pt.FlattenStories()
 	if err != nil {
 		return err
 	}
@@ -73,6 +96,11 @@ func fetchStories(pt *pivotal.Tracker) error {
 
 	if !reflect.DeepEqual(cards, c) {
 		cards = c
+		etag = time.Now()
+	}
+
+	if !reflect.DeepEqual(doneCards, d) {
+		doneCards = d
 		etag = time.Now()
 	}
 
@@ -149,7 +177,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 			ReviewalLimit: 4,
 			ApprovalLimit: 5,
 		}).
-		WithCards(cards, false).
+		WithCards(combineCards(cards, doneCards), false).
 		WithTeamMembers(members).
 		WithFreeTeamMembers().
 		WithSupport(support)

@@ -20,6 +20,7 @@ var _ = Describe("Main", func() {
 			pd  *pagerduty.Schedule
 
 			apiURL          = `https://www.pivotaltracker.com/services/v5/projects/123456/stories?fields=owner_ids,blockers,transitions,current_state,labels,name,url,created_at&filter=state:started,finished,delivered,rejected`
+			apiURLAccepted  = `https://www.pivotaltracker.com/services/v5/projects/123456/stories?fields=owner_ids,blockers,transitions,current_state,labels,name,url,created_at&filter=state:accepted`
 			apiURLMembers   = `https://www.pivotaltracker.com/services/v5/projects/123456/memberships`
 			apiURLSupport   = `https://api.pagerduty.com/oncalls`
 			response        = `[{"blockers": [{"name":1234}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[]}]`
@@ -89,6 +90,8 @@ var _ = Describe("Main", func() {
 
 		It("should fetchStories() successfully", func() {
 			httpmock.RegisterResponder("GET", apiURL,
+				httpmock.NewStringResponder(200, response))
+			httpmock.RegisterResponder("GET", apiURLAccepted,
 				httpmock.NewStringResponder(200, response))
 
 			err = fetchStories(pt)

@@ -5,8 +5,7 @@ DOCKER_COMPOSE = $(shell command -v docker-compose)
 
 GO     := $(if $(shell command -v go),go,docker run --rm -v $(RUBBERNECKER_DIR):$(RUBBERNECKER_DIR) -w $(RUBBERNECKER_DIR) golang:1.9 go)
 GOLINT := $(if $(shell command -v golint),golint,$(GO) get -u github.com/golang/lint/golint && golint)
-SASS   := $(if $(shell command -v sass),sass,docker run --rm -v $(RUBBERNECKER_DIR):$(RUBBERNECKER_DIR) -w $(RUBBERNECKER_DIR) ubuntudesign/sass sass)
-TSC    := $(if $(shell command -v tsc),tsc,docker run --rm -v $(RUBBERNECKER_DIR):$(RUBBERNECKER_DIR) -w $(RUBBERNECKER_DIR) sandrokeil/typescript tsc)
+NPM    := $(if $(shell command -v npm),npm,docker run --rm -v $(RUBBERNECKER_DIR):$(RUBBERNECKER_DIR) -w $(RUBBERNECKER_DIR) node:carbon-alpine npm)
 
 build: scripts styles compile
 
@@ -16,16 +15,20 @@ check_evn:
 compile: check_evn
 	$(GO) build -o bin/rubbernecker
 
+dependencies:
+	$(NPM) install
+
 lint: check_evn
 	$(GO) fmt ./...
 	$(GO) vet ./...
 	$(GOLINT) . pkg/...
+	$(NPM) run tslint
 
 scripts: check_evn
-	$(TSC) build/ts/app.ts --outFile dist/app.js --removeComments
+	$(NPM) run tsc
 
 styles: check_evn
-	$(SASS) build/scss/app.scss > dist/app.css --style compressed --no-cache
+	$(NPM) run sass
 
 test:
 ifndef TRAVIS

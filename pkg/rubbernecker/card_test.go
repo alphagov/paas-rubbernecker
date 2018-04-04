@@ -8,14 +8,6 @@ import (
 )
 
 var _ = Describe("Response", func() {
-	var (
-		resp rubbernecker.Response
-	)
-
-	BeforeEach(func() {
-		resp = rubbernecker.Response{}
-	})
-
 	It("should convert status to String() correctly", func() {
 		Expect(rubbernecker.StatusAll.String()).To(Equal("unknown"))
 		Expect(rubbernecker.StatusScheduled.String()).To(Equal("next"))

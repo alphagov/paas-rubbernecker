@@ -1,0 +1,32 @@
+{
+  "name": "paas-rubbernecker",
+  "version": "2.0.0",
+  "description": "A little kanban helper for the GOV.UK PaaS team.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jquery": "3.3.1",
+    "node-sass": "4.8.3",
+    "tslint": "5.9.1",
+    "tslint-consistent-codestyle": "1.13.0",
+    "tslint-immutable": "4.5.3",
+    "tslint-microsoft-contrib": "5.0.3",
+    "typescript": "2.8.1"
+  },
+  "scripts": {
+    "sass": "node-sass --output-style compressed --no-cache build/scss/app.scss dist/app.css",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc --outFile dist/app.js --removeComments",
+    "tslint": "tslint build/ts/**/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alphagov/paas-rubbernecker.git"
+  },
+  "author": "Government Digital Service",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alphagov/paas-rubbernecker/issues"
+  },
+  "homepage": "https://github.com/alphagov/paas-rubbernecker#readme"
+}

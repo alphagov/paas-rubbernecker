@@ -1,70 +1,9 @@
-type Members = { [id: string]: Member }
+import $ from 'jquery';
+import State from './state';
+import { ICard, IMembers } from './types';
 
-interface Member {
-  id: number
-  email: string
-  name: string
-}
-
-interface Card {
-  id: number
-  assignees: Members
-  in_play: number
-  status: string
-  stickers: any
-  title: string
-  url: string
-}
-
-interface Support {
-  type: string
-  member: string
-}
-
-interface Response {
-  cards: Card[]
-  support: { [type: string]: Support }
-  free_team_members: Members
-}
-
-declare var $: any;
-
-class State {
-  content: Response;
-
-  static updated: string = "rubbernecker:state:updated";
-
-  constructor() {
-    this.content = new Response();
-  }
-
-  fetchState() {
-    let request = new Request("/state", {
-      method: "GET",
-      headers: new Headers({
-        "Accept": "application/json",
-      })
-    });
-
-    fetch(request)
-      .then(response => {
-        if (response.status != 200) {
-          console.error("Rubbernecker responded with non 200 http status.");
-        }
-
-        return response.json();
-      })
-      .then(data => {
-        this.content = data;
-
-        // Trigger updated event.
-        $(document).trigger(State.updated);
-      });
-  }
-}
-
-class Application {
-  static updated: string = "rubbernecker:application:updated";
+export class Application {
+  public static updated: string = 'rubbernecker:application:updated';
 
   private state: State;
 
@@ -72,60 +11,60 @@ class Application {
     this.state = new State();
   }
 
-  private dealCard(card: Card) {
-    let tmpl: HTMLElement | null = document.getElementById("card-template");
-    let parsed = document.createElement("div");
+  public dealCard(card: ICard) {
+    const tmpl: HTMLElement | null = document.getElementById('card-template');
+    const parsed = document.createElement('div');
 
     if (tmpl === null) {
-      console.error("No card-template provided!");
-      return
+      console.error('No card-template provided!');
+      return;
     }
 
-    parsed.innerHTML = tmpl.innerHTML;
+    parsed.innerHTML = tmpl.innerHTML; // tslint:disable-line:no-inner-html
 
-    let $card = $(parsed).find("> div");
+    const $card = $(parsed).find('> div');
 
-    $card.attr("style", "display: none;");
+    $card.attr('style', 'display: none;');
 
     this.updateCardData($card, card);
 
-    $("#" + card.status)
+    $(`#${card.status}`)
       .append(parsed.innerHTML);
 
     this
-      .gracefulIn($("#" + card.status + " #" + card.id))
+      .gracefulIn($(`#${card.status} #${card.id}`));
   }
 
-  gracefulIn($elements: any) {
+  public gracefulIn($elements: any) {
     $elements.each(() => {
-      let $element = $(this);
+      const $element = $(this);
 
-      if (!$element.is(":hidden")) {
+      if (!$element.is(':hidden')) {
         return;
       }
 
-      $element.css("opacity", 0);
+      $element.css('opacity', 0);
       $element.slideDown();
 
       setTimeout(() => {
         $element.animate({
-          opacity: 1
+          opacity: 1,
         });
       }, 750);
     });
   }
 
-  gracefulOut($elements: any) {
+  public gracefulOut($elements: any) {
     $elements.each(() => {
-      let $element = $(this);
+      const $element = $(this);
 
-      if ($element.is(":hidden")) {
+      if ($element.is(':hidden')) {
         return;
       }
 
-      $element.css("opacity", 1);
+      $element.css('opacity', 1);
       $element.animate({
-        opacity: 0
+        opacity: 0,
       });
 
       setTimeout(() => {
@@ -134,31 +73,39 @@ class Application {
     });
   }
 
-  listAssignees(card: Card) {
-    let assignees: string[] = [];
+  public listAssignees(card: ICard) {
+    const assignees: string[] = [];
 
-    $.each(Object.keys(card.assignees), (i: number, id: number) => {
-      assignees.push(`<li>` + card.assignees[id].name + `</li>`);
+    $.each(Object.keys(card.assignees), (_: number, id: string) => {
+      assignees.push(`<li>${card.assignees[id].name}</li>`);
     });
 
-    return assignees.join("");
+    return assignees.join('');
+  }
+
+  public run() {
+    console.info('Running rubbernecker application.');
+
+    setInterval(() => {
+      this.state.fetchState();
+    }, 15000);
+
+    $(document)
+      .on(State.updated, () => { this.parseContent(); });
   }
 
   private parseContent() {
-    if (typeof this.state.content.cards === "undefined") {
-      console.error("No cards found in state...");
-      return
+    if (typeof this.state.content.cards === 'undefined') {
+      console.error('No cards found in state...');
+      return;
     }
 
-    let cards = this.state.content.cards;
+    const cards = this.state.content.cards;
 
-    for (let i in cards) {
-      let card = cards[i];
+    for (const card of cards) {
+      const $card = $(`#${card.id}`);
 
-      let $card = $("#" + card.id);
-
-
-      if (typeof $card !== "undefined") {
+      if ($card) {
         this.updateCard($card, card);
       } else {
         this.dealCard(card);
@@ -167,71 +114,60 @@ class Application {
 
     this.updateFreeMembers(this.state.content.free_team_members);
 
-    $.each(Object.keys(this.state.content.support), (i: number, type: string) =>
-      $("body > header ." + type).text(this.state.content.support[type].member)
+    $.each(Object.keys(this.state.content.support), (_: number, schedule: string) =>
+      $(`body > header .${schedule}`).text(this.state.content.support[schedule].member),
     );
 
     $(document).trigger(Application.updated);
   }
 
-  run() {
-    console.info("Running rubbernecker application.");
-
-    setInterval(() => {
-      this.state.fetchState();
-    }, 15000);
-
-    $(document)
-      .on(State.updated, () => { this.parseContent() });
-  }
-
-  private setAssignees($card: any, card: Card) {
+  private setAssignees($card: any, card: ICard) {
     let html;
 
     if (Object.keys(card.assignees).length > 0) {
-      html = `<h4>Assignee` + (Object.keys(card.assignees).length > 1 ? `s` : ``) + `</h4>
-        <ul>` + this.listAssignees(card) + `</ul>`;
+      html = `<h4>Assignee${Object.keys(card.assignees).length > 1 ? `s` : ``}</h4>
+        <ul>${this.listAssignees(card)}</ul>`;
     } else {
-      html = `<h4 class="text-danger">Nobody is working on this</h4>
+      html = `<h4 class='text-danger'>Nobody is working on this</h4>
         <p>Sad times.</p>`;
     }
 
     $card
-      .find("> main")
-      .html(html);
+      .find('> main')
+      .html(html); // tslint:disable-line:no-inner-html
 
     return this;
   }
 
-  private setHeader($card: any, card: Card) {
+  private setHeader($card: any, card: ICard) {
     $card
-      .find("> header > a")
-      .attr("href", card.url)
+      .find('> header > a')
+      .attr('href', card.url)
       .text(card.title);
 
     $card
-      .find("> header > span")
-      .text(card.in_play + " day" + (card.in_play !== 1 ? "s" : ""));
+      .find('> header > span')
+      .text(`${card.in_play} day${card.in_play !== 1 ? 's' : ''}`);
 
     return this;
   }
 
-  private setStickers($card: any, card: Card) {
-
-
+  private setStickers($card: any, card: ICard) {
+    // TODO: implement setSticker
+    console.log($card, card);
     return this;
   }
 
-  private setupCard($card: any, card: Card) {
+  private setupCard($card: any, card: ICard) {
     $card
-      .attr("class", "card " + card.status)
-      .attr("id", card.id);
+      .attr('class', `card ${card.status}`)
+      .attr('id', card.id);
 
     return this;
   }
 
-  private updateCard($card: any, card: Card) {
-    let correctState = $card.parents("#" + card.status).length > 0;
+  private updateCard($card: any, card: ICard) {
+    const correctState = $card.parents(`#${card.status}`).length > 0;
 
     if (!correctState) {
       setTimeout(() => {
@@ -245,24 +181,24 @@ class Application {
     }
   }
 
-  private updateCardData($card: any, card: Card) {
+  private updateCardData($card: any, card: ICard) {
     this.setupCard($card, card)
       .setHeader($card, card)
       .setAssignees($card, card)
       .setStickers($card, card);
   }
 
-  private updateFreeMembers(freeMembers: Members) {
-    let $freeMembers = $("body > footer");
+  private updateFreeMembers(freeMembers: IMembers) {
+    const $freeMembers = $('body > footer');
 
     $freeMembers
-      .find("span")
+      .find('span')
       .text(Object.keys(freeMembers).length);
 
-    $freeMembers.find("ul").empty();
+    $freeMembers.find('ul').empty();
 
-    $.each(Object.keys(freeMembers), (i: number, id: string) =>
-      $freeMembers.find("ul").append("<li>" + freeMembers[id].name + "</li>")
+    $.each(Object.keys(freeMembers), (_: number, id: string) =>
+      $freeMembers.find('ul').append(`<li>${freeMembers[id].name}</li>`),
     );
   }
 }
