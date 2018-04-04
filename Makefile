@@ -5,13 +5,14 @@ DOCKER         = $(shell command -v docker)
 GO     := $(if $(shell command -v go),go,docker run --rm -v $(RUBBERNECKER_DIR):$(RUBBERNECKER_DIR) -w $(RUBBERNECKER_DIR) golang:1.9 go)
 GOLINT := $(if $(shell command -v golint),golint,$(GO) get -u github.com/golang/lint/golint && golint)
 NPM    := $(if $(shell command -v npm),npm,docker run --rm -v $(RUBBERNECKER_DIR):$(RUBBERNECKER_DIR) -w $(RUBBERNECKER_DIR) node:carbon-alpine npm)
+DEP    := $(if $(shell command -v dep),dep,docker run --rm -v $(RUBBERNECKER_DIR):$(RUBBERNECKER_DIR) -w $(RUBBERNECKER_DIR) golang:1.9 dep)
 
 build: scripts styles compile
 
 check_evn:
 	$(if $(DOCKER),,$(error "docker not found in PATH"))
 
-compile: check_evn
+compile:
 	$(GO) build -o bin/rubbernecker
 
 dependencies:
