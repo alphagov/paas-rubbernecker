@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+
+cf_system_dns_root = ENV['CF_API'].sub('https://api.', '')
+
+manifest = YAML.load($stdin.read)
+manifest['applications'].each { |app|
+  app['env']['PIVOTAL_TRACKER_PROJECT_ID'] = ENV['PIVOTAL_TRACKER_PROJECT_ID']
+  app['env']['PIVOTAL_TRACKER_API_TOKEN'] = ENV['PIVOTAL_TRACKER_API_TOKEN']
+  app['env']['PAGERDUTY_AUTHTOKEN'] = ENV['PAGERDUTY_AUTHTOKEN']
+}
+puts manifest.to_yaml

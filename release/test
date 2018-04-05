@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -eu
+
+ROOT_DIR=$(cd "$(dirname "$0")/.." && pwd)
+PROJECT_DIR="/go/src/github.com/alphagov/paas-rubbernecker"
+
+# Setup the environment
+mkdir -p /go/src/github.com/alphagov
+ln -s "${ROOT_DIR}" "${PROJECT_DIR}"
+cd "${PROJECT_DIR}"
+
+# Install the dependencies
+dep ensure -vendor-only
+npm install
+
+# Run the tests
+go test -v ./...
