@@ -1,25 +1,32 @@
 {
-  "name": "rubbernecker",
-  "version": "0.1.0",
-  "private": true,
+  "name": "paas-rubbernecker",
+  "version": "2.0.0",
+  "description": "A little kanban helper for the GOV.UK PaaS team.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "node-sass": "4.8.3",
+    "tslint": "5.9.1",
+    "tslint-consistent-codestyle": "1.13.0",
+    "tslint-immutable": "4.5.3",
+    "tslint-microsoft-contrib": "5.0.3",
+    "typescript": "2.8.1"
+  },
   "scripts": {
-    "start": "node ./bin/www"
+    "sass": "node-sass --output-style compressed --no-cache build/scss/app.scss dist/app.css",
+    "sass:watch": "node-sass --output-style compressed --no-cache build/scss/app.scss dist/app.css -w",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc --outFile dist/app.js --removeComments",
+    "tslint": "tslint build/ts/**/*.ts"
   },
-  "dependencies": {
-    "body-parser": "~1.15.1",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.2.0",
-    "ejs": "~2.4.1",
-    "express": "~4.14.0",
-    "morgan": "~1.7.0",
-    "serve-favicon": "~2.3.0",
-    "cfenv": "1.0.3",
-    "request": "2.76.0",
-    "async": "2.1.2",
-    "find-business-days-in-range":"1.0.2"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alphagov/paas-rubbernecker.git"
   },
-  "engines": {
-      "node": ">=v6.7.0",
-      "npm": ">=3.10.3"
-    }
+  "author": "Government Digital Service",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alphagov/paas-rubbernecker/issues"
+  },
+  "homepage": "https://github.com/alphagov/paas-rubbernecker#readme"
 }

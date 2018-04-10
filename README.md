@@ -1,52 +1,67 @@
-# rubbernecker
-![Rubbernecker](https://github.com/Rory80Hz/rubbernecker/blob/master/public/images/android-icon-192x192.png?raw=true)
-Pivotal is useful. But it has a weird and complex layout so it is hard to use for day to day stuff. Rubbernecker simplifies it in a Kanban-esque fashion.
+# Rubbernecker
 
-It organises things by status, displays simple information about each story, who is working on it, and how long it has been in that state.
+An application that converts various tools the GOV.UK PaaS team is using into a
+friendly kanban wall used for standup and quick reference of what's going on.
 
-##Installation
+## Dependencies
 
-Clone this repo
+There are various dependencies for Node as well as Golang that would need to be
+installed before compilation of the code.
 
-```
-npm install
-```
+The make file has a target for them all:
 
-## Running
-After completing above installation instructions, to run locally without Basic Authentication:
-
-```
-DEBUG=rubbernecker:* PIVOTAL_API_KEY=your-api-key PIVOTAL_PROJECT_ID=your-project-id PAGERDUTY_API_TOKEN=your-pagerduty-token npm start
+```sh
+make dependencies
 ```
 
-If you want to try out the stunning Basic Auth (useful for when you don't want everyone getting straight to your story overviews)
-```
-DEBUG=rubbernecker:* PIVOTAL_API_KEY=your-api-key PIVOTAL_PROJECT_ID=your-project-id PAGERDUTY_API_TOKEN=your-pagerduty-token USE_AUTH=true USERNAME=username PASSWORD=password npm start
-```
+## Building
 
-#### PagerDuty Support
+The repo comes in with a make file which makes it easier to build the project
+from various Golang, TypeScript and SASS source code.
 
-Rubbernecker **optionally** supports PagerDuty, for pulling out the current rota information. This requires a `PAGERDUTY_API_TOKEN` environment variable, to be passed before the app is run.
+The following command should build them all:
 
-### Deploying
-I've been deploying this to cloud foundry so I use the following manifest file:
-
-```
----
-applications:
-- name: rubbernecker
-  command: npm start
-  memory: 128M
-  disk_quota: 128M
-  buildpack: nodejs_buildpack
-  env:
-    PIVOTAL_API_KEY: API KEY GOES HERE
-    PIVOTAL_PROJECT_ID: PROJECT ID GOES HERE
-    PAGERDUTY_API_TOKEN: PAGERDUTY TOKEN GOES HERE
-    USE_AUTH: true
-    USERNAME: sensible username goes here
-    PASSWORD: sensible long password goes here
+```sh
+make build
 ```
 
-### Some Opinions inflicted on you
-We work in 2 week iterations so when figuring out days in a particular state we get back only the last two week of story transitions. If we don't find a thing. Feel free to raise an issue to make this configurable. It might add horrible extra work though to deal with pagination if you are working in longer iterations. If you are though; Ask yourself some questions.
+## Testing
+
+The tests can be fired with the use of make target which will run ginkgo suite
+of tests:
+
+```sh
+make test
+```
+
+## Running
+
+After the application has been compiled, you should be able to execute the
+following:
+
+```sh
+./bin/rubbernecker
+```
+
+### Requirements
+
+Following environment variables are required to be provided for the application
+to work properly:
+
+```sh
+PIVOTAL_TRACKER_PROJECT_ID
+PIVOTAL_TRACKER_API_TOKEN
+PAGERDUTY_AUTHTOKEN
+```
+
+These can be provided in a form of flags. See the help section for more
+details.
+
+### Help
+
+You can find some exciting functionality if you run:
+
+```sh
+./bin/rubbernecker --help
+```
+

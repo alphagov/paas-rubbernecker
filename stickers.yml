@@ -1,0 +1,20 @@
+---
+- name: blocked
+  image: /img/blocked.svg
+  title: Story Blocked
+  content: "Blocked!<br/>See story comments for more details"
+
+- name: comments-to-resolve
+  image: /img/comments.svg
+  title: Story has Comments to Resolve
+  content: "Has comments to resolve<br/>See story or pull request for more details."
+
+- name: small
+  image: /img/small.png
+  title: It's a small task
+  content: "Presumably, it's a small task.<br/>Something for support or not requiring a pair."
+
+- name: overlimit
+  image: /img/sad_panda.gif
+  title: Sad Panda
+  content: "I am a sad panda.<br/>I will never find any slots for progress."

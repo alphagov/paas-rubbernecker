@@ -1,0 +1,110 @@
+$spacing: 16px;
+
+@mixin triangleBottomRight($size, $color) {
+  &:after {
+    border-color: transparent transparent $color transparent;
+    border-style: solid;
+    border-width: 0 0 $size $size;
+    bottom: 0;
+    content: "";
+    height: 0;
+    position: absolute;
+    right: 0;
+    width: 0;
+  }
+}
+
+.card {
+  border-radius: 0;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+
+  &:after {
+    transition: all .3s ease;
+  }
+
+  &.doing {
+    @include triangleBottomRight(16px, $blue);
+  }
+
+  &.reviewing {
+    @include triangleBottomRight(16px, $orange);
+  }
+
+  &.approving {
+    @include triangleBottomRight(16px, $green);
+  }
+
+  &.rejected {
+    @include triangleBottomRight(16px, $red);
+  }
+
+  &.done {
+    @include triangleBottomRight(16px, $dark);
+  }
+
+  h3 {
+    color: $blue;
+    font-size: 20px;
+    margin: $spacing;
+
+    a {
+      color: #000;
+    }
+  }
+
+  ul {
+    display: block;
+    list-style: none;
+    margin: 0 $spacing;
+    padding: 0;
+
+    li {
+      display: inline-block;
+      margin-right: 6px;
+
+      &:after {
+        content: ",";
+      }
+
+      &:last-of-type {
+        &:after {
+          content: "";
+        }
+      }
+    }
+  }
+
+  footer {
+    display: flex;
+    align-items: flex-start;
+    padding: $spacing;
+    width: 100%;
+
+    div.elapsed {
+      display: inline-block;
+      height: 32px;
+      padding: 3px;
+      text-align: left;
+      width: 25%;
+    }
+
+    div.stickers {
+      display: flex;
+      flex-direction: row-reverse;
+      width: 75%;
+
+      > div {
+        display: inline-block;
+        height: 32px;
+        padding: 3px;
+        text-align: center;
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+  }
+}

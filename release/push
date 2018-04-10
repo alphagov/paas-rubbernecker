@@ -2,24 +2,26 @@
 
 set -eu
 
-echo "Creating manifest"
-ruby -ryaml -e "
-  secrets = YAML.load_file('../secrets/${SECRETS_FILE}')
-  env = {
-    'PIVOTAL_PROJECT_ID' => secrets.fetch('pivotal_project_id'),
-    'PIVOTAL_API_KEY' => secrets.fetch('pivotal_api_key'),
-    'PAGERDUTY_API_TOKEN' => secrets.fetch('pagerduty_api_token'),
-  }
-  manifest = YAML.load_file('manifest.yml')
-  manifest['applications'].each { |app|
-    app['env'] = {} unless app['env']
-    app['env'].merge!(env)
-  }
-  File.write('manifest.yml', manifest.to_yaml)
-"
+PROJECT_DIR=$(cd "$(dirname "$0")/../" && pwd)
+CURRENT_DIR=$(pwd)
 
-echo "Deploy with zero downtime"
-cf blue-green-deploy rubbernecker
+export CF_APP_NAME=rubbernecker
+export CF_API
+export CF_APPS_DOMAIN
 
-echo "Delete left over app"
-cf delete -f rubbernecker-old
+export PIVOTAL_TRACKER_PROJECT_ID=`cat "../secrets/${SECRETS_FILE}" | awk '/pivotal_tracker_project_id/ { print $2 }'`
+export PIVOTAL_TRACKER_API_TOKEN=`cat "../secrets/${SECRETS_FILE}" | awk '/pivotal_tracker_api_token/ { print $2 }'`
+export PAGERDUTY_AUTHTOKEN=`cat "../secrets/${SECRETS_FILE}" | awk '/pagerduty_authtoken/ { print $2 }'`
+
+cd ${PROJECT_DIR}
+
+echo "Creating ${CF_APP_NAME} manifest"
+release/generate-manifest \
+    < manifest.yml \
+    > modified_manifest.yml
+
+echo "Deploying ${CF_APP_NAME} with zero downtime"
+cf zero-downtime-push ${CF_APP_NAME} \
+    -f modified_manifest.yml
+
+cd ${CURRENT_DIR}
