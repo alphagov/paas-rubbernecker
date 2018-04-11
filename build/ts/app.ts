@@ -1,9 +1,73 @@
-import State from './state';
-import { ICard, IMembers } from './types';
+interface ICard {
+  readonly id: number;
+  readonly assignees: IMembers;
+  readonly in_play: number;
+  readonly status: string;
+  readonly stickers: any;
+  readonly title: string;
+  readonly url: string;
+}
+
+interface IMembers {
+  readonly [id: string]: IMember;
+}
+
+interface IMember {
+  readonly id: number;
+  readonly email: string;
+  readonly name: string;
+}
+
+interface ISupport {
+  readonly type: string; //tslint:disable-line:no-reserved-keywords
+  readonly member: string;
+}
+
+interface IResponse {
+  readonly cards: ReadonlyArray<ICard>;
+  readonly support: {
+    readonly [type: string]: ISupport; // tslint:disable-line:no-reserved-keywords
+  };
+  readonly free_team_members: IMembers;
+}
 
 declare var $: any;
 
-export class Application {
+class State {
+  public static updated: string = 'rubbernecker:state:updated';
+
+  public content: any;
+
+  constructor() {
+    this.content = {
+      cards: [],
+      support: {},
+      free_team_members: {},
+    };
+  }
+
+  public async fetchState() {
+    const request = new Request('/state', {
+      method: 'GET',
+      headers: new Headers({
+        Accept: 'application/json',
+      }),
+    });
+
+    const response = await fetch(request);
+
+    if (response.status !== 200) {
+      console.error('Rubbernecker responded with non 200 http status.');
+    }
+
+    this.content = await response.json();
+
+    // Trigger updated event.
+    $(document).trigger(State.updated);
+  }
+}
+
+class Application {
   public static updated: string = 'rubbernecker:application:updated';
 
   private state: State;
@@ -37,40 +101,36 @@ export class Application {
       .gracefulIn($(`#${card.status} #${card.id}`));
   }
 
-  public gracefulIn($elements: any) {
-    $elements.each(() => {
-      const $element = $(this);
-
-      if (!$element.is(':hidden')) {
+  public gracefulIn($elements: ReadonlyArray<HTMLElement>) {
+    $.each($elements, (_: number, element: HTMLElement) => {
+      if (!$(element).is(':hidden')) {
         return;
       }
 
-      $element.css('opacity', 0);
-      $element.slideDown();
+      $(element).css('opacity', 0);
+      $(element).slideDown();
 
       setTimeout(() => {
-        $element.animate({
+        $(element).animate({
           opacity: 1,
         });
       }, 750);
     });
   }
 
-  public gracefulOut($elements: any) {
-    $elements.each(() => {
-      const $element = $(this);
-
-      if ($element.is(':hidden')) {
+  public gracefulOut($elements: ReadonlyArray<HTMLElement>) {
+    $.each($elements, (_: number, element: HTMLElement) => {
+      if ($(element).is(':hidden')) {
         return;
       }
 
-      $element.css('opacity', 1);
-      $element.animate({
+      $(element).css('opacity', 1);
+      $(element).animate({
         opacity: 0,
       });
 
       setTimeout(() => {
-        $element.slideUp();
+        $(element).slideUp();
       }, 750);
     });
   }
@@ -78,16 +138,16 @@ export class Application {
   public run() {
     console.info('Running rubbernecker application.');
 
-    setInterval(() => {
-      this.state.fetchState();
+    setInterval(async () => {
+      await this.state.fetchState();
     }, 15000);
 
     $(document)
       .on(State.updated, () => { this.parseContent(); });
   }
 
-  private parseContent() {
-    if (typeof this.state.content.cards === 'undefined') {
+  private async parseContent() {
+    if (!this.state.content.cards) {
       console.error('No cards found in state...');
       return;
     }
@@ -104,6 +164,9 @@ export class Application {
       }
     }
 
+    setInterval(() => {
+      this.updateCounters();
+    }, 150);
     this.updateFreeMembers(this.state.content.free_team_members);
 
     $.each(Object.keys(this.state.content.support), (_: number, schedule: string) =>
@@ -188,6 +251,24 @@ export class Application {
       .setHeader($card, card)
       .setAssignees($card, card)
       .setStickers($card, card);
+  }
+
+  private async updateCounters() {
+    const $sections = $('[data-cards]');
+
+    $.each($sections, (_: number, section: HTMLElement) => {
+      const count = $(section).find('div.card').length;
+      const limit = $(section).find('h2 > small').attr('data-limit') || 0;
+
+      $(section).find('h2 > small').removeClass('text-danger');
+
+      $(section).find('h2 > small').attr('data-cards', count);
+      $(section).find('h2 > small > span').text(count);
+
+      if (limit !== 0 && count > limit) {
+        $(section).find('h2 > small').addClass('text-danger');
+      }
+    });
   }
 
   private updateFreeMembers(freeMembers: IMembers) {

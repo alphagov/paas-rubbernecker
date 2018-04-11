@@ -1,7 +1,6 @@
 section {
   h2 {
     font-weight: 400;
-    // font-size: 24px;
     margin: 32px 0 16px 0;
     padding: 16px;
     text-align: center;
@@ -38,6 +37,10 @@ section {
     h2 {
       border-bottom: 3px solid $red;
       border-top: 3px solid $red;
+    }
+
+    &[data-cards="0"] {
+      display: none;
     }
   }
 
