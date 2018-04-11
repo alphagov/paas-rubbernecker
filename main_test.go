@@ -9,6 +9,7 @@ import (
 
 	"github.com/alphagov/paas-rubbernecker/pkg/pagerduty"
 	"github.com/alphagov/paas-rubbernecker/pkg/pivotal"
+	"github.com/alphagov/paas-rubbernecker/pkg/rubbernecker"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	httpmock "gopkg.in/jarcoal/httpmock.v1"
@@ -30,7 +31,6 @@ var _ = Describe("Main", func() {
 			apiURLSupport   = `https://api.pagerduty.com/oncalls`
 			response        = `[{"blockers": [{"name":1234}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[]}]`
 			responseMembers = `[{"person":{"id":1234,"name":"Tester"}}]`
-			responseSupport = `{"oncalls":[{"user":{"summary":"tester"},"schedule":{"summary":"test"}},{"user":{"summary":"tester"}}]}`
 		)
 		fmt.Println(fmt.Sprintf(`https://www.pivotaltracker.com/services/v5/projects/123456/stories?fields=owner_ids,blockers,transitions,current_state,labels,name,url,created_at&accepted_after=%d`, past))
 
@@ -114,13 +114,57 @@ var _ = Describe("Main", func() {
 			Expect(err).To(HaveOccurred())
 		})
 
-		It("should fetchSupport() successfully", func() {
-			httpmock.RegisterResponder("GET", apiURLSupport,
-				httpmock.NewStringResponder(200, responseSupport))
+		It("should fetch all on-call schedules", func() {
+			resp := `{"oncalls":[
+				{"user":{"summary":"X"},"schedule":{"summary":"PaaS team rota - out of hours"}},
+				{"user":{"summary":"Y"},"schedule":{"summary":"PaaS team rota - in hours"}},
+				{"user":{"summary":"Z"},"schedule":{"summary":"PaaS team Escalations - out of hours"}}
+			]}`
+			httpmock.RegisterResponder("GET", apiURLSupport, httpmock.NewStringResponder(200, resp))
 
 			err = fetchSupport(pd)
-
 			Expect(err).NotTo(HaveOccurred())
+
+			Expect((*support)).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
+				"out-of-hours": {
+					Type:   "PaaS team rota - out of hours",
+					Member: "X",
+				},
+				"in-hours": {
+					Type:   "PaaS team rota - in hours",
+					Member: "Y",
+				},
+				"escalations": {
+					Type:   "PaaS team Escalations - out of hours",
+					Member: "Z",
+				},
+			})))
+		})
+
+		It("should handle when there isn't anyone on call for a certain schedule", func() {
+			resp := `{"oncalls":[
+				{"user":{"summary":"X"},"schedule":{"summary":"PaaS team rota - out of hours"}},
+				{"user":{"summary":"Z"},"schedule":{"summary":"PaaS team Escalations - out of hours"}}
+			]}`
+			httpmock.RegisterResponder("GET", apiURLSupport, httpmock.NewStringResponder(200, resp))
+
+			err = fetchSupport(pd)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect((*support)).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
+				"out-of-hours": {
+					Type:   "PaaS team rota - out of hours",
+					Member: "X",
+				},
+				"in-hours": {
+					Type:   "PaaS team rota - in hours",
+					Member: "-",
+				},
+				"escalations": {
+					Type:   "PaaS team Escalations - out of hours",
+					Member: "Z",
+				},
+			})))
 		})
 
 		It("should deal healthcheckHandler() correctly", func() {

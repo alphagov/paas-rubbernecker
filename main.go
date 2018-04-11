@@ -153,9 +153,9 @@ func fetchUsers(pt *pivotal.Tracker) error {
 
 func formatSupportNames(s rubbernecker.SupportRota) rubbernecker.SupportRota {
 	return rubbernecker.SupportRota{
-		"in-hours":     s["PaaS team rota - in hours"],
-		"out-of-hours": s["PaaS team rota - out of hours"],
-		"escalations":  s["PaaS team Escalations - out of hours"],
+		"in-hours":     s.Get("PaaS team rota - in hours"),
+		"out-of-hours": s.Get("PaaS team rota - out of hours"),
+		"escalations":  s.Get("PaaS team Escalations - out of hours"),
 	}
 }
 
@@ -236,7 +236,7 @@ func main() {
 		log.Debug("Team Members have been fetched.")
 	})
 
-	scheduler.Every(6).Hours().Run(func() {
+	scheduler.Every(5).Minutes().Run(func() {
 		err := fetchSupport(pd)
 		if err != nil {
 			log.Error(err)

@@ -83,7 +83,7 @@ func (t *Tracker) FlattenStories() (rubbernecker.Cards, error) {
 			}
 		}
 
-		if len(s.Blockers) > 0 && stickers.Get("blocked") == nil {
+		if hasUnresolvedBlockers(s.Blockers) && stickers.Get("blocked") == nil {
 			if sticker := t.stickers.Get("blocked"); sticker != nil {
 				stickers = append(stickers, sticker)
 			}

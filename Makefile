@@ -1,6 +1,6 @@
 RUBBERNECKER_DIR=$(shell pwd)
 
-DOCKER         = $(shell command -v docker)
+DOCKER = $(shell command -v docker)
 
 GO     := $(if $(shell command -v go),go,docker run --rm -v $(RUBBERNECKER_DIR):$(RUBBERNECKER_DIR) -w $(RUBBERNECKER_DIR) golang:1.9 go)
 GOLINT := $(if $(shell command -v golint),golint,$(GO) get -u github.com/golang/lint/golint && golint)
