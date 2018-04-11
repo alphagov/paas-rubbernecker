@@ -127,3 +127,13 @@ func convertState(state string) string {
 		return "unknown"
 	}
 }
+
+func hasUnresolvedBlockers(blockers []blocker) bool {
+	for _, blocker := range blockers {
+		if !blocker.Resolved {
+			return true
+		}
+	}
+
+	return false
+}
