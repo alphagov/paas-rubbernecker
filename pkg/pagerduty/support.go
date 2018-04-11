@@ -26,8 +26,8 @@ func New(token string) *Schedule {
 // storing it in the Schedule for future use.
 func (p *Schedule) FetchSupport() error {
 	opts := pd.ListOnCallOptions{
-		Since: time.Now().Add(-24 * time.Hour).String(),
-		Until: time.Now().String(),
+		Since: time.Now().String(),
+		Until: time.Now().Add(24 * time.Hour).String(),
 	}
 
 	res, err := p.Client.ListOnCalls(opts)
