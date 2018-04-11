@@ -9,6 +9,17 @@ type Support struct {
 // SupportRota will contain a unique list prefixed with a type of support.
 type SupportRota map[string]*Support
 
+// Get returns with the given key or an empty value
+func (s SupportRota) Get(key string) *Support {
+	if support, ok := s[key]; ok {
+		return support
+	}
+	return &Support{
+		Type:   key,
+		Member: "-",
+	}
+}
+
 // SupportService interface will establish a standard for any extension handling
 // support data.
 type SupportService interface {
