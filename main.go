@@ -236,7 +236,7 @@ func main() {
 		log.Debug("Team Members have been fetched.")
 	})
 
-	scheduler.Every(6).Hours().Run(func() {
+	scheduler.Every(5).Minutes().Run(func() {
 		err := fetchSupport(pd)
 		if err != nil {
 			log.Error(err)
