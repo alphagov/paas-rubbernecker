@@ -34,16 +34,21 @@
       {{end}}
     </section>
 
-    <section id="doing" class="col">
-      <h2>Doing</h2>
+    <section id="doing" class="col" data-cards="{{(len $doing)}}">
+      <h2>Doing <small><span>{{len $doing}}</span></small></h2>
 
       {{range $doing}}
         {{template "card" .}}
       {{end}}
     </section>
 
-    <section id="reviewing" class="col" data-limit=".Config.ReviewalLimit">
-      <h2>Reviewing <small class="{{if gt (len $reviewing) .Config.ReviewalLimit}}text-danger{{end}}">{{len $reviewing}}/{{.Config.ReviewalLimit}}</small></h2>
+    <section id="reviewing" class="col" data-cards="{{(len $reviewing)}}" data-limit="{{.Config.ReviewalLimit}}">
+      <h2>
+        Reviewing
+        <small data-limit="{{.Config.ReviewalLimit}}" class="{{if gt (len $reviewing) .Config.ReviewalLimit}}text-danger{{end}}">
+          <span>{{len $reviewing}}</span>/{{.Config.ReviewalLimit}}
+        </small>
+      </h2>
 
       {{range $reviewing}}
         {{template "card" .}}
@@ -51,18 +56,21 @@
     </section>
 
     <div class="col">
-      {{if gt (len $rejected) 0}}
-      <section id="rejected">
-        <h2>Rejected <small>{{len $rejected}}</small></h2>
+      <section id="rejected" data-cards="{{(len $rejected)}}">
+        <h2>Rejected <small><span>{{len $rejected}}</span></small></h2>
 
         {{range $rejected}}
           {{template "card" .}}
         {{end}}
       </section>
-      {{end}}
 
-      <section id="approving" data-limit=".Config.ApprovalLimit">
-        <h2>Approving <small class="{{if gt (len $approving) .Config.ApprovalLimit}}text-danger{{end}}">{{len $approving}}/{{.Config.ApprovalLimit}}</small></h2>
+      <section id="approving" data-cards="{{(len $approving)}}" data-limit="{{.Config.ApprovalLimit}}">
+        <h2>
+          Approving
+          <small class="{{if gt (len $approving) .Config.ApprovalLimit}}text-danger{{end}}">
+            <span>{{len $approving}}</span>/{{.Config.ApprovalLimit}}
+          </small>
+        </h2>
 
         {{range $approving}}
           {{template "card" .}}
@@ -70,8 +78,8 @@
       </section>
     </div>
 
-    <section id="done" class="col">
-      <h2>Done</h2>
+    <section id="done" class="col" data-cards="{{(len $done)}}">
+      <h2>Done <small>{{len $done}}</small></h2>
 
       {{range $done}}
         {{template "thin-card" .}}
@@ -97,18 +105,13 @@
   </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.21.2/system.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
   <script src="./app.js"></script>
 
   <script>
-    System.config({
-      paths: {
-        jquery: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js',
-      }
-    });
-    System.import('index');
+    const app = new Application();
+    app.run();
   </script>
 </body>
 

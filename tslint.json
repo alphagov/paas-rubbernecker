@@ -118,6 +118,7 @@
       "ignore-local",
       "ignore-class"
     ],
+    "max-classes-per-file": false,
     "no-method-signature": true,
     "no-delete": true,
     "no-mixed-interface": false,
