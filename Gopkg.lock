@@ -32,12 +32,6 @@
   revision = "ee74d2f83d82cd1d2e92ed3ec3dbaf162ca5ece5"
 
 [[projects]]
-  name = "github.com/go-redis/redis"
-  packages = [".","internal","internal/consistenthash","internal/hashtag","internal/pool","internal/proto"]
-  revision = "d0f86971b5d61de9cebd2616b932acb7ba14d957"
-  version = "v6.7.3"
-
-[[projects]]
   branch = "master"
   name = "github.com/google/go-querystring"
   packages = ["query"]
@@ -118,6 +112,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bfef60e4fc47aeffb31d0ae21d15f43a532fc785fe7d8d88b8ce4a3ccac32100"
+  inputs-digest = "f18cd7838f3595619f9007ff5d0a6977b72bc14661133b00b16dbeaaf066f3c5"
   solver-name = "gps-cdcl"
   solver-version = 1
