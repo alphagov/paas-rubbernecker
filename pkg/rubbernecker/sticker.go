@@ -12,7 +12,7 @@ type Sticker struct {
 // Stickers is a simple slice of stickers
 type Stickers []*Sticker
 
-// Matches will check if the sticker mathes the query provided by the extension.
+// Matches will check if the sticker matches the query provided by the extension.
 func (s *Sticker) Matches(query string) *Sticker {
 	if s.Name == query {
 		return s
