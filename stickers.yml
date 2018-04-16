@@ -18,3 +18,11 @@
   image: /img/sad_panda.gif
   title: Sad Panda
   content: "I am a sad panda.<br/>I will never find any slots for progress."
+
+- name: team
+  regex: 'team:?\s*([a-zA-Z0-9\s]+)'
+  title: 'Team $1'
+
+- name: lead
+  regex: 'lead:?\s*([a-zA-Z0-9\s]+)'
+  title: 'Lead $1'
