@@ -216,7 +216,7 @@ class Application {
 
       for (const sticker of card.stickers) {
         $stickers
-          .append(`<div><img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}"></div>`);
+          .append(sticker.Image == ""? `<div>${sticker.Title}</div>` : `<div><img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}"></div>`);
       }
     }
 

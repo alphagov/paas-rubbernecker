@@ -93,6 +93,7 @@ $spacing: 16px;
       display: flex;
       flex-direction: row-reverse;
       width: 75%;
+      text-transform: capitalize;
 
       > div {
         display: inline-block;

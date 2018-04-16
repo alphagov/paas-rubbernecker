@@ -1,5 +1,9 @@
 {{define "sticker"}}
   <div>
+    {{if .Image}}
     <img src="{{.Image}}" alt="{{.Title}}" title="{{.Title}}">
+    {{else}}
+    {{.Title}}
+    {{end}}
   </div>
 {{end}}
