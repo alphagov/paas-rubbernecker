@@ -215,8 +215,14 @@ class Application {
         .empty();
 
       for (const sticker of card.stickers) {
+        const stickerClass = sticker.Class !== '' ? ` sticker-${sticker.Class}` : '';
+        const classAttribute = `sticker-${sticker.Name}${stickerClass}`;
+        const stickerContent = sticker.Image === '' ?
+              sticker.Title :
+              `<img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}">`;
+
         $stickers
-          .append(sticker.Image == ""? `<div>${sticker.Title}</div>` : `<div><img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}"></div>`);
+          .append(`<div class="${classAttribute}">${stickerContent}</div>`);
       }
     }
 

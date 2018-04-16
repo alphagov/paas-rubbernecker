@@ -22,7 +22,9 @@
 - name: team
   regex: 'team:?\s*([a-zA-Z0-9\s]+)'
   title: 'Team $1'
+  class: 'team-$1'
 
 - name: lead
   regex: 'lead:?\s*([a-zA-Z0-9\s]+)'
   title: 'Lead $1'
+  class: 'lead-$1'

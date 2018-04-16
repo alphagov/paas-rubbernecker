@@ -10,6 +10,7 @@ type Sticker struct {
 	Image   string
 	Content string
 	Aliases []string
+	Class   string
 }
 
 // Stickers is a simple slice of stickers
@@ -24,6 +25,7 @@ func (s *Sticker) Matches(query string) *Sticker {
 			sticker.Title = reg.ReplaceAllString(query, sticker.Title)
 			sticker.Image = reg.ReplaceAllString(query, sticker.Image)
 			sticker.Content = reg.ReplaceAllString(query, sticker.Content)
+			sticker.Class = reg.ReplaceAllString(query, sticker.Class)
 			return &sticker
 		}
 	}

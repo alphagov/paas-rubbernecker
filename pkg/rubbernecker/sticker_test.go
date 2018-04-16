@@ -37,28 +37,29 @@ var _ = Describe("Response", func() {
 		BeforeEach(func() {
 			sticker = rubbernecker.Sticker{
 				Name:    "test",
-				Regex:   "team: ([a-zA-Z])$",
-				Title:   "Team $1",
+				Regex:   "test: ([a-zA-Z])$",
+				Title:   "Test $1",
 				Image:   "/test_$1.png",
 				Content: "Only a test. Not to worry! $1",
 				Aliases: []string{"tset", "trial"},
+				Class:   "class-$1",
 			}
 		})
 
 		It("should check if the sticker Matches() regex", func() {
-			Expect(sticker.Matches("team: a")).NotTo(BeNil())
-			Expect(sticker.Matches("team: foo")).To(BeNil())
+			Expect(sticker.Matches("test: a")).NotTo(BeNil())
+			Expect(sticker.Matches("test: foo")).To(BeNil())
 		})
 
 		It("should expand submatches of Regex in all the UI fields", func() {
-			s := sticker.Matches("team: a")
+			s := sticker.Matches("test: a")
 			Expect(s).NotTo(BeNil())
-			Expect(s.Title).To(Equal("Team a"))
+			Expect(s.Title).To(Equal("Test a"))
 			Expect(s.Image).To(Equal("/test_a.png"))
 			Expect(s.Content).To(Equal("Only a test. Not to worry! a"))
+			Expect(s.Class).To(Equal("class-a"))
 		})
 	})
-
 
 	It("should establish if the list Has() specific sticker", func() {
 		ss := rubbernecker.Stickers{&sticker}
