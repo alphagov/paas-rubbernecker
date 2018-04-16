@@ -1,8 +1,11 @@
 package rubbernecker
 
+import "regexp"
+
 // Sticker is a rubbernecker definition of labels.
 type Sticker struct {
 	Name    string
+	Regex   string
 	Title   string
 	Image   string
 	Content string
@@ -14,6 +17,17 @@ type Stickers []*Sticker
 
 // Matches will check if the sticker matches the query provided by the extension.
 func (s *Sticker) Matches(query string) *Sticker {
+	if s.Regex != "" {
+		reg := regexp.MustCompile(s.Regex)
+		if reg.MatchString(query) {
+			sticker := *s
+			sticker.Title = reg.ReplaceAllString(query, sticker.Title)
+			sticker.Image = reg.ReplaceAllString(query, sticker.Image)
+			sticker.Content = reg.ReplaceAllString(query, sticker.Content)
+			return &sticker
+		}
+	}
+
 	if s.Name == query {
 		return s
 	}
