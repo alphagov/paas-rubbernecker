@@ -146,6 +146,22 @@ class Application {
       .on(State.updated, () => { this.parseContent(); });
   }
 
+  public filterTeam(name: string) {
+    const anyTeamCards = $('.card:not(:has(.sticker-team))');
+    this.gracefulIn(anyTeamCards);
+
+    const teamCards = $('.card:has(.sticker-team)')
+    const visibleTeamCards = teamCards.filter(`:has(.sticker-team-${name})`)
+    const hiddenTeamCards = teamCards.filter(`:not(:has(.sticker-team-${name}))`)
+
+    this.gracefulIn(visibleTeamCards);
+    this.gracefulOut(hiddenTeamCards);
+  }
+
+  public resetFilter() {
+    this.gracefulIn($('.card'));
+  }
+
   private async parseContent() {
     if (!this.state.content.cards) {
       console.error('No cards found in state...');
