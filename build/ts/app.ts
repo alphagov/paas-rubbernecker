@@ -146,6 +146,22 @@ class Application {
       .on(State.updated, () => { this.parseContent(); });
   }
 
+  public filterTeam(name: string) {
+    const anyTeamCards = $('.card:not(:has(.sticker-team))');
+    this.gracefulIn(anyTeamCards);
+
+    const teamCards = $('.card:has(.sticker-team)')
+    const visibleTeamCards = teamCards.filter(`:has(.sticker-team-${name})`)
+    const hiddenTeamCards = teamCards.filter(`:not(:has(.sticker-team-${name}))`)
+
+    this.gracefulIn(visibleTeamCards);
+    this.gracefulOut(hiddenTeamCards);
+  }
+
+  public resetFilter() {
+    this.gracefulIn($('.card'));
+  }
+
   private async parseContent() {
     if (!this.state.content.cards) {
       console.error('No cards found in state...');
@@ -215,8 +231,14 @@ class Application {
         .empty();
 
       for (const sticker of card.stickers) {
+        const stickerClass = sticker.Class !== '' ? ` sticker-${sticker.Class}` : '';
+        const classAttribute = `sticker-${sticker.Name}${stickerClass}`;
+        const stickerContent = sticker.Image === '' ?
+              sticker.Title :
+              `<img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}">`;
+
         $stickers
-          .append(`<div><img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}"></div>`);
+          .append(`<div class="${classAttribute}">${stickerContent}</div>`);
       }
     }
 

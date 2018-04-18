@@ -1,5 +1,9 @@
 {{define "sticker"}}
-  <div>
+  <div class="sticker-{{.Name}}{{if .Class}} sticker-{{.Class}}{{end}}">
+    {{if .Image}}
     <img src="{{.Image}}" alt="{{.Title}}" title="{{.Title}}">
+    {{else}}
+    {{.Title}}
+    {{end}}
   </div>
 {{end}}

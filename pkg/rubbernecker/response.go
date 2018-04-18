@@ -40,9 +40,7 @@ func (r *Response) Template(code int, w http.ResponseWriter, templateFile ...str
 		return err
 	}
 
-	t.Execute(w, r)
-
-	return nil
+	return t.Execute(w, r)
 }
 
 // WithCards will set a collection/single card for the current response.

@@ -23,6 +23,10 @@
       <li><strong>Out of hours</strong>: <em class="out-of-hours">{{(index .SupportRota "out-of-hours").Member}}</em></li>
       <li><strong>Escalations</strong>: <em class="escalations">{{(index .SupportRota "escalations").Member}}</em></li>
     </ul>
+    <button onclick="app.filterTeam('a')">Team A</button>
+    <button onclick="app.filterTeam('b')">Team B</button>
+    <button onclick="app.filterTeam('c')">Team C</button>
+    <button onclick="app.resetFilter()">Show all</button>
   </header>
 
   <main class="row">
