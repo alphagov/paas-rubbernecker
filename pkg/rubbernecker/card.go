@@ -39,6 +39,14 @@ type Card struct {
 // Cards will be a rubbernecker representative of all cards.
 type Cards []*Card
 
+// Reverse reverses the order of the cards in place
+func (cards Cards) Reverse() {
+	for i := len(cards)/2 - 1; i >= 0; i-- {
+		opp := len(cards) - 1 - i
+		cards[i], cards[opp] = cards[opp], cards[i]
+	}
+}
+
 // ProjectManagementService is an interface that should force each extension to
 // flatten their story into rubbernecker format.
 type ProjectManagementService interface {

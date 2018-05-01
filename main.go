@@ -87,6 +87,7 @@ func fetchStories(pt *pivotal.Tracker) error {
 	if err != nil {
 		log.Debug(err)
 	}
+	d.Reverse()
 
 	for s, story := range c {
 		if story.Assignees == nil {
