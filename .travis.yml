@@ -4,4 +4,4 @@ go:
   - master
 install: /bin/true
 script:
-  - go test -v ./...
+  - make dependencies test
