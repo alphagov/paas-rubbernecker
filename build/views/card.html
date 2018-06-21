@@ -11,13 +11,20 @@
   </ul>
 
   <footer>
-    <div class="elapsed">
+    <div class="labels">
       <small>{{.Elapsed}} day{{if ne .Elapsed 1}}s{{end}}</small>
+      {{range .Stickers}}
+        {{if .Label}}
+          {{template "sticker" .}}
+        {{end}}
+      {{end}}
     </div>
 
     <div class="stickers">
       {{range .Stickers}}
-        {{template "sticker" .}}
+        {{if not .Label}}
+          {{template "sticker" .}}
+        {{end}}
       {{end}}
     </div>
   </footer>

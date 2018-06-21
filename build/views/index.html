@@ -102,10 +102,14 @@
   </footer>
 
   <script id="card-template" type="text/template">
-    {{template "card" (index .Cards 0)}}
+    {{if len .Cards}}
+      {{template "card" (index .Cards 0)}}
+    {{end}}
   </script>
   <script id="thin-card-template" type="text/template">
-    {{template "thin-card" (index .Cards 0)}}
+    {{if len .Cards}}
+      {{template "thin-card" (index .Cards 0)}}
+    {{end}}
   </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
