@@ -151,8 +151,8 @@ class Application {
     this.gracefulIn(anyTeamCards);
 
     const teamCards = $('.card:has(.sticker-team)');
-    const visibleTeamCards = teamCards.filter(`:has(.sticker-team-${name})`);
-    const hiddenTeamCards = teamCards.filter(`:not(:has(.sticker-team-${name}))`);
+    const visibleTeamCards = teamCards.filter(`:has(.sticker-team.team-${name})`);
+    const hiddenTeamCards = teamCards.filter(`:not(:has(.sticker-team.team-${name}))`);
 
     this.gracefulIn(visibleTeamCards);
     this.gracefulOut(hiddenTeamCards);
