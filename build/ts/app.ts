@@ -228,21 +228,21 @@ class Application {
 
     if ($stickers.length > 0) {
       $stickers.empty();
-      $labels.find('.sticker').delete();
+      $labels.find('.sticker').remove();
 
       for (const sticker of card.stickers) {
         const stickerClass = sticker.Class !== '' ? ` ${sticker.Class}` : '';
-        const classAttribute = `sticker-${sticker.Name}${stickerClass}`;
+        const classAttribute = `sticker sticker-${sticker.Name}${stickerClass}`;
         const stickerContent = sticker.Image === '' ?
               sticker.Title :
               `<img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}">`;
 
         if (!sticker.Label) {
           $stickers
-            .append(`<div class="${classAttribute}">${stickerContent}</div>`);
+            .append(`<div class="${classAttribute}">${stickerContent}</div> `);
         } else {
           $labels
-            .append(`<div class="${classAttribute}">${stickerContent}</div>`);
+            .append(`<div class="${classAttribute}">${stickerContent}</div> `);
         }
       }
     }
