@@ -81,18 +81,34 @@ $spacing: 16px;
     padding: $spacing;
     width: 100%;
 
-    div.elapsed {
+    div.labels {
       display: inline-block;
       height: 32px;
       padding: 3px;
       text-align: left;
-      width: 25%;
+      width: 50%;
+
+      > div {
+        display: inline-block;
+        font-size: 80%;
+        font-weight: 400;
+      }
+
+      .team {
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .lead {
+        font-style: italic;
+        text-transform: capitalize;
+      }
     }
 
     div.stickers {
       display: flex;
       flex-direction: row-reverse;
-      width: 75%;
+      width: 50%;
       text-transform: capitalize;
 
       > div {

@@ -5,12 +5,12 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "node-sass": "4.8.3",
-    "tslint": "5.9.1",
-    "tslint-consistent-codestyle": "1.13.0",
-    "tslint-immutable": "4.5.3",
+    "node-sass": "4.9.0",
+    "tslint": "5.10.0",
+    "tslint-consistent-codestyle": "1.13.1",
+    "tslint-immutable": "4.6.0",
     "tslint-microsoft-contrib": "5.0.3",
-    "typescript": "2.8.1"
+    "typescript": "2.9.2"
   },
   "scripts": {
     "sass": "node-sass --output-style compressed --no-cache build/scss/app.scss dist/app.css",

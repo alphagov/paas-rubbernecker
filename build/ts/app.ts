@@ -150,9 +150,9 @@ class Application {
     const anyTeamCards = $('.card:not(:has(.sticker-team))');
     this.gracefulIn(anyTeamCards);
 
-    const teamCards = $('.card:has(.sticker-team)')
-    const visibleTeamCards = teamCards.filter(`:has(.sticker-team-${name})`)
-    const hiddenTeamCards = teamCards.filter(`:not(:has(.sticker-team-${name}))`)
+    const teamCards = $('.card:has(.sticker-team)');
+    const visibleTeamCards = teamCards.filter(`:has(.sticker-team.team-${name})`);
+    const hiddenTeamCards = teamCards.filter(`:not(:has(.sticker-team.team-${name}))`);
 
     this.gracefulIn(visibleTeamCards);
     this.gracefulOut(hiddenTeamCards);
@@ -223,22 +223,27 @@ class Application {
   }
 
   private setStickers($card: any, card: ICard) {
-    const $stickers = $card
-      .find('footer > .stickers');
+    const $stickers = $card.find('footer > .stickers');
+    const $labels = $card.find('footer > .labels');
 
     if ($stickers.length > 0) {
-      $stickers
-        .empty();
+      $stickers.empty();
+      $labels.find('.sticker').remove();
 
       for (const sticker of card.stickers) {
-        const stickerClass = sticker.Class !== '' ? ` sticker-${sticker.Class}` : '';
-        const classAttribute = `sticker-${sticker.Name}${stickerClass}`;
+        const stickerClass = sticker.Class !== '' ? ` ${sticker.Class}` : '';
+        const classAttribute = `sticker sticker-${sticker.Name}${stickerClass}`;
         const stickerContent = sticker.Image === '' ?
               sticker.Title :
               `<img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}">`;
 
-        $stickers
-          .append(`<div class="${classAttribute}">${stickerContent}</div>`);
+        if (!sticker.Label) {
+          $stickers
+            .append(`<div class="${classAttribute}">${stickerContent}</div> `);
+        } else {
+          $labels
+            .append(`<div class="${classAttribute}">${stickerContent}</div> `);
+        }
       }
     }
 

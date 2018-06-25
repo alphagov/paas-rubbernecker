@@ -5,6 +5,7 @@ import "regexp"
 // Sticker is a rubbernecker definition of labels.
 type Sticker struct {
 	Name    string
+	Label   bool
 	Regex   string
 	Title   string
 	Image   string
