@@ -67,9 +67,12 @@ class State {
   }
 }
 
+const RESET_FILTERS_TIMEOUT_MS = 30 * 60 * 1000;
+
 class Application {
   public static updated: string = 'rubbernecker:application:updated';
 
+  public filterResetTimeout: any;
   private state: State;
 
   constructor() {
@@ -156,10 +159,15 @@ class Application {
 
     this.gracefulIn(visibleTeamCards);
     this.gracefulOut(hiddenTeamCards);
+
+    this.filterResetTimeout = setTimeout(() => {
+      $('input[name=all]').parents('label').trigger('click');
+    }, RESET_FILTERS_TIMEOUT_MS);
   }
 
   public resetFilter() {
     this.gracefulIn($('.card'));
+    clearTimeout(this.filterResetTimeout);
   }
 
   private async parseContent() {
