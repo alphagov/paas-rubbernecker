@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "@types/jquery": "^3.3.4",
     "node-sass": "4.9.0",
     "tslint": "5.10.0",
     "tslint-consistent-codestyle": "1.13.1",

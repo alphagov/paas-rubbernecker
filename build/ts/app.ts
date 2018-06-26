@@ -3,7 +3,7 @@ interface ICard {
   readonly assignees: IMembers;
   readonly in_play: number;
   readonly status: string;
-  readonly stickers: any;
+  readonly stickers: ReadonlyArray<ISticker>;
   readonly title: string;
   readonly url: string;
 }
@@ -23,6 +23,17 @@ interface ISupport {
   readonly member: string;
 }
 
+interface ISticker {
+  readonly Name: string;
+  readonly Label: boolean;
+  readonly Regex: string;
+  readonly Title: string;
+  readonly Image: string;
+  readonly Content: string;
+  readonly Aliases: ReadonlyArray<string>;
+  readonly Class: string;
+}
+
 interface IResponse {
   readonly cards: ReadonlyArray<ICard>;
   readonly support: {
@@ -31,12 +42,16 @@ interface IResponse {
   readonly free_team_members: IMembers;
 }
 
-declare var $: any;
+interface IStateContent {
+  readonly cards: ReadonlyArray<ICard>;
+  readonly support: {readonly [schedule: string]: ISupport};
+  readonly free_team_members: IMembers;
+}
 
 class State {
   public static updated: string = 'rubbernecker:state:updated';
 
-  public content: any;
+  public content: IStateContent;
 
   constructor() {
     this.content = {
@@ -60,7 +75,7 @@ class State {
       console.error('Rubbernecker responded with non 200 http status.');
     }
 
-    this.content = await response.json();
+    this.content = await response.json() as IStateContent;
 
     // Trigger updated event.
     $(document).trigger(State.updated);
@@ -72,11 +87,12 @@ const RESET_FILTERS_TIMEOUT_MS = 30 * 60 * 1000;
 class Application {
   public static updated: string = 'rubbernecker:application:updated';
 
-  public filterResetTimeout: any;
+  public filterResetTimeout: number;
   private state: State;
 
   constructor() {
     this.state = new State();
+    this.filterResetTimeout = 0;
   }
 
   public dealCard(card: ICard) {
@@ -104,7 +120,7 @@ class Application {
       .gracefulIn($(`#${card.status} #${card.id}`));
   }
 
-  public gracefulIn($elements: ReadonlyArray<HTMLElement>) {
+  public gracefulIn($elements: JQuery<HTMLElement>) {
     $.each($elements, (_: number, element: HTMLElement) => {
       if (!$(element).is(':hidden')) {
         return;
@@ -121,7 +137,7 @@ class Application {
     });
   }
 
-  public gracefulOut($elements: ReadonlyArray<HTMLElement>) {
+  public gracefulOut($elements: JQuery<HTMLElement>) {
     $.each($elements, (_: number, element: HTMLElement) => {
       if ($(element).is(':hidden')) {
         return;
@@ -200,7 +216,7 @@ class Application {
     $(document).trigger(Application.updated);
   }
 
-  private setAssignees($card: any, card: ICard) {
+  private setAssignees($card: JQuery<HTMLElement>, card: ICard) {
     const $assignees = $card
       .find('> ul');
 
@@ -217,7 +233,7 @@ class Application {
     return this;
   }
 
-  private setHeader($card: any, card: ICard) {
+  private setHeader($card: JQuery<HTMLElement>, card: ICard) {
     $card
       .find('> h3 > a')
       .attr('href', card.url)
@@ -230,7 +246,7 @@ class Application {
     return this;
   }
 
-  private setStickers($card: any, card: ICard) {
+  private setStickers($card: JQuery<HTMLElement>, card: ICard) {
     const $stickers = $card.find('footer > .stickers');
     const $labels = $card.find('footer > .labels');
 
@@ -258,7 +274,7 @@ class Application {
     return this;
   }
 
-  private setupCard($card: any, card: ICard) {
+  private setupCard($card: JQuery<HTMLElement>, card: ICard) {
     $card
       .attr('class', `card ${card.status}`)
       .attr('id', card.id);
@@ -266,7 +282,7 @@ class Application {
     return this;
   }
 
-  private updateCard($card: any, card: ICard) {
+  private updateCard($card: JQuery<HTMLElement>, card: ICard) {
     const correctState = $card.parents(`#${card.status}`).length > 0;
 
     if (!correctState) {
@@ -281,7 +297,7 @@ class Application {
     }
   }
 
-  private updateCardData($card: any, card: ICard) {
+  private updateCardData($card: JQuery<HTMLElement>, card: ICard) {
     this.setupCard($card, card)
       .setHeader($card, card)
       .setAssignees($card, card)
@@ -293,7 +309,7 @@ class Application {
 
     $.each($sections, (_: number, section: HTMLElement) => {
       const count = $(section).find('div.card').length;
-      const limit = $(section).find('h2 > small').attr('data-limit') || 0;
+      const limit = parseInt($(section).find('h2 > small').attr('data-limit') || '0', 10);
 
       $(section).find('h2 > small').removeClass('text-danger');
 
