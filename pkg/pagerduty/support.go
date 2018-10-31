@@ -26,16 +26,26 @@ func New(token string) *Schedule {
 // storing it in the Schedule for future use.
 func (p *Schedule) FetchSupport() error {
 	opts := pd.ListOnCallOptions{
+		APIListObject: pd.APIListObject{
+			Limit:  100,
+			Offset: 0,
+		},
 		Since: time.Now().String(),
 		Until: time.Now().Add(24 * time.Hour).String(),
 	}
 
-	res, err := p.Client.ListOnCalls(opts)
-	if err != nil {
-		return err
-	}
+	for {
+		res, err := p.Client.ListOnCalls(opts)
+		if err != nil {
+			return err
+		}
 
-	p.content = res.OnCalls
+		p.content = append(p.content, res.OnCalls...)
+		if !res.More {
+			break
+		}
+		opts.Offset = opts.Offset + opts.Limit
+	}
 
 	return nil
 }
