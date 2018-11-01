@@ -6,6 +6,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
+	"github.com/alphagov/paas-rubbernecker/pkg/helpers"
 	"github.com/alphagov/paas-rubbernecker/pkg/pagerduty"
 	"github.com/alphagov/paas-rubbernecker/pkg/rubbernecker"
 )
@@ -54,6 +55,33 @@ var _ = Describe("PagerDuty", func() {
 			err := pd.FetchSupport()
 
 			Expect(err).NotTo(HaveOccurred())
+		})
+
+		It("should FetchSupport() next page", func() {
+			response1 := `{
+				"oncalls":[{"user":{"summary":"tester1"},"schedule":{"summary":"test1"}}],
+				"limit": 1,
+				"offset": 0,
+				"more": true
+			}`
+			response2 := `{
+				"oncalls":[{"user":{"summary":"tester2"},"schedule":{"summary":"test2"}}],
+				"limit": 1,
+				"offset": 1,
+				"more": false
+			}`
+
+			httpmock.RegisterResponder("GET", apiURL,
+				helpers.NewCycleResponder(
+					httpmock.NewStringResponder(200, response1),
+					httpmock.NewStringResponder(200, response2),
+				),
+			)
+
+			err := pd.FetchSupport()
+
+			Expect(err).NotTo(HaveOccurred())
+			Expect(httpmock.GetCallCountInfo()["GET "+apiURL]).To(BeNumerically("==", 2))
 		})
 
 		It("should FlattenStories() correctly", func() {

@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/alphagov/paas-rubbernecker/pkg/helpers"
 	"github.com/alphagov/paas-rubbernecker/pkg/pagerduty"
 	"github.com/alphagov/paas-rubbernecker/pkg/pivotal"
 	"github.com/alphagov/paas-rubbernecker/pkg/rubbernecker"
@@ -121,6 +122,62 @@ var _ = Describe("Main", func() {
 				{"user":{"summary":"Z"},"schedule":{"summary":"PaaS team Escalations - out of hours"}}
 			]}`
 			httpmock.RegisterResponder("GET", apiURLSupport, httpmock.NewStringResponder(200, resp))
+
+			err = fetchSupport(pd)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect((*support)).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
+				"out-of-hours": {
+					Type:   "PaaS team rota - out of hours",
+					Member: "X",
+				},
+				"in-hours": {
+					Type:   "PaaS team rota - in hours",
+					Member: "Y",
+				},
+				"escalations": {
+					Type:   "PaaS team Escalations - out of hours",
+					Member: "Z",
+				},
+			})))
+		})
+
+		It("should fetch multiple pages of on-call schedules", func() {
+			resp1 := `{
+				"oncalls":[
+					{"user":{"summary":"X"},"schedule":{"summary":"PaaS team rota - out of hours"}},
+					{"user":{"summary":"A"},"schedule":{"summary":"other team foo"}},
+					{"user":{"summary":"B"},"schedule":{"summary":"other team bar"}}
+				],
+				"limit": 3,
+				"offset": 0,
+				"more": true
+			}`
+			resp2 := `{
+				"oncalls":[
+					{"user":{"summary":"C"},"schedule":{"summary":"different team foo"}},
+					{"user":{"summary":"Y"},"schedule":{"summary":"PaaS team rota - in hours"}},
+					{"user":{"summary":"D"},"schedule":{"summary":"different team bar"}}
+				],
+				"limit": 3,
+				"offset": 3,
+				"more": true
+			}`
+			resp3 := `{
+				"oncalls":[
+					{"user":{"summary":"Z"},"schedule":{"summary":"PaaS team Escalations - out of hours"}}
+				],
+				"limit": 1,
+				"offset": 6,
+				"more": false
+			}`
+			httpmock.RegisterResponder("GET", apiURLSupport,
+				helpers.NewCycleResponder(
+					httpmock.NewStringResponder(200, resp1),
+					httpmock.NewStringResponder(200, resp2),
+					httpmock.NewStringResponder(200, resp3),
+				),
+			)
 
 			err = fetchSupport(pd)
 			Expect(err).NotTo(HaveOccurred())
