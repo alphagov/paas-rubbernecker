@@ -34,18 +34,21 @@ func (p *Schedule) FetchSupport() error {
 		Until: time.Now().Add(24 * time.Hour).String(),
 	}
 
+	var content []pd.OnCall
 	for {
 		res, err := p.Client.ListOnCalls(opts)
 		if err != nil {
 			return err
 		}
 
-		p.content = append(p.content, res.OnCalls...)
+		content = append(content, res.OnCalls...)
 		if !res.More {
 			break
 		}
 		opts.Offset = opts.Offset + opts.Limit
 	}
+
+	p.content = content
 
 	return nil
 }
