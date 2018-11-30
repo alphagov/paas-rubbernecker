@@ -19,6 +19,11 @@
   title: Sad Panda
   content: "I am a sad panda.<br/>I will never find any slots for progress."
 
+- name: pairing
+  regex: '^pairing:\s*(none|some|fully)'
+  image: '/img/pear_$1.svg'
+  title: 'Pairing: $1'
+
 - name: team
   label: true
   regex: '^team:?\s*([a-zA-Z0-9\s]+)'
