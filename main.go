@@ -109,6 +109,8 @@ func fetchStories(pt *pivotal.Tracker) error {
 		etag = time.Now()
 	}
 
+	log.Debug("Stories have been fetched.")
+
 	return nil
 }
 
@@ -130,6 +132,8 @@ func fetchSupport(pd *pagerduty.Schedule) error {
 		etag = time.Now()
 	}
 
+	log.Debug("Support Rota have been fetched.")
+
 	return nil
 }
 
@@ -148,6 +152,8 @@ func fetchUsers(pt *pivotal.Tracker) error {
 		members = m
 		etag = time.Now()
 	}
+
+	log.Debug("Team Members have been fetched.")
 
 	return nil
 }
@@ -228,35 +234,27 @@ func main() {
 
 	pt.AcceptStickers(approvedStickers)
 
-	scheduler.Every(1).Hours().Run(func() {
-		err := fetchUsers(pt)
-		if err != nil {
+	// We have to fetch the users synchronously first as the fetchStories call depends on it
+	if err := fetchUsers(pt); err != nil {
+		log.Error(err)
+	}
+
+	scheduler.Every(1).Hours().NotImmediately().Run(func() {
+		if err := fetchUsers(pt); err != nil {
 			log.Error(err)
 		}
-
-		log.Debug("Team Members have been fetched.")
 	})
 
 	scheduler.Every(5).Minutes().Run(func() {
-		err := fetchSupport(pd)
-		if err != nil {
+		if err := fetchSupport(pd); err != nil {
 			log.Error(err)
 		}
-
-		log.Debug("Support Rota have been fetched.")
 	})
 
-	// This is only a procaution as the stories rely on the members to be fetched
-	// first. Applying NotImmediately() method to the scheduler will make sure,
-	// there isn't a race condition between the two.
-	log.Info("Will fetch stories in 20 seconds.")
-	scheduler.Every(20).Seconds().NotImmediately().Run(func() {
-		err := fetchStories(pt)
-		if err != nil {
+	scheduler.Every(20).Seconds().Run(func() {
+		if err := fetchStories(pt); err != nil {
 			log.Error(err)
 		}
-
-		log.Debug("Stories have been fetched.")
 	})
 
 	r := mux.NewRouter()
