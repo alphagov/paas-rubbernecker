@@ -1,23 +1,28 @@
 ---
 - name: blocked
   image: /img/blocked.svg
-  title: Story Blocked
-  content: "Blocked!<br/>See story comments for more details"
+  title: Blocked! See story comments for more details
+  priority: 20
+
+- name: scheduled
+  regex: '^scheduled:\s*(.+)'
+  image: '/img/scheduled.png'
+  title: 'Scheduled on or after $1'
+  content: $1
+  priority: 30
 
 - name: comments-to-resolve
   image: /img/comments.svg
-  title: Story has Comments to Resolve
-  content: "Has comments to resolve<br/>See story or pull request for more details."
+  title: Has comments to resolve. See story or pull request for more details.
+  priority: 10
 
 - name: "'small' task"
   image: /img/small.png
-  title: It's a small task
-  content: "Presumably, it's a small task.<br/>Something for support or not requiring a pair."
+  title: Presumably, it's a small task. Something for support or not requiring a pair.
 
 - name: overlimit
   image: /img/sad_panda.gif
-  title: Sad Panda
-  content: "I am a sad panda.<br/>I will never find any slots for progress."
+  title: I am a sad panda. I will never find any slots for progress.
 
 - name: pairing
   regex: '^pairing:\s*(none|some|fully)'

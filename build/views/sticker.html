@@ -1,7 +1,10 @@
 {{define "sticker"}}
   <div class="sticker sticker-{{.Name}} {{if .Class}}{{.Class}}{{end}}">
     {{if .Image}}
-      <img src="{{.Image}}" alt="{{.Title}}" title="{{.Title}}">
+      <img src="{{.Image}}" alt="{{.Title}}" title="{{.Title}}" />
+      {{if .Content}}
+      <small>{{.Content}}</small>
+      {{end}}
     {{else}}
       {{.Title}}
     {{end}}

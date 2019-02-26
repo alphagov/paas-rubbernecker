@@ -257,9 +257,13 @@ class Application {
       for (const sticker of card.stickers) {
         const stickerClass = sticker.Class !== '' ? ` ${sticker.Class}` : '';
         const classAttribute = `sticker sticker-${sticker.Name}${stickerClass}`;
-        const stickerContent = sticker.Image === '' ?
+        let stickerContent = sticker.Image === '' ?
               sticker.Title :
-              `<img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}">`;
+              `<img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}" />`;
+
+        if (sticker.Content != "") {
+          stickerContent = stickerContent + ` <small>${sticker.Content}</small>`
+        }
 
         if (!sticker.Label) {
           $stickers
