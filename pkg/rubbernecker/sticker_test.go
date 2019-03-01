@@ -23,14 +23,25 @@ var _ = Describe("Response", func() {
 	})
 
 	It("should check if the sticker Matches() name", func() {
-		Expect(sticker.Matches("test")).NotTo(BeNil())
-		Expect(sticker.Matches("testing")).To(BeNil())
+		var ok bool
+
+		_, ok = sticker.Matches("test")
+		Expect(ok).To(BeTrue())
+		_, ok = sticker.Matches("testing")
+		Expect(ok).To(BeFalse())
 	})
 
 	It("should check if the sticker Matches() one of the aliases", func() {
-		Expect(sticker.Matches("tset")).NotTo(BeNil())
-		Expect(sticker.Matches("trial")).NotTo(BeNil())
-		Expect(sticker.Matches("testing")).To(BeNil())
+		var ok bool
+
+		_, ok = sticker.Matches("tset")
+		Expect(ok).To(BeTrue())
+
+		_, ok = sticker.Matches("trial")
+		Expect(ok).To(BeTrue())
+
+		_, ok = sticker.Matches("testing")
+		Expect(ok).To(BeFalse())
 	})
 
 	Context("when using Regexs", func() {
@@ -47,13 +58,18 @@ var _ = Describe("Response", func() {
 		})
 
 		It("should check if the sticker Matches() regex", func() {
-			Expect(sticker.Matches("test: a")).NotTo(BeNil())
-			Expect(sticker.Matches("test: foo")).To(BeNil())
+			var ok bool
+
+			_, ok = sticker.Matches("test: a")
+			Expect(ok).To(BeTrue())
+
+			_, ok = sticker.Matches("test: foo")
+			Expect(ok).To(BeFalse())
 		})
 
 		It("should expand submatches of Regex in all the UI fields", func() {
-			s := sticker.Matches("test: a")
-			Expect(s).NotTo(BeNil())
+			s, ok := sticker.Matches("test: a")
+			Expect(ok).To(BeTrue())
 			Expect(s.Title).To(Equal("Test a"))
 			Expect(s.Image).To(Equal("/test_a.png"))
 			Expect(s.Content).To(Equal("Only a test. Not to worry! a"))
@@ -62,9 +78,13 @@ var _ = Describe("Response", func() {
 	})
 
 	It("should establish if the list Has() specific sticker", func() {
-		ss := rubbernecker.Stickers{&sticker}
+		ss := rubbernecker.Stickers{sticker}
 
-		Expect(ss.Get("trial")).NotTo(BeNil())
-		Expect(ss.Get("testing")).To(BeNil())
+		s, ok := ss.Get("trial")
+		Expect(ok).To(BeTrue())
+		Expect(s).To(Equal(sticker))
+
+		_, ok = ss.Get("testing")
+		Expect(ok).To(BeFalse())
 	})
 })

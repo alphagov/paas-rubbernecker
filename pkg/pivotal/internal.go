@@ -1,12 +1,24 @@
 package pivotal
 
 import (
+	"fmt"
+	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/alphagov/paas-rubbernecker/pkg/rubbernecker"
 	pt "github.com/salsita/go-pivotaltracker/v5/pivotal"
 )
+
+var dateBlockerRegex = regexp.MustCompile(`(on or after|after|before|until|on)\s+(\d+\/\d+(?:\/\d+)?|\d+-\d+-\d+|\d+\/\d+\/\d+)`)
+
+var validDateLayouts = []string{
+	"2/1/2006",
+	"02/01/2006",
+	"2006/01/02",
+	"2006-01-02",
+}
 
 type story struct {
 	ID          int          `json:"id,omitempty"`
@@ -21,8 +33,10 @@ type story struct {
 }
 
 type blocker struct {
-	ID       int  `json:"id,omitempty"`
-	Resolved bool `json:"resolved,omitempty"`
+	ID          int        `json:"id,omitempty"`
+	CreatedAt   *time.Time `json:"created_at,omitempty"`
+	Description string     `json:"description,omitempty"`
+	Resolved    bool       `json:"resolved,omitempty"`
 }
 
 type transition struct {
@@ -128,12 +142,92 @@ func convertState(state string) string {
 	}
 }
 
-func hasUnresolvedBlockers(blockers []blocker) bool {
+func convertBlockersToStickers(blockers []blocker, availableStickers rubbernecker.Stickers) rubbernecker.Stickers {
+	var stickers rubbernecker.Stickers
 	for _, blocker := range blockers {
 		if !blocker.Resolved {
-			return true
+			scheduledDate, err := getScheduledDate(blocker)
+
+			if err != nil {
+				if !stickers.Has("scheduled") {
+					if sticker, ok := availableStickers.Get("scheduled"); ok {
+						sticker.Title = blocker.Description
+						sticker.Content = "?/?"
+						stickers = append(stickers, sticker)
+					}
+				}
+			} else if scheduledDate != nil {
+				if scheduledDate.After(time.Now()) && !stickers.Has("scheduled") {
+					if sticker, ok := availableStickers.Get("scheduled"); ok {
+						dateStr := scheduledDate.Format("2/1")
+						sticker.Title = blocker.Description
+						sticker.Content = dateStr
+						stickers = append(stickers, sticker)
+					}
+				}
+			} else {
+				if !stickers.Has("blocked") {
+					if sticker, ok := availableStickers.Get("blocked"); ok {
+						sticker.Title = blocker.Description
+						stickers = append(stickers, sticker)
+					}
+				}
+			}
 		}
 	}
 
-	return false
+	return stickers
+}
+
+func getScheduledDate(blocker blocker) (*time.Time, error) {
+	matches := dateBlockerRegex.FindStringSubmatch(blocker.Description)
+	if len(matches) > 0 {
+		if blocker.CreatedAt == nil {
+			panic("a blocker should always have a created_at field")
+		}
+		date, err := parseScheduledDate(matches[1], matches[2], *blocker.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		return &date, nil
+	}
+
+	return nil, nil
+}
+
+func parseScheduledDate(preposition string, date string, minDate time.Time) (time.Time, error) {
+	var valid, isShortDate bool
+	var result time.Time
+
+	// short date format, like dd/mm
+	if regexp.MustCompile(`^\d+\/\d+$`).MatchString(date) {
+		isShortDate = true
+		date = date + "/" + strconv.Itoa(minDate.Year())
+	}
+
+	for _, l := range validDateLayouts {
+		if t, err := time.Parse(l, date); err == nil {
+			result = t
+			valid = true
+			break
+		}
+	}
+
+	if !valid {
+		return time.Time{}, fmt.Errorf("unrecognised date format: %s", date)
+	}
+
+	// We need to check if the short date format is meant to be in the next year
+	// We will consider any dates that are 6 months before the minimum date as a date that should be in the next year
+	if isShortDate && result.Before(minDate.AddDate(0, -6, 0)) {
+		result = result.AddDate(1, 0, 0)
+	}
+
+	if preposition == "after" {
+		// Add +1 day
+		result = result.AddDate(0, 0, 1)
+	}
+
+	return result, nil
 }

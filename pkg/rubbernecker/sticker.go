@@ -16,45 +16,52 @@ type Sticker struct {
 }
 
 // Matches will check if the sticker matches the query provided by the extension.
-func (s *Sticker) Matches(query string) *Sticker {
+func (s Sticker) Matches(query string) (Sticker, bool) {
 	if s.Regex != "" {
 		reg := regexp.MustCompile(s.Regex)
 		if reg.MatchString(query) {
-			sticker := *s
+			sticker := s
 			sticker.Title = reg.ReplaceAllString(query, sticker.Title)
 			sticker.Image = reg.ReplaceAllString(query, sticker.Image)
 			sticker.Content = reg.ReplaceAllString(query, sticker.Content)
 			sticker.Class = reg.ReplaceAllString(query, sticker.Class)
-			return &sticker
+			return sticker, true
 		}
 	}
 
 	if s.Name == query {
-		return s
+		return s, true
 	}
 
 	for _, alias := range s.Aliases {
 		if alias == query {
-			return s
+			return s, true
 		}
 	}
 
-	return nil
+	return Sticker{}, false
 }
 
 // Stickers is a simple slice of stickers
-type Stickers []*Sticker
+type Stickers []Sticker
+
+// Has will run a quick check against the slice of stickers to see if one has
+// been already added
+func (ss Stickers) Has(query string) bool {
+	_, ok := ss.Get(query)
+	return ok
+}
 
 // Get will run a quick check against the slice of stickers to see if one has
 // been already added and will return it.
-func (ss Stickers) Get(query string) *Sticker {
+func (ss Stickers) Get(query string) (Sticker, bool) {
 	for _, s := range ss {
-		if sticker := s.Matches(query); sticker != nil {
-			return sticker
+		if sticker, ok := s.Matches(query); ok {
+			return sticker, true
 		}
 	}
 
-	return nil
+	return Sticker{}, false
 }
 
 // Contains returns true if the list has a sticker with the given name
