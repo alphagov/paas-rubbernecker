@@ -41,11 +41,11 @@
   </header>
 
   <main class="row">
-    <section id="next" class="column collapsed left" style="display:none;">
+    <section id="next" class="col" data-cards="{{(len $next)}}">
       <h2>Next</h2>
 
       {{range $next}}
-        {{template "card" .}}
+        {{template "thin-card" .}}
       {{end}}
     </section>
 
