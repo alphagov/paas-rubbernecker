@@ -5,9 +5,9 @@
   </h3>
 
   <ul>
-    {{range .Assignees}}
+    {{range .Assignees -}}
       <li>{{.Name}}</li>
-    {{end}}
+    {{- end}}
   </ul>
 
   <footer>

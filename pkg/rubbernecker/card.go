@@ -40,10 +40,10 @@ type Card struct {
 type Cards []*Card
 
 // Reverse reverses the order of the cards in place
-func (cards Cards) Reverse() {
-	for i := len(cards)/2 - 1; i >= 0; i-- {
-		opp := len(cards) - 1 - i
-		cards[i], cards[opp] = cards[opp], cards[i]
+func (c Cards) Reverse() {
+	for i := len(c)/2 - 1; i >= 0; i-- {
+		opp := len(c) - 1 - i
+		c[i], c[opp] = c[opp], c[i]
 	}
 }
 
@@ -75,14 +75,14 @@ func (s Status) String() string {
 }
 
 // Filter the cards by status.
-func (c *Cards) Filter(s string) Cards {
+func (c Cards) Filter(s string) Cards {
 	tmp := Cards{}
 
 	if c == nil {
 		return tmp
 	}
 
-	for _, card := range *c {
+	for _, card := range c {
 		if card.Status == s {
 			tmp = append(tmp, card)
 		}

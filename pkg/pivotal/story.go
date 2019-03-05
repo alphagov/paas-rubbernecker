@@ -2,6 +2,7 @@ package pivotal
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/alphagov/paas-rubbernecker/pkg/rubbernecker"
@@ -78,16 +79,18 @@ func (t *Tracker) FlattenStories() (rubbernecker.Cards, error) {
 		stickers := rubbernecker.Stickers{}
 
 		for _, l := range s.Labels {
-			if sticker := t.stickers.Get(l.Name); sticker != nil {
+			if sticker, ok := t.stickers.Get(l.Name); ok {
 				stickers = append(stickers, sticker)
 			}
 		}
 
-		if hasUnresolvedBlockers(s.Blockers) && stickers.Get("blocked") == nil {
-			if sticker := t.stickers.Get("blocked"); sticker != nil {
+		for _, sticker := range convertBlockersToStickers(s.Blockers, t.stickers) {
+			if !stickers.Has(sticker.Name) {
 				stickers = append(stickers, sticker)
 			}
 		}
+
+		sort.Sort(stickers)
 
 		assignees := rubbernecker.Members{}
 
