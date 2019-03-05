@@ -126,7 +126,7 @@ var _ = Describe("Main", func() {
 			err = fetchSupport(pd)
 			Expect(err).NotTo(HaveOccurred())
 
-			Expect((*support)).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
+			Expect(support).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
 				"out-of-hours": {
 					Type:   "PaaS team rota - out of hours",
 					Member: "X",
@@ -182,7 +182,7 @@ var _ = Describe("Main", func() {
 			err = fetchSupport(pd)
 			Expect(err).NotTo(HaveOccurred())
 
-			Expect((*support)).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
+			Expect(support).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
 				"out-of-hours": {
 					Type:   "PaaS team rota - out of hours",
 					Member: "X",
@@ -208,7 +208,7 @@ var _ = Describe("Main", func() {
 			err = fetchSupport(pd)
 			Expect(err).NotTo(HaveOccurred())
 
-			Expect((*support)).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
+			Expect(support).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
 				"out-of-hours": {
 					Type:   "PaaS team rota - out of hours",
 					Member: "X",

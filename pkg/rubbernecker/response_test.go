@@ -53,7 +53,7 @@ var _ = Describe("Response", func() {
 	})
 
 	It("should setup the response WithSupport() rota collection", func() {
-		resp.WithSupport(&rubbernecker.SupportRota{
+		resp.WithSupport(rubbernecker.SupportRota{
 			"Test Case": &rubbernecker.Support{Type: "Test Case"},
 		})
 

@@ -8,14 +8,14 @@ import (
 
 // Response will be a standard outcome returned when hitting rubbernecker app.
 type Response struct {
-	Card            *Card        `json:"card,omitempty"`
-	Cards           Cards        `json:"cards,omitempty"`
-	Config          *Config      `json:"config,omitempty"`
-	Error           string       `json:"error,omitempty"`
-	Message         string       `json:"message,omitempty"`
-	SupportRota     *SupportRota `json:"support,omitempty"`
-	TeamMembers     Members      `json:"team_members,omitempty"`
-	FreeTeamMembers Members      `json:"free_team_members,omitempty"`
+	Card            *Card       `json:"card,omitempty"`
+	Cards           Cards       `json:"cards,omitempty"`
+	Config          *Config     `json:"config,omitempty"`
+	Error           string      `json:"error,omitempty"`
+	Message         string      `json:"message,omitempty"`
+	SupportRota     SupportRota `json:"support,omitempty"`
+	TeamMembers     Members     `json:"team_members,omitempty"`
+	FreeTeamMembers Members     `json:"free_team_members,omitempty"`
 }
 
 // JSON function will execute the response to our HTTP writer.
@@ -69,7 +69,7 @@ func (r *Response) WithError(err error) *Response {
 
 // WithSupport will set either rota or a single support data for the current
 // response.
-func (r *Response) WithSupport(rota *SupportRota) *Response {
+func (r *Response) WithSupport(rota SupportRota) *Response {
 	r.SupportRota = rota
 	return r
 }

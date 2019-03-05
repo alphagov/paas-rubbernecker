@@ -24,7 +24,11 @@ var (
 	cards     rubbernecker.Cards
 	doneCards rubbernecker.Cards
 	members   rubbernecker.Members
-	support   *rubbernecker.SupportRota
+	support   = rubbernecker.SupportRota{
+		"in-hours":     &rubbernecker.Support{},
+		"out-of-hours": &rubbernecker.Support{},
+		"escalations":  &rubbernecker.Support{},
+	}
 
 	verbose = kingpin.Flag("verbose", "Will enable the DEBUG logging level.").Default("false").Short('v').OverrideDefaultFromEnvar("DEBUG").Bool()
 	port    = kingpin.Flag("port", "Port the application should listen for the traffic on.").Default("8080").Short('p').OverrideDefaultFromEnvar("PORT").Int64()
@@ -115,6 +119,10 @@ func fetchStories(pt *pivotal.Tracker) error {
 }
 
 func fetchSupport(pd *pagerduty.Schedule) error {
+	if pd.Client == nil {
+		return fmt.Errorf("PAGERDUTY_AUTHTOKEN is not set, support rota will not be fetched")
+	}
+
 	err := pd.FetchSupport()
 	if err != nil {
 		return err
@@ -128,7 +136,7 @@ func fetchSupport(pd *pagerduty.Schedule) error {
 	s = formatSupportNames(s)
 
 	if !reflect.DeepEqual(support, s) {
-		support = &s
+		support = s
 		etag = time.Now()
 	}
 
@@ -215,7 +223,13 @@ func main() {
 	kingpin.Parse()
 	setupLogger()
 
-	pd := pagerduty.New(*pagerdutyAuthToken)
+	var pd = &pagerduty.Schedule{
+		Client: nil,
+	}
+	if pagerdutyAuthToken != nil && *pagerdutyAuthToken != "" {
+		pd = pagerduty.New(*pagerdutyAuthToken)
+	}
+
 	pt, err := pivotal.New(*pivotalProjectID, *pivotalAPIToken)
 	if err != nil {
 		log.Fatal(err)
