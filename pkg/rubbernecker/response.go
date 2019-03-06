@@ -10,6 +10,7 @@ import (
 type Response struct {
 	Card            *Card       `json:"card,omitempty"`
 	Cards           Cards       `json:"cards,omitempty"`
+	SampleCard      *Card       `json:"sample_card,omitempty"`
 	Config          *Config     `json:"config,omitempty"`
 	Error           string      `json:"error,omitempty"`
 	Message         string      `json:"message,omitempty"`
@@ -41,6 +42,12 @@ func (r *Response) Template(code int, w http.ResponseWriter, templateFile ...str
 	}
 
 	return t.Execute(w, r)
+}
+
+// WithSampleCard will set a sample card used for template generation
+func (r *Response) WithSampleCard(card *Card) *Response {
+	r.SampleCard = card
+	return r
 }
 
 // WithCards will set a collection/single card for the current response.
