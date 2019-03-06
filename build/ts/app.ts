@@ -213,10 +213,10 @@ class Application {
         }
       }
 
-      if ($card) {
-        this.updateCard($card, card, posInColumn);
-      } else {
+      if ($card.length === 0) {
         this.dealCard(card, posInColumn);
+      } else {
+        this.updateCard($card, card, posInColumn);
       }
     }
 
@@ -304,8 +304,9 @@ class Application {
 
   private updateCard($card: JQuery<HTMLElement>, card: ICard, pos: number) {
     const correctState = $card.parents(`#${card.status}`).length > 0;
+    const correctPos = $card.prevAll(`.card`).length === pos;
 
-    if (!correctState) {
+    if (!correctState || !correctPos) {
       setTimeout(() => {
         $card.remove();
       }, 500);
