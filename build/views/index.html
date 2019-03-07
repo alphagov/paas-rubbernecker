@@ -41,11 +41,11 @@
   </header>
 
   <main class="row">
-    <section id="next" class="column collapsed left" style="display:none;">
+    <section id="next" class="col" data-cards="{{(len $next)}}">
       <h2>Next</h2>
 
       {{range $next}}
-        {{template "card" .}}
+        {{template "thin-card" .}}
       {{end}}
     </section>
 
@@ -113,14 +113,10 @@
   </footer>
 
   <script id="card-template" type="text/template">
-    {{if len .Cards}}
-      {{template "card" (index .Cards 0)}}
-    {{end}}
+    {{template "card" .SampleCard }}
   </script>
   <script id="thin-card-template" type="text/template">
-    {{if len .Cards}}
-      {{template "thin-card" (index .Cards 0)}}
-    {{end}}
+    {{template "thin-card" .SampleCard }}
   </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>

@@ -8,7 +8,7 @@ const (
 	// ProjectManagementService.Fetch call.
 	StatusAll Status = iota
 	// StatusScheduled should only filter the stories that are not in the
-	// StatusStarted state, but prioritised into backlock.
+	// StatusStarted state, but prioritised into backlog.
 	StatusScheduled
 	// StatusDoing should only filter the stories that are in play.
 	StatusDoing

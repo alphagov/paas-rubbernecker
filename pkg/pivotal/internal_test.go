@@ -76,8 +76,8 @@ var _ = Describe("Pivotal internal functionality", func() {
 		reje := composeState(rubbernecker.StatusRejected)
 		done := composeState(rubbernecker.StatusDone)
 
-		Expect(all).To(Equal("started,finished,delivered,rejected"))
-		Expect(todo).To(Equal(pivotal.StoryStatePlanned))
+		Expect(all).To(Equal("unstarted,started,finished,delivered,rejected"))
+		Expect(todo).To(Equal(pivotal.StoryStateUnstarted))
 		Expect(play).To(Equal(pivotal.StoryStateStarted))
 		Expect(revi).To(Equal(pivotal.StoryStateFinished))
 		Expect(appr).To(Equal(pivotal.StoryStateDelivered))
@@ -86,7 +86,7 @@ var _ = Describe("Pivotal internal functionality", func() {
 	})
 
 	It("should convertState() correctly", func() {
-		Expect(convertState(pivotal.StoryStatePlanned)).To(Equal("next"))
+		Expect(convertState(pivotal.StoryStateUnstarted)).To(Equal("next"))
 		Expect(convertState(pivotal.StoryStateStarted)).To(Equal("doing"))
 		Expect(convertState(pivotal.StoryStateFinished)).To(Equal("reviewing"))
 		Expect(convertState(pivotal.StoryStateDelivered)).To(Equal("approving"))

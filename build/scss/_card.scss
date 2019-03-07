@@ -23,6 +23,10 @@ $spacing: 16px;
     transition: all .3s ease;
   }
 
+  &.next {
+    @include triangleBottomRight(16px, $grey);
+  }
+
   &.doing {
     @include triangleBottomRight(16px, $blue);
   }

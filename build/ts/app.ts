@@ -95,9 +95,10 @@ class Application {
     this.filterResetTimeout = 0;
   }
 
-  public dealCard(card: ICard) {
+  public dealCard(card: ICard, pos: number) {
     const tmpl: HTMLElement | null =
-      document.getElementById(card.status === 'done' ? 'thin-card-template' : 'card-template');
+      document.getElementById(card.status === 'done' || card.status === 'next' ?
+        'thin-card-template' : 'card-template');
     const parsed = document.createElement('div');
 
     if (tmpl === null) {
@@ -113,8 +114,13 @@ class Application {
 
     this.updateCardData($card, card);
 
-    $(`#${card.status}`)
-      .append(parsed.innerHTML);
+    const cardInPos = $(`#${card.status} div.card:eq(${pos})`);
+    if (cardInPos.length === 0) {
+      $(`#${card.status}`)
+        .append(parsed.innerHTML);
+    } else {
+      cardInPos.before(parsed.innerHTML);
+    }
 
     this
       .gracefulIn($(`#${card.status} #${card.id}`));
@@ -197,10 +203,20 @@ class Application {
     for (const card of cards) {
       const $card = $(`#${card.id}`);
 
-      if ($card) {
-        this.updateCard($card, card);
+      let posInColumn = 0;
+      for (const c of cards) {
+        if (c.id === card.id) {
+          break;
+        }
+        if (c.status === card.status) {
+          posInColumn++;
+        }
+      }
+
+      if ($card.length === 0) {
+        this.dealCard(card, posInColumn);
       } else {
-        this.dealCard(card);
+        this.updateCard($card, card, posInColumn);
       }
     }
 
@@ -261,8 +277,8 @@ class Application {
               sticker.Title :
               `<img src="${sticker.Image}" alt="${sticker.Title}" title="${sticker.Title}" />`;
 
-        if (sticker.Content != "") {
-          stickerContent = stickerContent + ` <small>${sticker.Content}</small>`
+        if (sticker.Content !== '') {
+          stickerContent = `${stickerContent} <small>${sticker.Content}</small>`;
         }
 
         if (!sticker.Label) {
@@ -286,16 +302,17 @@ class Application {
     return this;
   }
 
-  private updateCard($card: JQuery<HTMLElement>, card: ICard) {
+  private updateCard($card: JQuery<HTMLElement>, card: ICard, pos: number) {
     const correctState = $card.parents(`#${card.status}`).length > 0;
+    const correctPos = $card.prevAll(`.card`).length === pos;
 
-    if (!correctState) {
+    if (!correctState || !correctPos) {
       setTimeout(() => {
         $card.remove();
       }, 500);
 
       this.gracefulOut($card);
-      this.dealCard(card);
+      this.dealCard(card, pos);
     } else {
       this.updateCardData($card, card);
     }

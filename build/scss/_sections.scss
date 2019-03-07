@@ -12,6 +12,13 @@ section {
     }
   }
 
+  &#next {
+    h2 {
+      border-bottom: 3px solid $grey;
+      border-top: 3px solid $grey;
+    }
+  }
+
   &#doing {
     h2 {
       border-bottom: 3px solid $blue;

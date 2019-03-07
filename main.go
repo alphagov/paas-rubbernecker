@@ -197,6 +197,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 			ApprovalLimit: 5,
 		}).
 		WithCards(combineCards(cards, doneCards), false).
+		WithSampleCard(&rubbernecker.Card{}).
 		WithTeamMembers(members).
 		WithFreeTeamMembers().
 		WithSupport(support)
