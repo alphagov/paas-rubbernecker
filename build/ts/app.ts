@@ -171,6 +171,23 @@ class Application {
       .on(State.updated, () => { this.parseContent(); });
   }
 
+  public filterNonTech(showNonTech: boolean) {
+    const nonTechCards = $('.card:has(.sticker-non-tech)');
+    const otherCards = $('.card:not(:has(.sticker-non-tech))');
+
+    if (showNonTech) {
+      this.gracefulIn(nonTechCards);
+      this.gracefulOut(otherCards);
+    } else {
+      this.gracefulOut(nonTechCards);
+      this.gracefulIn(otherCards);
+    }
+
+    this.filterResetTimeout = setTimeout(() => {
+      $('input[name=all]').parents('label').trigger('click');
+    }, RESET_FILTERS_TIMEOUT_MS);
+  }
+
   public filterTeam(name: string) {
     const anyTeamCards = $('.card:not(:has(.sticker-team))');
     this.gracefulIn(anyTeamCards);

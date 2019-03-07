@@ -25,6 +25,12 @@
     </ul>
 
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-outline-dark btn-sm" onclick="app.filterNonTech(false)">
+        <input type="radio" name="tech" autocomplete="off"> Tech
+      </label>
+      <label class="btn btn-outline-dark btn-sm" onclick="app.filterNonTech(true)">
+        <input type="radio" name="non-tech" autocomplete="off"> Non-Tech
+      </label>
       <label class="btn btn-outline-dark btn-sm" onclick="app.filterTeam('a')">
         <input type="radio" name="a" autocomplete="off"> Team A
       </label>

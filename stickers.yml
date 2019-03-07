@@ -40,3 +40,9 @@
   regex: '^lead:?\s*([a-zA-Z0-9\s]+)'
   title: '$1'
   class: 'lead lead-$1'
+
+- name: non-tech
+  label: true
+  regex: 'non-tech'
+  title: 'non-tech'
+  class: 'non-tech'
