@@ -171,16 +171,17 @@ class Application {
       .on(State.updated, () => { this.parseContent(); });
   }
 
-  public filterTeam(name: string) {
-    const anyTeamCards = $('.card:not(:has(.sticker-team))');
-    this.gracefulIn(anyTeamCards);
+  public filterNonTech(showNonTech: boolean) {
+    const nonTechCards = $('.card:has(.sticker-non-tech)');
+    const otherCards = $('.card:not(:has(.sticker-non-tech))');
 
-    const teamCards = $('.card:has(.sticker-team)');
-    const visibleTeamCards = teamCards.filter(`:has(.sticker-team.team-${name})`);
-    const hiddenTeamCards = teamCards.filter(`:not(:has(.sticker-team.team-${name}))`);
-
-    this.gracefulIn(visibleTeamCards);
-    this.gracefulOut(hiddenTeamCards);
+    if (showNonTech) {
+      this.gracefulIn(nonTechCards);
+      this.gracefulOut(otherCards);
+    } else {
+      this.gracefulOut(nonTechCards);
+      this.gracefulIn(otherCards);
+    }
 
     this.filterResetTimeout = setTimeout(() => {
       $('input[name=all]').parents('label').trigger('click');
