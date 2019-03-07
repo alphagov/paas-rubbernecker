@@ -188,22 +188,6 @@ class Application {
     }, RESET_FILTERS_TIMEOUT_MS);
   }
 
-  public filterTeam(name: string) {
-    const anyTeamCards = $('.card:not(:has(.sticker-team))');
-    this.gracefulIn(anyTeamCards);
-
-    const teamCards = $('.card:has(.sticker-team)');
-    const visibleTeamCards = teamCards.filter(`:has(.sticker-team.team-${name})`);
-    const hiddenTeamCards = teamCards.filter(`:not(:has(.sticker-team.team-${name}))`);
-
-    this.gracefulIn(visibleTeamCards);
-    this.gracefulOut(hiddenTeamCards);
-
-    this.filterResetTimeout = setTimeout(() => {
-      $('input[name=all]').parents('label').trigger('click');
-    }, RESET_FILTERS_TIMEOUT_MS);
-  }
-
   public resetFilter() {
     this.gracefulIn($('.card'));
     clearTimeout(this.filterResetTimeout);

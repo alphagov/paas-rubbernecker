@@ -29,12 +29,6 @@
   image: '/img/pear_$1.svg'
   title: 'Pairing: $1'
 
-- name: team
-  label: true
-  regex: '^team:?\s*([a-zA-Z0-9\s]+)'
-  title: '$1'
-  class: 'team team-$1'
-
 - name: lead
   label: true
   regex: '^lead:?\s*([a-zA-Z0-9\s]+)'
