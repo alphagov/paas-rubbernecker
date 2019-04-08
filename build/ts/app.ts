@@ -330,7 +330,7 @@ class Application {
     const $sections = $('[data-cards]');
 
     $.each($sections, (_: number, section: HTMLElement) => {
-      const count = $(section).find('div.card').length;
+      const count = $(section).find('div.card:visible').length;
       const limit = parseInt($(section).find('h2 > small').attr('data-limit') || '0', 10);
 
       $(section).find('h2 > small').removeClass('text-danger');

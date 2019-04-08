@@ -91,7 +91,7 @@
     </div>
 
     <section id="done" class="col" data-cards="{{(len $done)}}">
-      <h2>Done <small>{{len $done}}</small></h2>
+      <h2>Done <small><span>{{len $done}}</span></small></h2>
 
       {{range $done}}
         {{template "thin-card" .}}
