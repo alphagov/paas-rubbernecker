@@ -128,6 +128,50 @@ var _ = Describe("Response", func() {
 		handler.ServeHTTP(rr, req)
 
 		Expect(rr.Code).To(Equal(500))
-		Expect(rr.Body.String()).To(BeEmpty())
+		Expect(rr.Body.String()).To(ContainSubstring("Rubbernecker could not parse templates"))
+	})
+
+	It("should not error when assignees are valid", func() {
+
+		req, err := http.NewRequest("GET", "/", nil)
+		Expect(err).NotTo(HaveOccurred())
+
+		rr := httptest.NewRecorder()
+		handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			resp.WithCards(rubbernecker.Cards{
+				&rubbernecker.Card{
+					Title: "Test Case",
+					Assignees: rubbernecker.Members{
+						1: &rubbernecker.Member{Name: "fieldexists"},
+					},
+				},
+			}, false).Template(200, w, "./test/cards.html")
+		})
+		handler.ServeHTTP(rr, req)
+
+		Expect(rr.Code).To(Equal(200))
+		Expect(rr.Body.String()).To(ContainSubstring("fieldexists"))
+	})
+
+	It("should error when assignees are invalid", func() {
+
+		req, err := http.NewRequest("GET", "/", nil)
+		Expect(err).NotTo(HaveOccurred())
+
+		rr := httptest.NewRecorder()
+		handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			resp.WithCards(rubbernecker.Cards{
+				&rubbernecker.Card{
+					Title: "Test Case",
+					Assignees: rubbernecker.Members{
+						1: nil,
+					},
+				},
+			}, false).Template(200, w, "./test/cards.html")
+		})
+		handler.ServeHTTP(rr, req)
+
+		Expect(rr.Code).To(Equal(500))
+		Expect(rr.Body.String()).To(ContainSubstring("Rubbernecker could not render template"))
 	})
 })

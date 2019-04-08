@@ -1,7 +1,9 @@
 package rubbernecker
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"text/template"
 )
@@ -32,16 +34,32 @@ func (r *Response) JSON(code int, w http.ResponseWriter) error {
 func (r *Response) Template(code int, w http.ResponseWriter, templateFile ...string) error {
 	var err error
 
-	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-	w.WriteHeader(code)
-
 	t := template.New("Rubbernecker.Template")
 	t, err = template.ParseFiles(templateFile...)
+
 	if err != nil {
+		w.WriteHeader(500)
+		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+		fmt.Fprintf(w, "Rubbernecker could not parse templates:\n%s", err)
 		return err
 	}
 
-	return t.Execute(w, r)
+	b := &bytes.Buffer{}
+	err = t.Execute(b, r)
+
+	if err != nil {
+		w.WriteHeader(500)
+		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+		fmt.Fprintf(w, "Rubbernecker could not render template:\n%s\n", err)
+
+		return err
+	} else {
+		w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+		w.WriteHeader(code)
+		w.Write(b.Bytes())
+
+		return nil
+	}
 }
 
 // WithSampleCard will set a sample card used for template generation
