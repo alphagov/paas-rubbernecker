@@ -1,7 +1,18 @@
 {{define "thin-card"}}
-<div id="{{.ID}}" class="card {{.Status}}">
+<div id="{{.ID}}" class="card thin {{.Status}}">
   <h3>
     <a href="{{.URL}}" target="_blank">{{.Title}}</a>
   </h3>
+
+  <footer>
+    <div class="labels"></div>
+    <div class="stickers">
+      {{range .Stickers}}
+        {{if not .Label}}
+          {{template "sticker" .}}
+        {{end}}
+      {{end}}
+    </div>
+  </footer>
 </div>
 {{end}}

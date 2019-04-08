@@ -45,6 +45,16 @@ $spacing: 16px;
 
   &.done {
     @include triangleBottomRight(16px, $dark);
+
+    footer {
+      display: none;
+    }
+  }
+
+  &.thin {
+    footer {
+      padding: $spacing/2 $spacing;
+    }
   }
 
   h3 {
@@ -80,17 +90,26 @@ $spacing: 16px;
   }
 
   footer {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto;
+
     align-items: flex-start;
     padding: $spacing;
     width: 100%;
 
-    div.labels {
-      display: inline-block;
-      height: 32px;
-      padding: 3px;
-      text-align: left;
-      width: 50%;
+    .labels {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          float: left;
+          clear: none;
+
+          .sticker {
+            font-weight: 400;
+          }
+      }
 
       > div {
         display: inline-block;
@@ -107,7 +126,6 @@ $spacing: 16px;
     div.stickers {
       display: flex;
       flex-direction: row-reverse;
-      width: 50%;
       text-transform: capitalize;
 
       > div {
