@@ -23,7 +23,7 @@ $spacing: 16px;
     transition: all .3s ease;
   }
 
-  &.next {
+  &.next:not(.type-release) {
     @include triangleBottomRight(16px, $grey);
   }
 
@@ -49,6 +49,11 @@ $spacing: 16px;
     footer {
       display: none;
     }
+  }
+
+
+  &.type-release {
+    border: none;
   }
 
   &.thin {

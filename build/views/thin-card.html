@@ -1,18 +1,36 @@
 {{define "thin-card"}}
-<div id="{{.ID}}" class="card thin {{.Status}}">
-  <h3>
-    <a href="{{.URL}}" target="_blank">{{.Title}}</a>
-  </h3>
 
-  <footer>
-    <div class="labels"></div>
-    <div class="stickers">
-      {{range .Stickers}}
-        {{if not .Label}}
-          {{template "sticker" .}}
-        {{end}}
-      {{end}}
+  {{- /*
+    In Pivotal tracker, 'release' type stories are used to create separators within the backlog and icebox.
+    We mirror that in Rubbernecker so that they don't appear as visual clutter.
+  */ -}}
+  {{ if eq .StoryType "release"}}
+    <div id="{{.ID}}" class="card thin type-{{.StoryType}}">
+      <h2>{{.Title}}</h2>
     </div>
-  </footer>
-</div>
+  {{ else -}}
+    <div id="{{.ID}}" class="card thin {{.Status}} type-{{.StoryType}}">
+      <h3>
+        <a href="{{.URL}}" target="_blank">{{.Title}}</a>
+      </h3>
+
+      <footer>
+        <div class="labels">
+          <small>{{.Elapsed}} day{{if ne .Elapsed 1}}s{{end}}</small>
+          {{range .Stickers}}
+            {{if .Label}}
+              {{template "sticker" .}}
+            {{end}}
+          {{end}}
+        </div>
+        <div class="stickers">
+          {{range .Stickers}}
+            {{if not .Label}}
+              {{template "sticker" .}}
+            {{end}}
+          {{end}}
+        </div>
+      </footer>
+    </div>
+ {{- end}}
 {{end}}
