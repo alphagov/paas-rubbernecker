@@ -6,6 +6,7 @@ interface ICard {
   readonly stickers: ReadonlyArray<ISticker>;
   readonly title: string;
   readonly url: string;
+  readonly story_type: string;
 }
 
 interface IMembers {
@@ -172,8 +173,8 @@ class Application {
   }
 
   public filterNonTech(showNonTech: boolean) {
-    const nonTechCards = $('.card:has(.sticker-non-tech)');
-    const otherCards = $('.card:not(:has(.sticker-non-tech))');
+    const nonTechCards = $('.card:not(.type-release):has(.sticker-non-tech)');
+    const otherCards = $('.card:not(.type-release):not(:has(.sticker-non-tech))');
 
     if (showNonTech) {
       this.gracefulIn(nonTechCards);
@@ -297,7 +298,7 @@ class Application {
 
   private setupCard($card: JQuery<HTMLElement>, card: ICard) {
     $card
-      .attr('class', `card ${card.status}`)
+      .attr('class', `card ${card.status} type-${card.story_type}`)
       .attr('id', card.id);
 
     return this;

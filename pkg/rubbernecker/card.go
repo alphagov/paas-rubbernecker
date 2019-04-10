@@ -34,6 +34,7 @@ type Card struct {
 	Stickers  Stickers `json:"stickers"`
 	Title     string   `json:"title"`
 	URL       string   `json:"url"`
+	StoryType string   `json:"story_type"`
 }
 
 // Cards will be a rubbernecker representative of all cards.

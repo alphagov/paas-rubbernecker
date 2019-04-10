@@ -30,6 +30,7 @@ type story struct {
 	Blockers    []blocker    `json:"blockers,omitempty"`
 	Transitions []transition `json:"transitions,omitempty"`
 	CreatedAt   *time.Time   `json:"created_at,omitempty"`
+	StoryType   string 			 `json:"story_type"`
 }
 
 type blocker struct {
