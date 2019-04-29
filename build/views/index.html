@@ -48,15 +48,30 @@
     </ul>
 
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-outline-dark btn-sm" onclick="app.filterNonTech(false)">
-        <input type="radio" name="tech" autocomplete="off"> Tech
-      </label>
-      <label class="btn btn-outline-dark btn-sm" onclick="app.filterNonTech(true)">
+      <a class="btn btn-outline-dark btn-sm" href="?include-sticker=blocked">
+        <input type="radio" name="tech" autocomplete="off"> Blocked
+      </a>
+      <a class="btn btn-outline-dark btn-sm" href="?include-sticker=scheduled">
+        <input type="radio" name="tech" autocomplete="off"> Scheduled
+      </a>
+      <a class="btn btn-outline-dark btn-sm" href="?include-sticker=comments-to-resolve">
+        <input type="radio" name="tech" autocomplete="off"> Comments to resolve
+      </a>
+      <a class="btn btn-outline-dark btn-sm" href="?include-sticker='small' task">
+        <input type="radio" name="tech" autocomplete="off"> Small tasks
+      </a>
+      <a class="btn btn-outline-dark btn-sm" href="?include-sticker=pairing">
+        <input type="radio" name="tech" autocomplete="off"> Pairing
+      </a>
+      <a class="btn btn-outline-dark btn-sm" href="?include-sticker=non-tech">
         <input type="radio" name="non-tech" autocomplete="off"> Non-Tech
-      </label>
-      <label class="btn btn-outline-dark btn-sm active" onclick="app.resetFilter()">
-        <input type="radio" name="all" autocomplete="off" checked> Show all
-      </label>
+      </a>
+      <a class="btn btn-outline-dark btn-sm" href="?exclude-sticker=non-tech">
+        <input type="radio" name="tech" autocomplete="off"> Tech
+      </a>
+      <a class="btn btn-outline-dark btn-sm" href="?">
+        <input type="radio" name="all" autocomplete="off" checked> Clear filters
+      </a>
     </div>
   </header>
 
