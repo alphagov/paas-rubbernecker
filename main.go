@@ -243,7 +243,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 			"./build/views/index.html",
 			"./build/views/card.html",
 			"./build/views/sticker.html",
-			"./build/views/thin-card.html",
 		)
 	}
 
