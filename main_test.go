@@ -278,4 +278,5 @@ var _ = Describe("Main", func() {
 			Expect(rr.Body.String()).To(ContainSubstring(`<!doctype html>`))
 		})
 	})
+
 })
