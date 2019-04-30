@@ -195,13 +195,17 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		r.URL.Query()["include-sticker"],
 		r.URL.Query()["exclude-sticker"],
 	)
+	filteredDoneCards := doneCards.FilterByStickerNames(
+		r.URL.Query()["include-sticker"],
+		r.URL.Query()["exclude-sticker"],
+	)
 
 	resp.
 		WithConfig(&rubbernecker.Config{
 			ReviewalLimit: 4,
 			ApprovalLimit: 5,
 		}).
-		WithCards(combineCards(filteredCards, doneCards), false).
+		WithCards(combineCards(filteredCards, filteredDoneCards), false).
 		WithSampleCard(&rubbernecker.Card{}).
 		WithTeamMembers(members).
 		WithFreeTeamMembers().
