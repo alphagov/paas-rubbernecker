@@ -1,130 +1,172 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="govuk-template ">
 
 <head>
+  <meta charset="utf-8" />
+  <meta name="theme-color" content="#0b0c0c" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Rubbernecker</title>
-  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-  <link rel="stylesheet" href="./app.css">
+  <link rel="stylesheet" href="css/govuk-frontend-2.11.0.min.css">
+  <link rel="stylesheet" href="css/application.css">
+  <meta http-equiv="refresh" content="300">
+  <script type="text/javascript">
+		setInterval(() => {
+			console.info('About to update with new Rubbernecker data')
+			fetch('')
+			.then(response => {
+				if (response.status != 200) {
+					console.error(
+						'Request to Rubbernecker server did not response with 200',
+						response
+					)
+				}
+				return response.text()
+			})
+			.then(responseContents => {
+				let elem = document.createElement('html')
+				elem.innerHTML = responseContents
+				let body = elem.querySelector('body')
+				document.querySelector('body').innerHTML = body.innerHTML
+				console.info('Updated document body with new Rubbernecker data')
+			})
+		}, 15 * 1000)
+  </script>
 </head>
 
-<body class="container-fluid">
-  {{$next := .Cards.Filter "next"}}
-  {{$doing := .Cards.Filter "doing"}}
-  {{$reviewing := .Cards.Filter "reviewing"}}
-  {{$approving := .Cards.Filter "approving"}}
-  {{$rejected := .Cards.Filter "rejected"}}
-  {{$done := .Cards.Filter "done"}}
+<body class="govuk-template__body ">
+  <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
-  <header class="text-center">
-    <ul>
-      <li><strong>In hours</strong>: <em class="in-hours">{{(index .SupportRota "in-hours").Member}}</em></li>
-      <li><strong>Out of hours</strong>: <em class="out-of-hours">{{(index .SupportRota "out-of-hours").Member}}</em></li>
-      <li><strong>Escalations</strong>: <em class="escalations">{{(index .SupportRota "escalations").Member}}</em></li>
-    </ul>
+  <header class="govuk-header " role="banner" data-module="header">
+    <div class="govuk-header__container govuk-width-container">
 
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-outline-dark btn-sm" onclick="app.filterNonTech(false)">
-        <input type="radio" name="tech" autocomplete="off"> Tech
-      </label>
-      <label class="btn btn-outline-dark btn-sm" onclick="app.filterNonTech(true)">
-        <input type="radio" name="non-tech" autocomplete="off"> Non-Tech
-      </label>
-      <label class="btn btn-outline-dark btn-sm active" onclick="app.resetFilter()">
-        <input type="radio" name="all" autocomplete="off" checked> Show all
-      </label>
+      <div class="govuk-header__logo">
+        <a href="/" class="govuk-header__link govuk-header__link--homepage">
+          <span class="govuk-header__logotype">
+            <span class="govuk-header__logotype-text">
+              Rubbernecker
+            </span>
+          </span>
+        </a>
+      </div>
     </div>
   </header>
 
-  <main class="row">
-    <section id="next" class="col" data-cards="{{(len $next)}}">
-      <h2>Next</h2>
+  <div class="govuk-width-container">
+    <main class="govuk-main-wrapper " id="main-content" role="main">
+      {{$next := .Cards.Filter "next"}}
+      {{$doing := .Cards.Filter "doing"}}
+      {{$reviewing := .Cards.Filter "reviewing"}}
+      {{$approving := .Cards.Filter "approving"}}
+      {{$rejected := .Cards.Filter "rejected"}}
+      {{$done := .Cards.Filter "done"}}
 
-      {{range $next}}
-        {{template "thin-card" .}}
-      {{end}}
-    </section>
+      <header class="text-center">
+        <ul>
+        </ul>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">
+              <strong>In hours</strong>:
+              {{(index .SupportRota "in-hours").Member}}
+            </p>
+          </div>
+          <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">
+              <strong>Out of hours</strong>:
+              {{(index .SupportRota "out-of-hours").Member}}
+            </p>
+          </div>
+          <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">
+              <strong>Escalations</strong>:
+              {{(index .SupportRota "escalations").Member}}
+            </p>
+          </div>
+        </div>
 
-    <section id="doing" class="col" data-cards="{{(len $doing)}}">
-      <h2>Doing <small><span>{{len $doing}}</span></small></h2>
 
-      {{range $doing}}
-        {{template "card" .}}
-      {{end}}
-    </section>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <a class="govuk-button govuk-button--secondary" href="?">
+            Clear filters
+          </a>
+          <a class="govuk-button govuk-button--secondary" href="?include-sticker=blocked">
+            Blocked
+          </a>
+          <a class="govuk-button govuk-button--secondary" href="?include-sticker=scheduled">
+            Scheduled
+          </a>
+          <a class="govuk-button govuk-button--secondary" href="?include-sticker=comments-to-resolve">
+            Comments to resolve
+          </a>
+          <a class="govuk-button govuk-button--secondary" href="?include-sticker='small' task">
+            Small tasks
+          </a>
+          <a class="govuk-button govuk-button--secondary" href="?include-sticker=pairing">
+            Pairing
+          </a>
+          <a class="govuk-button govuk-button--secondary" href="?include-sticker=non-tech">
+            Non-Tech
+          </a>
+          <a class="govuk-button govuk-button--secondary" href="?exclude-sticker=non-tech">
+            Tech
+          </a>
+        </div>
+      </header>
 
-    <section id="reviewing" class="col" data-cards="{{(len $reviewing)}}" data-limit="{{.Config.ReviewalLimit}}">
-      <h2>
-        Reviewing
-        <small data-limit="{{.Config.ReviewalLimit}}" class="{{if gt (len $reviewing) .Config.ReviewalLimit}}text-danger{{end}}">
-          <span>{{len $reviewing}}</span>/{{.Config.ReviewalLimit}}
-        </small>
-      </h2>
+			<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-      {{range $reviewing}}
-        {{template "card" .}}
-      {{end}}
-    </section>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+          <h1 class="text-center govuk-heading-l">Doing ({{len $doing}})</h1>
+          {{range $doing}}
+            {{template "card" .}}
+          {{end}}
 
-    <div class="col">
-      <section id="rejected" data-cards="{{(len $rejected)}}">
-        <h2>Rejected <small><span>{{len $rejected}}</span></small></h2>
+          <hr class="govuk-section-break govuk-section-break--m">
 
-        {{range $rejected}}
-          {{template "card" .}}
-        {{end}}
-      </section>
+          <h1 class="text-center govuk-heading-l">Next</h1>
+          {{range $next}}
+            {{template "card" .}}
+          {{end}}
+        </div>
 
-      <section id="approving" data-cards="{{(len $approving)}}" data-limit="{{.Config.ApprovalLimit}}">
-        <h2>
-          Approving
-          <small class="{{if gt (len $approving) .Config.ApprovalLimit}}text-danger{{end}}">
-            <span>{{len $approving}}</span>/{{.Config.ApprovalLimit}}
-          </small>
-        </h2>
+        <div class="govuk-grid-column-one-third">
+          <h1 class="text-center govuk-heading-l">
+            Reviewing ({{len $reviewing}}  / {{.Config.ReviewalLimit}})
+          </h1>
+          {{range $reviewing}}
+            {{template "card" .}}
+          {{end}}
+        </div>
 
-        {{range $approving}}
-          {{template "card" .}}
-        {{end}}
-      </section>
-    </div>
+        <div class="govuk-grid-column-one-third">
+          {{ if gt (len $rejected) 0 }}
+            <h1 class="text-center govuk-heading-l">Rejected</h1>
+            {{range $rejected}}
+              {{template "card" .}}
+            {{end}}
 
-    <section id="done" class="col" data-cards="{{(len $done)}}">
-      <h2>Done <small><span>{{len $done}}</span></small></h2>
+            <hr class="govuk-section-break govuk-section-break--m">
+          {{end}}
 
-      {{range $done}}
-        {{template "thin-card" .}}
-      {{end}}
-    </section>
-  </main>
+          <h1 class="text-center govuk-heading-l">
+            Approving ({{len $approving}}/{{.Config.ApprovalLimit}})
+          </h1>
+          {{range $approving}}
+            {{template "card" .}}
+          {{end}}
 
-  <footer style="display: none;">
-    <ul>
-      {{range .FreeTeamMembers}}
-        <li>{{.Name}}</li>
-      {{end}}
-    </ul>
+          <hr class="govuk-section-break govuk-section-break--m">
 
-    <span>{{len .FreeTeamMembers}}</span>
-  </footer>
-
-  <script id="card-template" type="text/template">
-    {{template "card" .SampleCard }}
-  </script>
-  <script id="thin-card-template" type="text/template">
-    {{template "thin-card" .SampleCard }}
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
-  <script src="./app.js"></script>
-
-  <script>
-    const app = new Application();
-    app.run();
-  </script>
+          <h1 class="text-center govuk-heading-l">Done ({{ len $done }})</h1>
+          {{range $done}}
+            {{template "card" .}}
+          {{end}}
+        </div>
+      </div>
+    </main>
+  </div>
 </body>
 
 </html>

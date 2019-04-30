@@ -191,12 +191,21 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	filteredCards := cards.FilterByStickerNames(
+		r.URL.Query()["include-sticker"],
+		r.URL.Query()["exclude-sticker"],
+	)
+	filteredDoneCards := doneCards.FilterByStickerNames(
+		r.URL.Query()["include-sticker"],
+		r.URL.Query()["exclude-sticker"],
+	)
+
 	resp.
 		WithConfig(&rubbernecker.Config{
 			ReviewalLimit: 4,
 			ApprovalLimit: 5,
 		}).
-		WithCards(combineCards(cards, doneCards), false).
+		WithCards(combineCards(filteredCards, filteredDoneCards), false).
 		WithSampleCard(&rubbernecker.Card{}).
 		WithTeamMembers(members).
 		WithFreeTeamMembers().
@@ -211,7 +220,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 			"./build/views/index.html",
 			"./build/views/card.html",
 			"./build/views/sticker.html",
-			"./build/views/thin-card.html",
 		)
 	}
 
