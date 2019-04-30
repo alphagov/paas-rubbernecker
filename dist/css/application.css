@@ -17,11 +17,11 @@
 }
 
 .card.type-feature {
-  border-top: 10px solid #d53880;
+  border-top: 5px solid #85994b;
 }
 
 .card.type-bug, .card.type-chore {
-  border-top: 10px solid #ffbf47;
+  border-top: 5px solid #ffbf47;
 }
 
 .card h2 a, .card h3 a {
