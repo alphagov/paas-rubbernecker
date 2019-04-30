@@ -191,10 +191,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	includeStickers := r.URL.Query()["include-sticker"]
-	excludeStickers := r.URL.Query()["exclude-sticker"]
-
-	filteredCards := filterCards(cards, includeStickers, excludeStickers)
+	filteredCards := cards.FilterByStickerNames(
+		r.URL.Query()["include-sticker"],
+		r.URL.Query()["exclude-sticker"],
+	)
 
 	resp.
 		WithConfig(&rubbernecker.Config{
