@@ -159,5 +159,48 @@ var _ = Describe("Card Filtering", func() {
 
 			Expect(filteredCards).To(HaveLen(3))
 		})
+
+		It("should implement person filters", func() {
+			members := make(rubbernecker.Members, 0)
+			members[1] = &rubbernecker.Member{Name: "Rubber Necker"}
+
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{Title: "a-card", Assignees: members},
+				&rubbernecker.Card{},
+				&rubbernecker.Card{},
+			)
+
+			filteredCards := cards.FilterByTextFilters([]string{
+				"person:rubber",
+			})
+
+			Expect(filteredCards).To(HaveLen(1))
+			Expect(filteredCards[0].Title).To(Equal("a-card"))
+		})
+
+		It("should implement multiple person filters", func() {
+			members1 := make(rubbernecker.Members, 0)
+			members1[1] = &rubbernecker.Member{Name: "Rubber Necker"}
+
+			members2 := make(rubbernecker.Members, 0)
+			members2[1] = &rubbernecker.Member{Name: "Necker"}
+
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{Title: "a-card", Assignees: members1},
+				&rubbernecker.Card{Title: "b-card", Assignees: members2},
+				&rubbernecker.Card{},
+			)
+
+			filteredCards := cards.FilterByTextFilters([]string{
+				"person:necker", "person:rubber",
+			})
+
+			Expect(filteredCards).To(HaveLen(1))
+			Expect(filteredCards[0].Title).To(Equal("a-card"))
+		})
 	})
 })

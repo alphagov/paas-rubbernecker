@@ -1,5 +1,9 @@
 package rubbernecker
 
+import (
+	"strings"
+)
+
 // Status is treated as an enum for the story status codes.
 type Status int
 
@@ -130,15 +134,30 @@ func (c Cards) FilterByStickerNames(
 }
 
 func (c Cards) FilterByTextFilters(filters []string) Cards {
+	if len(filters) == 0 {
+		return c
+	}
+
+	filter := strings.ToLower(filters[0])
+
 	filteredCards := make(Cards, 0)
 
 	for _, card := range c {
-		shouldAdd := true
+		shouldAdd := false
+
+		if strings.Contains(filter, "person:") {
+			memberName := strings.ToLower(strings.ReplaceAll(filter, "person:", ""))
+			for _, member := range card.Assignees {
+				if strings.Contains(strings.ToLower(member.Name), memberName) {
+					shouldAdd = true
+				}
+			}
+		}
 
 		if shouldAdd {
 			filteredCards = append(filteredCards, card)
 		}
 	}
 
-	return filteredCards
+	return filteredCards.FilterByTextFilters(filters[1:])
 }
