@@ -191,22 +191,22 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Merge any/all text-filters into one list
-	// text-filters should not contain spaces anyway
-	textFilters := strings.Split(strings.Join(
-		r.URL.Query()["text-filters"],
+	// Merge any/all filter params into one list of filters
+	// a filter should not contain spaces anyway
+	filters := strings.Split(strings.Join(
+		r.URL.Query()["filter"],
 		" "),
 		" ")
 
 	filteredCards := cards.FilterByStickerNames(
 		r.URL.Query()["include-sticker"],
 		r.URL.Query()["exclude-sticker"],
-	).FilterByTextFilters(textFilters)
+	).FilterBy(filters)
 
 	filteredDoneCards := doneCards.FilterByStickerNames(
 		r.URL.Query()["include-sticker"],
 		r.URL.Query()["exclude-sticker"],
-	).FilterByTextFilters(textFilters)
+	).FilterBy(filters)
 
 	resp.
 		WithConfig(&rubbernecker.Config{
@@ -217,7 +217,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		WithSampleCard(&rubbernecker.Card{}).
 		WithTeamMembers(members).
 		WithFreeTeamMembers().
-		WithTextFilters(textFilters).
+		WithFilters(filters).
 		WithSupport(support)
 
 	if strings.Contains(r.Header.Get("Accept"), "json") {

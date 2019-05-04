@@ -133,7 +133,7 @@ func (c Cards) FilterByStickerNames(
 	return filteredCards
 }
 
-func (c Cards) FilterByTextFilters(filters []string) Cards {
+func (c Cards) FilterBy(filters []string) Cards {
 	if len(filters) == 0 {
 		return c
 	}
@@ -166,5 +166,5 @@ func (c Cards) FilterByTextFilters(filters []string) Cards {
 		}
 	}
 
-	return filteredCards.FilterByTextFilters(filters[1:])
+	return filteredCards.FilterBy(filters[1:])
 }

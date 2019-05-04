@@ -145,7 +145,7 @@ var _ = Describe("Card Filtering", func() {
 			Expect(filteredCards[0].Title).To(Equal("a non-tech card"))
 		})
 	})
-	Context("Card Filtering By Text Filters", func() {
+	Context("Card FilterBy", func() {
 		It("should not do anything if there are no filters", func() {
 			cards := make(rubbernecker.Cards, 0)
 			cards = append(
@@ -155,7 +155,7 @@ var _ = Describe("Card Filtering", func() {
 				&rubbernecker.Card{},
 			)
 
-			filteredCards := cards.FilterByTextFilters([]string{})
+			filteredCards := cards.FilterBy([]string{})
 
 			Expect(filteredCards).To(HaveLen(3))
 		})
@@ -169,7 +169,7 @@ var _ = Describe("Card Filtering", func() {
 				&rubbernecker.Card{},
 			)
 
-			filteredCards := cards.FilterByTextFilters([]string{"foo"})
+			filteredCards := cards.FilterBy([]string{"foo"})
 
 			Expect(filteredCards).To(HaveLen(3))
 		})
@@ -186,7 +186,7 @@ var _ = Describe("Card Filtering", func() {
 				&rubbernecker.Card{},
 			)
 
-			filteredCards := cards.FilterByTextFilters([]string{
+			filteredCards := cards.FilterBy([]string{
 				"person:rubber",
 			})
 
@@ -209,7 +209,7 @@ var _ = Describe("Card Filtering", func() {
 				&rubbernecker.Card{},
 			)
 
-			filteredCards := cards.FilterByTextFilters([]string{
+			filteredCards := cards.FilterBy([]string{
 				"person:necker", "person:rubber",
 			})
 
@@ -225,7 +225,7 @@ var _ = Describe("Card Filtering", func() {
 				&rubbernecker.Card{Title: "b-card"},
 			)
 
-			filteredCards := cards.FilterByTextFilters([]string{"title:b"})
+			filteredCards := cards.FilterBy([]string{"title:b"})
 
 			Expect(filteredCards).To(HaveLen(1))
 			Expect(filteredCards[0].Title).To(Equal("b-card"))
@@ -239,7 +239,7 @@ var _ = Describe("Card Filtering", func() {
 				&rubbernecker.Card{Title: "b-card"},
 			)
 
-			filteredCards := cards.FilterByTextFilters([]string{
+			filteredCards := cards.FilterBy([]string{
 				"title:card", "title:b",
 			})
 
