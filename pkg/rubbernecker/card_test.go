@@ -145,4 +145,19 @@ var _ = Describe("Card Filtering", func() {
 			Expect(filteredCards[0].Title).To(Equal("a non-tech card"))
 		})
 	})
+	Context("Card Filtering By Text Filters", func() {
+		It("should not do anything if there are no filters", func() {
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{},
+				&rubbernecker.Card{},
+				&rubbernecker.Card{},
+			)
+
+			filteredCards := cards.FilterByTextFilters([]string{})
+
+			Expect(filteredCards).To(HaveLen(3))
+		})
+	})
 })

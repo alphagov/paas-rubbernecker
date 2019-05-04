@@ -128,3 +128,17 @@ func (c Cards) FilterByStickerNames(
 
 	return filteredCards
 }
+
+func (c Cards) FilterByTextFilters(filters []string) Cards {
+	filteredCards := make(Cards, 0)
+
+	for _, card := range c {
+		shouldAdd := true
+
+		if shouldAdd {
+			filteredCards = append(filteredCards, card)
+		}
+	}
+
+	return filteredCards
+}
