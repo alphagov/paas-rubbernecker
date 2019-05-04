@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"text/template"
 )
 
@@ -19,6 +20,7 @@ type Response struct {
 	SupportRota     SupportRota `json:"support,omitempty"`
 	TeamMembers     Members     `json:"team_members,omitempty"`
 	FreeTeamMembers Members     `json:"free_team_members,omitempty"`
+	TextFilters     string      `json:"text_filters"`
 }
 
 // JSON function will execute the response to our HTTP writer.
@@ -125,5 +127,11 @@ func (r *Response) WithFreeTeamMembers() *Response {
 		r.FreeTeamMembers = free
 	}
 
+	return r
+}
+
+// WithTextFilters will set the text-filters param for the current response.
+func (r *Response) WithTextFilters(textFilters []string) *Response {
+	r.TextFilters = strings.Join(textFilters, " ")
 	return r
 }

@@ -112,7 +112,19 @@
             Tech
           </a>
         </div>
+
+        <form method="GET">
+          <div class="govuk-form-group">
+            <input class="govuk-input"
+                   style="text-align: center"
+                   name="text-filters"
+                   value="{{ .TextFilters }}"
+                   placeholder="Filters e.g. title:cve person:towers"
+                   type="text"/>
+          </div>
+        </form>
       </header>
+
 
 			<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
