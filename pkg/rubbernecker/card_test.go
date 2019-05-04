@@ -202,5 +202,35 @@ var _ = Describe("Card Filtering", func() {
 			Expect(filteredCards).To(HaveLen(1))
 			Expect(filteredCards[0].Title).To(Equal("a-card"))
 		})
+
+		It("should implement title filters", func() {
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{Title: "a-card"},
+				&rubbernecker.Card{Title: "b-card"},
+			)
+
+			filteredCards := cards.FilterByTextFilters([]string{"title:b"})
+
+			Expect(filteredCards).To(HaveLen(1))
+			Expect(filteredCards[0].Title).To(Equal("b-card"))
+		})
+
+		It("should implement multiple title filters", func() {
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{Title: "a-card"},
+				&rubbernecker.Card{Title: "b-card"},
+			)
+
+			filteredCards := cards.FilterByTextFilters([]string{
+				"title:card", "title:b",
+			})
+
+			Expect(filteredCards).To(HaveLen(1))
+			Expect(filteredCards[0].Title).To(Equal("b-card"))
+		})
 	})
 })

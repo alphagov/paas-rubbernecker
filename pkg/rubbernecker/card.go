@@ -154,6 +154,13 @@ func (c Cards) FilterByTextFilters(filters []string) Cards {
 			}
 		}
 
+		if strings.Contains(filter, "title:") {
+			title := strings.ToLower(strings.ReplaceAll(filter, "title:", ""))
+			if strings.Contains(strings.ToLower(card.Title), title) {
+				shouldAdd = true
+			}
+		}
+
 		if shouldAdd {
 			filteredCards = append(filteredCards, card)
 		}
