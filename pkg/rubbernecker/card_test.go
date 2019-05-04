@@ -34,7 +34,7 @@ var _ = Describe("Response", func() {
 })
 
 var _ = Describe("Card Filtering", func() {
-	Context("Card Filtering", func() {
+	Context("Card Filtering By Sticker Names", func() {
 		It("should not do anything if there are no filters", func() {
 			cards := make(rubbernecker.Cards, 0)
 			cards = append(
