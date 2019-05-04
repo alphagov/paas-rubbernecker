@@ -20,7 +20,8 @@ type Response struct {
 	SupportRota     SupportRota `json:"support,omitempty"`
 	TeamMembers     Members     `json:"team_members,omitempty"`
 	FreeTeamMembers Members     `json:"free_team_members,omitempty"`
-	Filters         string      `json:"filters"`
+	Filters         string      `json:"filters,omitempty"`
+	TextFilters     string      `json:"text_filters,omitempty"`
 }
 
 // JSON function will execute the response to our HTTP writer.
@@ -130,8 +131,25 @@ func (r *Response) WithFreeTeamMembers() *Response {
 	return r
 }
 
-// WithFilters will set the text-filters param for the current response.
+// WithFilters will set the filters param for the current response.
 func (r *Response) WithFilters(filters []string) *Response {
 	r.Filters = strings.Join(filters, " ")
+	return r
+}
+
+// WithTextFilters will set the text-filters param for the current response.
+func (r *Response) WithTextFilters(filters []string) *Response {
+	// We do not include stickers in the text filters
+	textFilters := make([]string, 0)
+
+	for _, f := range filters {
+		if !strings.HasPrefix(f, "sticker:") &&
+			!strings.HasPrefix(f, "not-sticker:") {
+
+			textFilters = append(textFilters, f)
+		}
+	}
+
+	r.Filters = strings.Join(textFilters, " ")
 	return r
 }

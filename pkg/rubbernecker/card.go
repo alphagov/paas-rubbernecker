@@ -96,43 +96,6 @@ func (c Cards) Filter(s string) Cards {
 	return tmp
 }
 
-func (c Cards) FilterByStickerNames(
-	includeStickers []string,
-	excludeStickers []string,
-) Cards {
-	filteredCards := make(Cards, 0)
-
-	for _, card := range c {
-		shouldAdd := true
-
-		if len(includeStickers) > 0 {
-			shouldAdd = false
-			for _, sticker := range card.Stickers {
-				for _, includedStickerName := range includeStickers {
-					if sticker.Name == includedStickerName {
-						shouldAdd = true
-					}
-				}
-			}
-		} else if len(excludeStickers) > 0 {
-			shouldAdd = true
-			for _, sticker := range card.Stickers {
-				for _, excludedStickerName := range excludeStickers {
-					if sticker.Name == excludedStickerName {
-						shouldAdd = false
-					}
-				}
-			}
-		}
-
-		if shouldAdd {
-			filteredCards = append(filteredCards, card)
-		}
-	}
-
-	return filteredCards
-}
-
 func (c Cards) FilterBy(filters []string) Cards {
 	if len(filters) == 0 {
 		return c
@@ -145,17 +108,34 @@ func (c Cards) FilterBy(filters []string) Cards {
 	for _, card := range c {
 		shouldAdd := false
 
-		if strings.Contains(filter, "person:") {
+		if strings.HasPrefix(filter, "person:") {
 			memberName := strings.ToLower(strings.ReplaceAll(filter, "person:", ""))
 			for _, member := range card.Assignees {
 				if strings.Contains(strings.ToLower(member.Name), memberName) {
 					shouldAdd = true
 				}
 			}
-		} else if strings.Contains(filter, "title:") {
+		} else if strings.HasPrefix(filter, "title:") {
 			title := strings.ToLower(strings.ReplaceAll(filter, "title:", ""))
 			if strings.Contains(strings.ToLower(card.Title), title) {
 				shouldAdd = true
+			}
+		} else if strings.HasPrefix(filter, "sticker:") {
+			sname := strings.ToLower(strings.ReplaceAll(filter, "sticker:", ""))
+
+			for _, sticker := range card.Stickers {
+				if strings.HasPrefix(sticker.Name, sname) {
+					shouldAdd = true
+				}
+			}
+		} else if strings.HasPrefix(filter, "not-sticker:") {
+			sname := strings.ToLower(strings.ReplaceAll(filter, "not-sticker:", ""))
+			shouldAdd = true
+
+			for _, sticker := range card.Stickers {
+				if strings.HasPrefix(sticker.Name, sname) {
+					shouldAdd = false
+				}
 			}
 		} else {
 			shouldAdd = true

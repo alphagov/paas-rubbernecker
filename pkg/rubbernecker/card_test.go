@@ -34,118 +34,7 @@ var _ = Describe("Response", func() {
 })
 
 var _ = Describe("Card Filtering", func() {
-	Context("Card Filtering By Sticker Names", func() {
-		It("should not do anything if there are no filters", func() {
-			cards := make(rubbernecker.Cards, 0)
-			cards = append(
-				cards,
-				&rubbernecker.Card{},
-				&rubbernecker.Card{},
-				&rubbernecker.Card{},
-			)
-
-			includeStickers := []string{}
-			excludeStickers := []string{}
-
-			filteredCards := cards.FilterByStickerNames(
-				includeStickers,
-				excludeStickers,
-			)
-
-			Expect(filteredCards).To(HaveLen(3))
-		})
-
-		It("should include cards", func() {
-			cards := make(rubbernecker.Cards, 0)
-			cards = append(
-				cards,
-				&rubbernecker.Card{
-					Title: "a non-tech card",
-					Stickers: []rubbernecker.Sticker{
-						rubbernecker.Sticker{Name: "non-tech"},
-					},
-				},
-				&rubbernecker.Card{
-					Title: "a tech card",
-					Stickers: []rubbernecker.Sticker{
-						rubbernecker.Sticker{Name: "tech"},
-					},
-				},
-			)
-
-			includeStickers := []string{"non-tech"}
-			excludeStickers := []string{}
-
-			filteredCards := cards.FilterByStickerNames(
-				includeStickers,
-				excludeStickers,
-			)
-
-			Expect(filteredCards).To(HaveLen(1))
-			Expect(filteredCards[0].Title).To(Equal("a non-tech card"))
-		})
-
-		It("should exclude cards", func() {
-			cards := make(rubbernecker.Cards, 0)
-			cards = append(
-				cards,
-				&rubbernecker.Card{
-					Title: "a non-tech card",
-					Stickers: []rubbernecker.Sticker{
-						rubbernecker.Sticker{Name: "non-tech"},
-					},
-				},
-				&rubbernecker.Card{
-					Title: "a bug",
-					Stickers: []rubbernecker.Sticker{
-						rubbernecker.Sticker{Name: "bug"},
-					},
-				},
-			)
-
-			includeStickers := []string{}
-			excludeStickers := []string{"bug"}
-
-			filteredCards := cards.FilterByStickerNames(
-				includeStickers,
-				excludeStickers,
-			)
-
-			Expect(filteredCards).To(HaveLen(1))
-			Expect(filteredCards[0].Title).To(Equal("a non-tech card"))
-		})
-
-		It("should prioritise include over exclude", func() {
-			cards := make(rubbernecker.Cards, 0)
-			cards = append(
-				cards,
-				&rubbernecker.Card{
-					Title: "a non-tech card",
-					Stickers: []rubbernecker.Sticker{
-						rubbernecker.Sticker{Name: "non-tech"},
-					},
-				},
-				&rubbernecker.Card{
-					Title: "a tech card",
-					Stickers: []rubbernecker.Sticker{
-						rubbernecker.Sticker{Name: "tech"},
-					},
-				},
-			)
-
-			includeStickers := []string{"non-tech"}
-			excludeStickers := []string{"tech"}
-
-			filteredCards := cards.FilterByStickerNames(
-				includeStickers,
-				excludeStickers,
-			)
-
-			Expect(filteredCards).To(HaveLen(1))
-			Expect(filteredCards[0].Title).To(Equal("a non-tech card"))
-		})
-	})
-	Context("Card FilterBy", func() {
+	Context("FilterBy", func() {
 		It("should not do anything if there are no filters", func() {
 			cards := make(rubbernecker.Cards, 0)
 			cards = append(
@@ -245,6 +134,135 @@ var _ = Describe("Card Filtering", func() {
 
 			Expect(filteredCards).To(HaveLen(1))
 			Expect(filteredCards[0].Title).To(Equal("b-card"))
+		})
+
+		It("should include cards when stickers are filtered by", func() {
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{
+					Title: "a non-tech card",
+					Stickers: []rubbernecker.Sticker{
+						rubbernecker.Sticker{Name: "non-tech"},
+					},
+				},
+				&rubbernecker.Card{
+					Title: "a tech card",
+					Stickers: []rubbernecker.Sticker{
+						rubbernecker.Sticker{Name: "tech"},
+					},
+				},
+			)
+
+			filteredCards := cards.FilterBy([]string{
+				"sticker:non-tech",
+			})
+
+			Expect(filteredCards).To(HaveLen(1))
+			Expect(filteredCards[0].Title).To(Equal("a non-tech card"))
+		})
+
+		It("should exclude cards when stickers are filtered by", func() {
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{
+					Title: "a non-tech card",
+					Stickers: []rubbernecker.Sticker{
+						rubbernecker.Sticker{Name: "non-tech"},
+					},
+				},
+				&rubbernecker.Card{
+					Title: "a bug",
+					Stickers: []rubbernecker.Sticker{
+						rubbernecker.Sticker{Name: "bug"},
+					},
+				},
+			)
+
+			filteredCards := cards.FilterBy([]string{
+				"not-sticker:bug",
+			})
+
+			Expect(filteredCards).To(HaveLen(1))
+			Expect(filteredCards[0].Title).To(Equal("a non-tech card"))
+		})
+
+		It("should not include cards when stickers cancel out", func() {
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{
+					Title: "a non-tech card",
+					Stickers: []rubbernecker.Sticker{
+						rubbernecker.Sticker{Name: "non-tech"},
+					},
+				},
+				&rubbernecker.Card{
+					Title: "a tech card",
+					Stickers: []rubbernecker.Sticker{
+						rubbernecker.Sticker{Name: "tech"},
+					},
+				},
+			)
+
+			filteredCards := cards.FilterBy([]string{
+				"sticker:tech", "not-sticker:tech",
+			})
+
+			Expect(filteredCards).To(HaveLen(0))
+		})
+
+		It("can include (sticker:'small' task)", func() {
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{
+					Title: "a small task",
+					Stickers: []rubbernecker.Sticker{
+						rubbernecker.Sticker{Name: "'small' task"},
+					},
+				},
+				&rubbernecker.Card{
+					Title: "a tech card",
+					Stickers: []rubbernecker.Sticker{
+						rubbernecker.Sticker{Name: "tech"},
+					},
+				},
+			)
+
+			filteredCards := cards.FilterBy([]string{
+				"sticker:'small' task",
+			})
+
+			Expect(filteredCards).To(HaveLen(1))
+			Expect(filteredCards[0].Title).To(Equal("a small task"))
+		})
+
+		It("can exclude (sticker:'small' task)", func() {
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{
+					Title: "a small task",
+					Stickers: []rubbernecker.Sticker{
+						rubbernecker.Sticker{Name: "'small' task"},
+					},
+				},
+				&rubbernecker.Card{
+					Title: "a tech card",
+					Stickers: []rubbernecker.Sticker{
+						rubbernecker.Sticker{Name: "tech"},
+					},
+				},
+			)
+
+			filteredCards := cards.FilterBy([]string{
+				"not-sticker:'small' task",
+			})
+
+			Expect(filteredCards).To(HaveLen(1))
+			Expect(filteredCards[0].Title).NotTo(Equal("a small task"))
 		})
 	})
 })
