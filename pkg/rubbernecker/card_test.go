@@ -160,6 +160,20 @@ var _ = Describe("Card Filtering", func() {
 			Expect(filteredCards).To(HaveLen(3))
 		})
 
+		It("should not do anything for unknown filters", func() {
+			cards := make(rubbernecker.Cards, 0)
+			cards = append(
+				cards,
+				&rubbernecker.Card{},
+				&rubbernecker.Card{},
+				&rubbernecker.Card{},
+			)
+
+			filteredCards := cards.FilterByTextFilters([]string{"foo"})
+
+			Expect(filteredCards).To(HaveLen(3))
+		})
+
 		It("should implement person filters", func() {
 			members := make(rubbernecker.Members, 0)
 			members[1] = &rubbernecker.Member{Name: "Rubber Necker"}
