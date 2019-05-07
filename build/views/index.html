@@ -87,30 +87,22 @@
 
 
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <a class="govuk-button govuk-button--secondary" href="?">
-            Clear filters
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker=blocked">
-            Blocked
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker=scheduled">
-            Scheduled
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker=comments-to-resolve">
-            Comments to resolve
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker='small' task">
-            Small tasks
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker=pairing">
-            Pairing
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker=non-tech">
-            Non-Tech
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?exclude-sticker=non-tech">
-            Tech
-          </a>
+          {{ range .Filters}}
+            {{ $appliedClass := "govuk-button--secondary"}}
+            {{ if .Exclude}}
+              {{if .IsApplied $.AppliedExcludeFilters }}
+                {{$appliedClass = ""}}
+              {{end }}
+            {{ else }}
+              {{if .IsApplied $.AppliedIncludeFilters }}
+                {{$appliedClass = ""}}
+              {{end }}
+            {{end}}
+
+            <a class="govuk-button {{$appliedClass}}" href="{{.Href}}">
+              {{.FilterText}}
+            </a>
+          {{end}}
         </div>
       </header>
 

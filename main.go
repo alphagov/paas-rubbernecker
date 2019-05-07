@@ -191,25 +191,38 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	includeFilters := r.URL.Query()["include-sticker"]
+	excludeFilters := r.URL.Query()["exclude-sticker"]
 	filteredCards := cards.FilterByStickerNames(
-		r.URL.Query()["include-sticker"],
-		r.URL.Query()["exclude-sticker"],
+		includeFilters,
+		excludeFilters,
 	)
 	filteredDoneCards := doneCards.FilterByStickerNames(
-		r.URL.Query()["include-sticker"],
-		r.URL.Query()["exclude-sticker"],
+		includeFilters,
+		excludeFilters,
 	)
 
 	resp.
 		WithConfig(&rubbernecker.Config{
-			ReviewalLimit: 4,
-			ApprovalLimit: 5,
+			ReviewalLimit:         4,
+			ApprovalLimit:         5,
 		}).
 		WithCards(combineCards(filteredCards, filteredDoneCards), false).
 		WithSampleCard(&rubbernecker.Card{}).
 		WithTeamMembers(members).
 		WithFreeTeamMembers().
-		WithSupport(support)
+		WithSupport(support).
+		WithFilters([]rubbernecker.Filter{
+			{ FilterText: "Clear filters", StickerName: "" },
+			{ FilterText: "Blocked", StickerName: "blocked" },
+			{ FilterText: "Scheduled", StickerName: "scheduled" },
+			{ FilterText: "Comments to resolve", StickerName: "comments-to-resolve" },
+			{ FilterText: "Small tasks", StickerName: "'small' task" },
+			{ FilterText: "Pairing", StickerName: "pairing" },
+			{ FilterText: "Non-Tech", StickerName: "non-tech" },
+			{ FilterText: "Tech", StickerName: "non-tech", Exclude: true },
+		}).
+		WithAppliedFilters(includeFilters, excludeFilters)
 
 	if strings.Contains(r.Header.Get("Accept"), "json") {
 		w.Header().Set("ETag", et)

@@ -10,15 +10,18 @@ import (
 
 // Response will be a standard outcome returned when hitting rubbernecker app.
 type Response struct {
-	Card            *Card       `json:"card,omitempty"`
-	Cards           Cards       `json:"cards,omitempty"`
-	SampleCard      *Card       `json:"sample_card,omitempty"`
-	Config          *Config     `json:"config,omitempty"`
-	Error           string      `json:"error,omitempty"`
-	Message         string      `json:"message,omitempty"`
-	SupportRota     SupportRota `json:"support,omitempty"`
-	TeamMembers     Members     `json:"team_members,omitempty"`
-	FreeTeamMembers Members     `json:"free_team_members,omitempty"`
+	Card                  *Card       `json:"card,omitempty"`
+	Cards                 Cards       `json:"cards,omitempty"`
+	SampleCard            *Card       `json:"sample_card,omitempty"`
+	Config                *Config     `json:"config,omitempty"`
+	Error                 string      `json:"error,omitempty"`
+	Message               string      `json:"message,omitempty"`
+	SupportRota           SupportRota `json:"support,omitempty"`
+	TeamMembers           Members     `json:"team_members,omitempty"`
+	FreeTeamMembers       Members     `json:"free_team_members,omitempty"`
+	Filters               []Filter    `json:"filters,omitempty"`
+	AppliedIncludeFilters []string    `json:"applied_include_filters,omitempty"`
+	AppliedExcludeFilters []string    `json:"applied_exclude_filters,omitempty"`
 }
 
 // JSON function will execute the response to our HTTP writer.
@@ -125,5 +128,16 @@ func (r *Response) WithFreeTeamMembers() *Response {
 		r.FreeTeamMembers = free
 	}
 
+	return r
+}
+
+func (r *Response) WithFilters(filters []Filter) *Response {
+	r.Filters = filters
+	return r
+}
+
+func (r *Response) WithAppliedFilters(include []string, exclude []string) *Response {
+	r.AppliedIncludeFilters = include
+	r.AppliedExcludeFilters = exclude
 	return r
 }
