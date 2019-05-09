@@ -11,17 +11,18 @@ import (
 
 // Response will be a standard outcome returned when hitting rubbernecker app.
 type Response struct {
-	Card            *Card       `json:"card,omitempty"`
-	Cards           Cards       `json:"cards,omitempty"`
-	SampleCard      *Card       `json:"sample_card,omitempty"`
-	Config          *Config     `json:"config,omitempty"`
-	Error           string      `json:"error,omitempty"`
-	Message         string      `json:"message,omitempty"`
-	SupportRota     SupportRota `json:"support,omitempty"`
-	TeamMembers     Members     `json:"team_members,omitempty"`
-	FreeTeamMembers Members     `json:"free_team_members,omitempty"`
-	Filters         string      `json:"filters,omitempty"`
-	TextFilters     string      `json:"text_filters,omitempty"`
+	Card                 *Card       `json:"card,omitempty"`
+	Cards                Cards       `json:"cards,omitempty"`
+	SampleCard           *Card       `json:"sample_card,omitempty"`
+	Config               *Config     `json:"config,omitempty"`
+	Error                string      `json:"error,omitempty"`
+	Message              string      `json:"message,omitempty"`
+	SupportRota          SupportRota `json:"support,omitempty"`
+	TeamMembers          Members     `json:"team_members,omitempty"`
+	FreeTeamMembers      Members     `json:"free_team_members,omitempty"`
+	Filters              []Filter    `json:"filers,omitempty"`
+	AppliedFilterQueries []string    `json:"applied_filters,omitempty"`
+	TextFilters          string      `json:"text_filters,omitempty"`
 }
 
 // JSON function will execute the response to our HTTP writer.
@@ -131,9 +132,15 @@ func (r *Response) WithFreeTeamMembers() *Response {
 	return r
 }
 
-// WithFilters will set the filters param for the current response.
-func (r *Response) WithFilters(filters []string) *Response {
-	r.Filters = strings.Join(filters, " ")
+// WithFilters will set te filters param for the current response
+func (r *Response) WithFilters(filters []Filter) *Response {
+	r.Filters = filters
+	return r
+}
+
+// WithAppliedFilterQueries will set the applied filter queries param for the current response.
+func (r *Response) WithAppliedFilterQueries(queries []string) *Response {
+	r.AppliedFilterQueries = queries
 	return r
 }
 
@@ -150,6 +157,6 @@ func (r *Response) WithTextFilters(filters []string) *Response {
 		}
 	}
 
-	r.Filters = strings.Join(textFilters, " ")
+	r.AppliedFilterQueries = textFilters
 	return r
 }
