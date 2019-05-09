@@ -109,19 +109,19 @@ func (c Cards) FilterBy(filters []string) Cards {
 		shouldAdd := false
 
 		if strings.HasPrefix(filter, "person:") {
-			memberName := strings.ToLower(strings.ReplaceAll(filter, "person:", ""))
+			memberName := strings.ToLower(strings.Replace(filter, "person:", "", -1))
 			for _, member := range card.Assignees {
 				if strings.Contains(strings.ToLower(member.Name), memberName) {
 					shouldAdd = true
 				}
 			}
 		} else if strings.HasPrefix(filter, "title:") {
-			title := strings.ToLower(strings.ReplaceAll(filter, "title:", ""))
+			title := strings.ToLower(strings.Replace(filter, "title:", "", -1))
 			if strings.Contains(strings.ToLower(card.Title), title) {
 				shouldAdd = true
 			}
 		} else if strings.HasPrefix(filter, "sticker:") {
-			sname := strings.ToLower(strings.ReplaceAll(filter, "sticker:", ""))
+			sname := strings.ToLower(strings.Replace(filter, "sticker:", "", -1))
 
 			for _, sticker := range card.Stickers {
 				if strings.HasPrefix(sticker.Name, sname) {
@@ -129,7 +129,7 @@ func (c Cards) FilterBy(filters []string) Cards {
 				}
 			}
 		} else if strings.HasPrefix(filter, "not-sticker:") {
-			sname := strings.ToLower(strings.ReplaceAll(filter, "not-sticker:", ""))
+			sname := strings.ToLower(strings.Replace(filter, "not-sticker:", "",- 1))
 			shouldAdd = true
 
 			for _, sticker := range card.Stickers {
