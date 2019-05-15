@@ -157,6 +157,6 @@ func (r *Response) WithTextFilters(filters []string) *Response {
 		}
 	}
 
-	r.AppliedFilterQueries = textFilters
+	r.AppliedFilterQueries = filters
 	return r
 }
