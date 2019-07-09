@@ -86,33 +86,35 @@
         </div>
 
 
+        <form method="GET">
+          <div class="govuk-form-group">
+            <input class="govuk-input"
+                   style="text-align: center"
+                   name="filter"
+                   value="{{ range .AppliedFilterQueries }}{{.}}{{" "}}{{end}}"
+                   placeholder="Filters e.g. title:cve person:towers"
+                   type="text"/>
+          </div>
+        </form>
+
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <a class="govuk-button govuk-button--secondary" href="?">
             Clear filters
           </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker=blocked">
-            Blocked
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker=scheduled">
-            Scheduled
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker=comments-to-resolve">
-            Comments to resolve
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker='small' task">
-            Small tasks
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker=pairing">
-            Pairing
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?include-sticker=non-tech">
-            Non-Tech
-          </a>
-          <a class="govuk-button govuk-button--secondary" href="?exclude-sticker=non-tech">
-            Tech
-          </a>
+
+          {{- range .Filters}}
+            {{ $buttonClass := "govuk-button--secondary" }}
+            {{- if .IsApplied $.AppliedFilterQueries }}
+              {{ $buttonClass = "" }}
+            {{- end }}
+
+            <a class="govuk-button {{$buttonClass}}" href="?{{.QueryText}}">
+              {{.DisplayText}}
+            </a>
+          {{- end }}
         </div>
       </header>
+
 
 			<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 

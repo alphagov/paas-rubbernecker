@@ -1,5 +1,9 @@
 package rubbernecker
 
+import (
+	"strings"
+)
+
 // Status is treated as an enum for the story status codes.
 type Status int
 
@@ -92,33 +96,49 @@ func (c Cards) Filter(s string) Cards {
 	return tmp
 }
 
-func (c Cards) FilterByStickerNames(
-	includeStickers []string,
-	excludeStickers []string,
-) Cards {
+func (c Cards) FilterBy(filters []string) Cards {
+	if len(filters) == 0 {
+		return c
+	}
+
+	filter := strings.ToLower(filters[0])
+
 	filteredCards := make(Cards, 0)
 
 	for _, card := range c {
-		shouldAdd := true
+		shouldAdd := false
 
-		if len(includeStickers) > 0 {
-			shouldAdd = false
-			for _, sticker := range card.Stickers {
-				for _, includedStickerName := range includeStickers {
-					if sticker.Name == includedStickerName {
-						shouldAdd = true
-					}
+		if strings.HasPrefix(filter, "person:") {
+			memberName := strings.ToLower(strings.Replace(filter, "person:", "", -1))
+			for _, member := range card.Assignees {
+				if strings.Contains(strings.ToLower(member.Name), memberName) {
+					shouldAdd = true
 				}
 			}
-		} else if len(excludeStickers) > 0 {
+		} else if strings.HasPrefix(filter, "title:") {
+			title := strings.ToLower(strings.Replace(filter, "title:", "", -1))
+			if strings.Contains(strings.ToLower(card.Title), title) {
+				shouldAdd = true
+			}
+		} else if strings.HasPrefix(filter, "sticker:") {
+			sname := strings.ToLower(strings.Replace(filter, "sticker:", "", -1))
+
+			for _, sticker := range card.Stickers {
+				if strings.HasPrefix(sticker.Name, sname) {
+					shouldAdd = true
+				}
+			}
+		} else if strings.HasPrefix(filter, "not-sticker:") {
+			sname := strings.ToLower(strings.Replace(filter, "not-sticker:", "",- 1))
 			shouldAdd = true
+
 			for _, sticker := range card.Stickers {
-				for _, excludedStickerName := range excludeStickers {
-					if sticker.Name == excludedStickerName {
-						shouldAdd = false
-					}
+				if strings.HasPrefix(sticker.Name, sname) {
+					shouldAdd = false
 				}
 			}
+		} else {
+			shouldAdd = true
 		}
 
 		if shouldAdd {
@@ -126,5 +146,5 @@ func (c Cards) FilterByStickerNames(
 		}
 	}
 
-	return filteredCards
+	return filteredCards.FilterBy(filters[1:])
 }

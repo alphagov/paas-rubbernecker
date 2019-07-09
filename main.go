@@ -191,14 +191,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	filteredCards := cards.FilterByStickerNames(
-		r.URL.Query()["include-sticker"],
-		r.URL.Query()["exclude-sticker"],
-	)
-	filteredDoneCards := doneCards.FilterByStickerNames(
-		r.URL.Query()["include-sticker"],
-		r.URL.Query()["exclude-sticker"],
-	)
+	filterQueries := r.URL.Query()["filter"]
+
+	filteredCards := cards.FilterBy(filterQueries)
+	filteredDoneCards := doneCards.FilterBy(filterQueries)
 
 	resp.
 		WithConfig(&rubbernecker.Config{
@@ -209,6 +205,9 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		WithSampleCard(&rubbernecker.Card{}).
 		WithTeamMembers(members).
 		WithFreeTeamMembers().
+		WithFilters(rubbernecker.DefaultFilterSet()).
+		WithAppliedFilterQueries(filterQueries).
+		WithTextFilters(filterQueries).
 		WithSupport(support)
 
 	if strings.Contains(r.Header.Get("Accept"), "json") {
