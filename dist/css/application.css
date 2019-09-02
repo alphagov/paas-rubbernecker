@@ -24,7 +24,7 @@
   border-top: 5px solid #ffbf47;
 }
 
-.card h2 a, .card h3 a {
+.card h2 a, .card h3 a.govuk-link {
   color: inherit;
   text-decoration: none;
 }
