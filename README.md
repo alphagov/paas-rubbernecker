@@ -65,3 +65,7 @@ You can find some exciting functionality if you run:
 ./bin/rubbernecker --help
 ```
 
+
+### Creative Commons usage
+
+- [documentation icon](dist/img/documentation.svg) by Adrien Coquet

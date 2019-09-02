@@ -42,7 +42,6 @@
   class: 'non-tech'
 
 - name: documentation
-  label: true
   regex: '^.*(docs)|(documentation).*$'
+  image: /img/documentation.svg
   title: 'documentation'
-  class: 'documentation'
