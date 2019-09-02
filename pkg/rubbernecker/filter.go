@@ -37,7 +37,7 @@ func (*BlockedFilter) IsApplied(queries []string) bool {
 	return isApplied(queries, "sticker:blocked")
 }
 
-type ScheduledFilter struct {}
+type ScheduledFilter struct{}
 
 func (*ScheduledFilter) QueryText() string {
 	return "filter=sticker:scheduled"
@@ -51,7 +51,7 @@ func (*ScheduledFilter) IsApplied(queries []string) bool {
 	return isApplied(queries, "sticker:scheduled")
 }
 
-type CommentsToResolveFilter struct {}
+type CommentsToResolveFilter struct{}
 
 func (*CommentsToResolveFilter) QueryText() string {
 	return "filter=sticker:comments-to-resolve"
@@ -65,7 +65,7 @@ func (*CommentsToResolveFilter) IsApplied(queries []string) bool {
 	return isApplied(queries, "sticker:comments-to-resolve")
 }
 
-type SmallTaskFilter struct {}
+type SmallTaskFilter struct{}
 
 func (SmallTaskFilter) QueryText() string {
 	return "filter=sticker:'small' task"
@@ -107,7 +107,7 @@ func (*PairingFilter) IsApplied(queries []string) bool {
 	return isApplied(queries, "sticker:pairing")
 }
 
-type NonTechFilter struct {}
+type NonTechFilter struct{}
 
 func (*NonTechFilter) QueryText() string {
 	return "filter=sticker:non-tech"
@@ -121,7 +121,7 @@ func (*NonTechFilter) IsApplied(queries []string) bool {
 	return isApplied(queries, "sticker:non-tech")
 }
 
-type TechFilter struct {}
+type TechFilter struct{}
 
 func (*TechFilter) QueryText() string {
 	return "filter=not-sticker:non-tech"
@@ -145,4 +145,3 @@ func isApplied(queries []string, term string) bool {
 
 	return false
 }
-

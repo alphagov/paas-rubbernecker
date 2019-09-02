@@ -7,9 +7,9 @@ import (
 )
 
 var _ = Describe("Filter", func() {
-	Describe("blocked filter", func(){
-		It("is applied when the queries contain 'sticker:blocked'", func(){
-			queries := []string {"bar", "sticker:blocked", "foo"}
+	Describe("blocked filter", func() {
+		It("is applied when the queries contain 'sticker:blocked'", func() {
+			queries := []string{"bar", "sticker:blocked", "foo"}
 
 			filter := rubbernecker.BlockedFilter{}
 			actual := filter.IsApplied(queries)
@@ -19,8 +19,8 @@ var _ = Describe("Filter", func() {
 	})
 
 	Describe("scheduled filter", func() {
-		It("is applied when the queries contain 'sticker:scheduled'", func(){
-			queries := []string {"bar", "sticker:scheduled", "foo"}
+		It("is applied when the queries contain 'sticker:scheduled'", func() {
+			queries := []string{"bar", "sticker:scheduled", "foo"}
 
 			filter := rubbernecker.ScheduledFilter{}
 			actual := filter.IsApplied(queries)
@@ -29,9 +29,9 @@ var _ = Describe("Filter", func() {
 		})
 	})
 
-	Describe("comments to resolve filter", func(){
-		It("is applied when the queries contain 'sticker:comments-to-resolve'", func(){
-			queries := []string {"bar", "sticker:comments-to-resolve", "foo"}
+	Describe("comments to resolve filter", func() {
+		It("is applied when the queries contain 'sticker:comments-to-resolve'", func() {
+			queries := []string{"bar", "sticker:comments-to-resolve", "foo"}
 
 			filter := rubbernecker.CommentsToResolveFilter{}
 			actual := filter.IsApplied(queries)
@@ -40,9 +40,9 @@ var _ = Describe("Filter", func() {
 		})
 	})
 
-	Describe("small task filter", func(){
-		It("is applied when the queries contain 'sticker:'small' task'", func(){
-			queries := []string {"bar", "sticker:'small' task", "foo"}
+	Describe("small task filter", func() {
+		It("is applied when the queries contain 'sticker:'small' task'", func() {
+			queries := []string{"bar", "sticker:'small' task", "foo"}
 
 			filter := rubbernecker.SmallTaskFilter{}
 			actual := filter.IsApplied(queries)
@@ -73,9 +73,9 @@ var _ = Describe("Filter", func() {
 		})
 	})
 
-	Describe("non-tech filter", func(){
-		It("is applied when the queries contain 'sticker:non-tech'", func(){
-			queries := []string {"bar", "sticker:non-tech", "foo"}
+	Describe("non-tech filter", func() {
+		It("is applied when the queries contain 'sticker:non-tech'", func() {
+			queries := []string{"bar", "sticker:non-tech", "foo"}
 
 			filter := rubbernecker.NonTechFilter{}
 			actual := filter.IsApplied(queries)
@@ -84,9 +84,9 @@ var _ = Describe("Filter", func() {
 		})
 	})
 
-	Describe("tech filter", func(){
-		It("is applied when the queries contain 'not-sticker:non-tech'", func(){
-			queries := []string {"bar", "not-sticker:non-tech", "foo"}
+	Describe("tech filter", func() {
+		It("is applied when the queries contain 'not-sticker:non-tech'", func() {
+			queries := []string{"bar", "not-sticker:non-tech", "foo"}
 
 			filter := rubbernecker.TechFilter{}
 			actual := filter.IsApplied(queries)
