@@ -129,7 +129,7 @@ func (c Cards) FilterBy(filters []string) Cards {
 				}
 			}
 		} else if strings.HasPrefix(filter, "not-sticker:") {
-			sname := strings.ToLower(strings.Replace(filter, "not-sticker:", "",- 1))
+			sname := strings.ToLower(strings.Replace(filter, "not-sticker:", "", -1))
 			shouldAdd = true
 
 			for _, sticker := range card.Stickers {
