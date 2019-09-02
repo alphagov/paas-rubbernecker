@@ -50,10 +50,21 @@ var _ = Describe("Filter", func() {
 			Expect(actual).To(BeTrue())
 		})
 	})
-	
-	Describe("pairing filter", func(){
-		It("is applied when the queries contain 'sticker:pairing'", func(){
-			queries := []string {"bar", "sticker:pairing", "foo"}
+
+	Describe("documentation filter", func() {
+		It("is applied when the queries contain 'sticker:documentationm", func() {
+			queries := []string{"bar", "sticker:documentation", "foo"}
+
+			filter := rubbernecker.DocumentationFilter{}
+			actual := filter.IsApplied(queries)
+
+			Expect(actual).To(BeTrue())
+		})
+	})
+
+	Describe("pairing filter", func() {
+		It("is applied when the queries contain 'sticker:pairing'", func() {
+			queries := []string{"bar", "sticker:pairing", "foo"}
 
 			filter := rubbernecker.PairingFilter{}
 			actual := filter.IsApplied(queries)

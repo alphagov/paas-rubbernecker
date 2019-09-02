@@ -11,18 +11,19 @@ type Filter interface {
 }
 
 func DefaultFilterSet() []Filter {
-	return []Filter {
+	return []Filter{
 		&BlockedFilter{},
 		&ScheduledFilter{},
 		&CommentsToResolveFilter{},
 		&SmallTaskFilter{},
+		&DocumentationFilter{},
 		&PairingFilter{},
 		&NonTechFilter{},
 		&TechFilter{},
 	}
 }
 
-type BlockedFilter struct {}
+type BlockedFilter struct{}
 
 func (*BlockedFilter) QueryText() string {
 	return "filter=sticker:blocked"
@@ -78,7 +79,21 @@ func (SmallTaskFilter) IsApplied(queries []string) bool {
 	return isApplied(queries, "sticker:'small' task")
 }
 
-type PairingFilter struct {}
+type DocumentationFilter struct{}
+
+func (*DocumentationFilter) QueryText() string {
+	return "filter=sticker:documentation"
+}
+
+func (*DocumentationFilter) DisplayText() string {
+	return "Documentation"
+}
+
+func (*DocumentationFilter) IsApplied(queries []string) bool {
+	return isApplied(queries, "sticker:documentation")
+}
+
+type PairingFilter struct{}
 
 func (*PairingFilter) QueryText() string {
 	return "filter=sticker:pairing"

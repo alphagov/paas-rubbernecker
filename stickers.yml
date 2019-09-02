@@ -40,3 +40,9 @@
   regex: 'non-tech'
   title: 'non-tech'
   class: 'non-tech'
+
+- name: documentation
+  label: true
+  regex: '^.*(docs)|(documentation).*$'
+  title: 'documentation'
+  class: 'documentation'
