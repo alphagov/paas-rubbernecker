@@ -110,7 +110,7 @@ var _ = Describe("Pivotal Stories", func() {
 		DescribeTable("a scheduled date in a blocker should be parsed correctly",
 			func(blockerDescription string, expectedDate time.Time) {
 				response = fmt.Sprintf(
-					`[{"blockers": [{"created_at":"2019-09-01T12:34:56Z", "description":"%s"}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[{"name":"test"}]}]`,
+					`[{"blockers": [{"created_at":"2199-09-01T12:34:56Z", "description":"%s"}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[{"name":"test"}]}]`,
 					blockerDescription,
 				)
 				httpmock.RegisterResponder("GET", apiURL, httpmock.NewStringResponder(200, response))
@@ -120,6 +120,7 @@ var _ = Describe("Pivotal Stories", func() {
 
 				cards, err := pt.FlattenStories()
 				Expect(err).NotTo(HaveOccurred())
+				Expect(cards).To(HaveLen(1))
 
 				sticker, ok := cards[0].Stickers.Get("scheduled")
 				Expect(ok).To(BeTrue())
@@ -131,28 +132,28 @@ var _ = Describe("Pivotal Stories", func() {
 				Expect(ok).To(BeFalse())
 			},
 			// All date formats
-			Entry("until 2/9", "until 2/9", getTimeFromStr("2/9/2019")),
-			Entry("until 02/09", "until 02/09", getTimeFromStr("2/9/2019")),
-			Entry("until 02/09/2019", "until 02/09/2019", getTimeFromStr("2/9/2019")),
-			Entry("until 2019/09/02", "until 2019/09/02", getTimeFromStr("2/9/2019")),
-			Entry("until 2019-09-02", "until 2019-09-02", getTimeFromStr("2/9/2019")),
+			Entry("until 2/9", "until 2/9", getTimeFromStr("2/9/2199")),
+			Entry("until 02/09", "until 02/09", getTimeFromStr("2/9/2199")),
+			Entry("until 02/09/2199", "until 02/09/2199", getTimeFromStr("2/9/2199")),
+			Entry("until 2199/09/02", "until 2199/09/02", getTimeFromStr("2/9/2199")),
+			Entry("until 2199-09-02", "until 2199-09-02", getTimeFromStr("2/9/2199")),
 
 			// Next year
 			Entry("until 3/1", "until 3/1", getTimeFromStr("3/1/2020")),
 
 			// All prepositions
-			Entry("before 2/9", "before 2/9", getTimeFromStr("2/9/2019")),
-			Entry("on 2/9", "on 2/9", getTimeFromStr("2/9/2019")),
-			Entry("on or after 2/9", "on or after 2/9", getTimeFromStr("2/9/2019")),
+			Entry("before 2/9", "before 2/9", getTimeFromStr("2/9/2199")),
+			Entry("on 2/9", "on 2/9", getTimeFromStr("2/9/2199")),
+			Entry("on or after 2/9", "on or after 2/9", getTimeFromStr("2/9/2199")),
 
 			// After should add an extra day
-			Entry("after 2/9", "after 2/9", getTimeFromStr("3/9/2019")),
+			Entry("after 2/9", "after 2/9", getTimeFromStr("3/9/2199")),
 		)
 
 		It("a scheduled sticker should not be added if in the past", func() {
 			response = fmt.Sprintf(
-				`[{"blockers": [{"created_at":"2019-02-01T12:34:56Z", "description":"xx %s xx"}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[{"name":"test"}]}]`,
-				"until 2019-02-01",
+				`[{"blockers": [{"created_at":"1970-02-01T12:34:56Z", "description":"xx %s xx"}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[{"name":"test"}]}]`,
+				"until 1970-02-01",
 			)
 			httpmock.RegisterResponder("GET", apiURL, httpmock.NewStringResponder(200, response))
 
@@ -168,7 +169,7 @@ var _ = Describe("Pivotal Stories", func() {
 
 		It("a scheduled sticker should not be added if resolved", func() {
 			response = fmt.Sprintf(
-				`[{"blockers": [{"created_at":"2019-02-01T12:34:56Z", "description":"xx %s xx", "resolved": true}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[{"name":"test"}]}]`,
+				`[{"blockers": [{"created_at":"2199-02-01T12:34:56Z", "description":"xx %s xx", "resolved": true}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[{"name":"test"}]}]`,
 				"until "+time.Now().AddDate(0, 0, 1).Format("2/1/2006"),
 			)
 			httpmock.RegisterResponder("GET", apiURL, httpmock.NewStringResponder(200, response))
@@ -188,7 +189,7 @@ var _ = Describe("Pivotal Stories", func() {
 
 		It("a scheduled blocker should not hide an other blocker", func() {
 			response = fmt.Sprintf(
-				`[{"blockers": [{"created_at":"2019-02-01T12:34:56Z", "description":"xx %s xx"}, {"created_at":"2019-02-01T12:34:56Z", "description":"other blocker"}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[{"name":"test"}]}]`,
+				`[{"blockers": [{"created_at":"2199-02-01T12:34:56Z", "description":"xx %s xx"}, {"created_at":"2199-02-01T12:34:56Z", "description":"other blocker"}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[{"name":"test"}]}]`,
 				"until "+time.Now().AddDate(0, 0, 1).Format("2/1/2006"),
 			)
 			httpmock.RegisterResponder("GET", apiURL, httpmock.NewStringResponder(200, response))
