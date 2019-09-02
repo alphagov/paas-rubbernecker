@@ -30,7 +30,7 @@ type story struct {
 	Blockers    []blocker    `json:"blockers,omitempty"`
 	Transitions []transition `json:"transitions,omitempty"`
 	CreatedAt   *time.Time   `json:"created_at,omitempty"`
-	StoryType   string 			 `json:"story_type"`
+	StoryType   string       `json:"story_type"`
 }
 
 type blocker struct {
@@ -161,9 +161,8 @@ func convertBlockersToStickers(blockers []blocker, availableStickers rubbernecke
 			} else if scheduledDate != nil {
 				if scheduledDate.After(time.Now()) && !stickers.Has("scheduled") {
 					if sticker, ok := availableStickers.Get("scheduled"); ok {
-						dateStr := scheduledDate.Format("2/1")
 						sticker.Title = blocker.Description
-						sticker.Content = dateStr
+						sticker.Content = scheduledDate.Format("2/1")
 						stickers = append(stickers, sticker)
 					}
 				}

@@ -9,6 +9,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
 	. "github.com/onsi/gomega"
+	. "github.com/onsi/gomega/gstruct"
 
 	"github.com/alphagov/paas-rubbernecker/pkg/pivotal"
 	"github.com/alphagov/paas-rubbernecker/pkg/rubbernecker"
@@ -122,14 +123,21 @@ var _ = Describe("Pivotal Stories", func() {
 				Expect(err).NotTo(HaveOccurred())
 				Expect(cards).To(HaveLen(1))
 
-				sticker, ok := cards[0].Stickers.Get("scheduled")
-				Expect(ok).To(BeTrue())
-				dateStr := expectedDate.Format("2/1")
-				Expect(sticker.Title).To(Equal(blockerDescription))
-				Expect(sticker.Content).To(Equal(dateStr))
+				stickers := cards[0].Stickers
 
-				_, ok = cards[0].Stickers.Get("blocked")
-				Expect(ok).To(BeFalse())
+				Expect(stickers).To(
+					ContainElement(MatchFields(IgnoreExtras, Fields{
+						"Name":    Equal("scheduled"),
+						"Title":   Equal(blockerDescription),
+						"Content": Equal(expectedDate.Format("2/1")),
+					})),
+				)
+
+				Expect(stickers).NotTo(
+					ContainElement(MatchFields(IgnoreExtras, Fields{
+						"Name": Equal("blocked"),
+					})),
+				)
 			},
 			// All date formats
 			Entry("until 2/9", "until 2/9", getTimeFromStr("2/9/2199")),
