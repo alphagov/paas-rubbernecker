@@ -119,7 +119,7 @@ var _ = Describe("Main", func() {
 			resp := `{"oncalls":[
 				{"user":{"summary":"X"},"schedule":{"summary":"PaaS team rota - out of hours"}},
 				{"user":{"summary":"Y"},"schedule":{"summary":"PaaS team rota - in hours"}},
-				{"user":{"summary":"Z"},"schedule":{"summary":"PaaS team Escalations - out of hours"}}
+				{"user":{"summary":"Z"},"schedule":{"summary":"TechOps RE Incident Escalation"}}
 			]}`
 			httpmock.RegisterResponder("GET", apiURLSupport, httpmock.NewStringResponder(200, resp))
 
@@ -136,7 +136,7 @@ var _ = Describe("Main", func() {
 					Member: "Y",
 				},
 				"escalations": {
-					Type:   "PaaS team Escalations - out of hours",
+					Type:   "TechOps RE Incident Escalation",
 					Member: "Z",
 				},
 			})))
@@ -165,7 +165,7 @@ var _ = Describe("Main", func() {
 			}`
 			resp3 := `{
 				"oncalls":[
-					{"user":{"summary":"Z"},"schedule":{"summary":"PaaS team Escalations - out of hours"}}
+					{"user":{"summary":"Z"},"schedule":{"summary":"TechOps RE Incident Escalation"}}
 				],
 				"limit": 1,
 				"offset": 6,
@@ -192,7 +192,7 @@ var _ = Describe("Main", func() {
 					Member: "Y",
 				},
 				"escalations": {
-					Type:   "PaaS team Escalations - out of hours",
+					Type:   "TechOps RE Incident Escalation",
 					Member: "Z",
 				},
 			})))
@@ -201,7 +201,7 @@ var _ = Describe("Main", func() {
 		It("should handle when there isn't anyone on call for a certain schedule", func() {
 			resp := `{"oncalls":[
 				{"user":{"summary":"X"},"schedule":{"summary":"PaaS team rota - out of hours"}},
-				{"user":{"summary":"Z"},"schedule":{"summary":"PaaS team Escalations - out of hours"}}
+				{"user":{"summary":"Z"},"schedule":{"summary":"TechOps RE Incident Escalation"}}
 			]}`
 			httpmock.RegisterResponder("GET", apiURLSupport, httpmock.NewStringResponder(200, resp))
 
@@ -218,7 +218,7 @@ var _ = Describe("Main", func() {
 					Member: "-",
 				},
 				"escalations": {
-					Type:   "PaaS team Escalations - out of hours",
+					Type:   "TechOps RE Incident Escalation",
 					Member: "Z",
 				},
 			})))
