@@ -170,7 +170,7 @@ func formatSupportNames(s rubbernecker.SupportRota) rubbernecker.SupportRota {
 	return rubbernecker.SupportRota{
 		"in-hours":     s.Get("PaaS team rota - in hours"),
 		"out-of-hours": s.Get("PaaS team rota - out of hours"),
-		"escalations":  s.Get("PaaS team Escalations - out of hours"),
+		"escalations":  s.Get("TechOps RE Incident Escalation"),
 	}
 }
 
