@@ -69,3 +69,4 @@ You can find some exciting functionality if you run:
 ### Creative Commons usage
 
 - [documentation icon](dist/img/documentation.svg) by Adrien Coquet
+- [goat icon](dist/img/goat.svg) by Chanut is Industries

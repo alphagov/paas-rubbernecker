@@ -45,3 +45,8 @@
   regex: '^.*(docs)|(documentation).*$'
   image: /img/documentation.svg
   title: 'documentation'
+
+- name: everyone
+  regex: '^for-everyone.*$'
+  image: /img/goat.svg
+  title: 'for-everyone'
