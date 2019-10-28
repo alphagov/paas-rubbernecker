@@ -174,4 +174,30 @@ var _ = Describe("Response", func() {
 		Expect(rr.Code).To(Equal(500))
 		Expect(rr.Body.String()).To(ContainSubstring("Rubbernecker could not render template"))
 	})
+
+	It("should escape HTML in templates", func() {
+
+		req, err := http.NewRequest("GET", "/", nil)
+		Expect(err).NotTo(HaveOccurred())
+
+		rr := httptest.NewRecorder()
+		handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			resp.WithCards(rubbernecker.Cards{
+				&rubbernecker.Card{
+					Title: "<script>alert(1)</script>",
+				},
+			}, false).Template(200, w, "./test/cards.html")
+		})
+		handler.ServeHTTP(rr, req)
+
+		Expect(rr.Code).To(Equal(200))
+
+		Expect(rr.Body.String()).NotTo(
+			ContainSubstring("<script>alert(1)</script>"),
+		)
+
+		Expect(rr.Body.String()).To(
+			ContainSubstring("&lt;script&gt;alert(1)&lt;/script&gt;"),
+		)
+	})
 })
