@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 	"strings"
-	"text/template"
 )
 
 // Response will be a standard outcome returned when hitting rubbernecker app.
