@@ -66,13 +66,13 @@ func (r *Response) Template(code int, w http.ResponseWriter, templateFile ...str
 		fmt.Fprintf(w, "Rubbernecker could not render template:\n%s\n", err)
 
 		return err
-	} else {
-		w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-		w.WriteHeader(code)
-		w.Write(b.Bytes())
-
-		return nil
 	}
+
+	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+	w.WriteHeader(code)
+	w.Write(b.Bytes())
+
+	return nil
 }
 
 // WithSampleCard will set a sample card used for template generation
