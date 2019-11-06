@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"path"
 	"strings"
 )
 
@@ -38,7 +39,7 @@ func (r *Response) JSON(code int, w http.ResponseWriter) error {
 func (r *Response) Template(code int, w http.ResponseWriter, templateFile ...string) error {
 	var err error
 
-	t, err := template.New("index.html").Funcs(
+	t, err := template.New(path.Base(templateFile[len(templateFile)-1])).Funcs(
 		template.FuncMap{
 			"safeHTML": func(s string) template.HTML {
 				return template.HTML(s)
