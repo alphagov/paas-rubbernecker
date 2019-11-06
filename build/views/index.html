@@ -108,13 +108,12 @@
               {{ $buttonClass = "" }}
             {{- end }}
 
-            <a class="govuk-button {{$buttonClass}}" href="?{{.QueryText}}">
+            <a class="govuk-button {{$buttonClass}}" href="?{{safeURL .QueryText}}">
               {{.DisplayText}}
             </a>
           {{- end }}
         </div>
       </header>
-
 
 			<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 

@@ -38,8 +38,16 @@ func (r *Response) JSON(code int, w http.ResponseWriter) error {
 func (r *Response) Template(code int, w http.ResponseWriter, templateFile ...string) error {
 	var err error
 
-	t := template.New("Rubbernecker.Template")
-	t, err = template.ParseFiles(templateFile...)
+	t, err := template.New("index.html").Funcs(
+		template.FuncMap{
+			"safeHTML": func(s string) template.HTML {
+				return template.HTML(s)
+			},
+			"safeURL": func(s string) template.URL {
+				return template.URL(s)
+			},
+		},
+	).ParseFiles(templateFile...)
 
 	if err != nil {
 		w.WriteHeader(500)

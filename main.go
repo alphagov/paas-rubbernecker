@@ -216,9 +216,9 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		err = resp.JSON(http.StatusOK, w)
 	} else {
 		err = resp.Template(http.StatusOK, w,
-			"./build/views/index.html",
-			"./build/views/card.html",
 			"./build/views/sticker.html",
+			"./build/views/card.html",
+			"./build/views/index.html",
 		)
 	}
 
