@@ -50,3 +50,8 @@
   regex: '^for-everyone.*$'
   image: /img/goat.svg
   title: 'for-everyone'
+
+- name: christmas
+  regex: '^🎄$'
+  image: /img/grinch.svg
+  title: 'christmas'
