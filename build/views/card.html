@@ -10,7 +10,7 @@
 
       <ul class="govuk-list">
         {{range .Assignees -}}
-          <li>{{.Name}}</li>
+          {{if .}}<li>{{.Name}}</li>{{end}}
         {{- end}}
       </ul>
 
