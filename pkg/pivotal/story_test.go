@@ -51,6 +51,9 @@ var _ = Describe("Pivotal Stories", func() {
 				rubbernecker.Sticker{
 					Name: "scheduled",
 				},
+				rubbernecker.Sticker{
+					Name: "knowledge-share",
+				},
 			})
 		})
 
@@ -156,6 +159,44 @@ var _ = Describe("Pivotal Stories", func() {
 
 			// After should add an extra day
 			Entry("after 2/9", "after 2/9", getTimeFromStr("3/9/2199")),
+		)
+
+		DescribeTable("a knowledge-share label in a blocker should be parsed correctly",
+			func(blockerDescription string) {
+				response = fmt.Sprintf(
+					`[{"blockers": [{"created_at":"2199-09-01T12:34:56Z", "description":"%s"}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[{"name":"test"}]}]`,
+					blockerDescription,
+				)
+				httpmock.RegisterResponder("GET", apiURL, httpmock.NewStringResponder(200, response))
+
+				err := pt.FetchCards(rubbernecker.StatusDoing, map[string]string{})
+				Expect(err).NotTo(HaveOccurred())
+
+				cards, err := pt.FlattenStories()
+				Expect(err).NotTo(HaveOccurred())
+				Expect(cards).To(HaveLen(1))
+
+				stickers := cards[0].Stickers
+
+				Expect(stickers).To(
+					ContainElement(MatchFields(IgnoreExtras, Fields{
+						"Name":    Equal("knowledge-share"),
+						"Title":   Equal("knowledge-share"),
+						"Content": Equal(""),
+					})),
+				)
+
+				Expect(stickers).NotTo(
+					ContainElement(MatchFields(IgnoreExtras, Fields{
+						"Name": Equal("blocked"),
+					})),
+				)
+			},
+
+			Entry("knowledge-share", "knowledge-share"),
+			Entry("knowledge_share", "knowledge_share"),
+			Entry("knowledge share", "knowledge share"),
+			Entry("knowledgeshare", "knowledgeshare"),
 		)
 
 		It("a scheduled sticker should not be added if in the past", func() {

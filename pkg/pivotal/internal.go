@@ -11,7 +11,10 @@ import (
 	pt "github.com/salsita/go-pivotaltracker/v5/pivotal"
 )
 
-var dateBlockerRegex = regexp.MustCompile(`(on or after|after|before|until|on)\s+(\d+\/\d+(?:\/\d+)?|\d+-\d+-\d+|\d+\/\d+\/\d+)`)
+var (
+	dateBlockerRegex           = regexp.MustCompile(`(on or after|after|before|until|on)\s+(\d+\/\d+(?:\/\d+)?|\d+-\d+-\d+|\d+\/\d+\/\d+)`)
+	knowledgeShareBlockerRegex = regexp.MustCompile(`knowledge[-_ ]?share`)
+)
 
 var validDateLayouts = []string{
 	"2/1/2006",
@@ -148,8 +151,17 @@ func convertBlockersToStickers(blockers []blocker, availableStickers rubbernecke
 	var stickers rubbernecker.Stickers
 	for _, blocker := range blockers {
 		if !blocker.Resolved {
-			scheduledDate, err := getScheduledDate(blocker)
 
+			if knowledgeShareBlockerRegex.MatchString(blocker.Description) {
+				if sticker, ok := availableStickers.Get("knowledge-share"); ok {
+					sticker.Title = "knowledge-share"
+					stickers = append(stickers, sticker)
+				}
+
+				continue
+			}
+
+			scheduledDate, err := getScheduledDate(blocker)
 			if err != nil {
 				if !stickers.Has("scheduled") {
 					if sticker, ok := availableStickers.Get("scheduled"); ok {
@@ -182,6 +194,7 @@ func convertBlockersToStickers(blockers []blocker, availableStickers rubbernecke
 
 func getScheduledDate(blocker blocker) (*time.Time, error) {
 	matches := dateBlockerRegex.FindStringSubmatch(blocker.Description)
+
 	if len(matches) > 0 {
 		if blocker.CreatedAt == nil {
 			panic("a blocker should always have a created_at field")

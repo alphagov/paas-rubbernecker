@@ -55,3 +55,8 @@
   regex: '^🎄$'
   image: /img/grinch.svg
   title: 'christmas'
+
+- name: knowledge-share
+  regex: '^knowledge-share$'
+  image: /img/brain.svg
+  title: 'knowledge-share'

@@ -71,3 +71,4 @@ You can find some exciting functionality if you run:
 - [documentation icon](dist/img/documentation.svg) by Adrien Coquet
 - [goat icon](dist/img/goat.svg) by Chanut is Industries
 - [grinch icon](dist/img/grinch.svg) by Denis Shumaylov
+- [brain icon](dist/img/brain.svg) by Sumit Saengthong
