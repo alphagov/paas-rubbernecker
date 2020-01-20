@@ -25,9 +25,14 @@
   title: I am a sad panda. I will never find any slots for progress.
 
 - name: pairing
-  regex: '^pairing:\s*(none|some|fully)'
+  regex: '^pairing:\s*(none|some|fully|please)'
   image: '/img/pear_$1.svg'
   title: 'Pairing: $1'
+
+- name: please-pair-on-this
+  regex: '^please-pair-on-this$'
+  image: '/img/pear_please.svg'
+  title: 'Please pair on this'
 
 - name: lead
   label: true
