@@ -127,9 +127,17 @@ var _ = Describe("Main", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(support).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
+				"in-hours-comms": {
+					Type:   "PaaS team rota - comms lead (in Hours)",
+					Member: "-",
+				},
 				"out-of-hours": {
 					Type:   "PaaS team rota - out of hours",
 					Member: "X",
+				},
+				"out-of-hours-comms": {
+					Type:   "PaaS team rota - comms lead (OOH)",
+					Member: "-",
 				},
 				"in-hours": {
 					Type:   "PaaS team rota - in hours",
@@ -183,9 +191,17 @@ var _ = Describe("Main", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(support).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
+				"in-hours-comms": {
+					Type:   "PaaS team rota - comms lead (in Hours)",
+					Member: "-",
+				},
 				"out-of-hours": {
 					Type:   "PaaS team rota - out of hours",
 					Member: "X",
+				},
+				"out-of-hours-comms": {
+					Type:   "PaaS team rota - comms lead (OOH)",
+					Member: "-",
 				},
 				"in-hours": {
 					Type:   "PaaS team rota - in hours",
@@ -209,9 +225,17 @@ var _ = Describe("Main", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(support).To(Equal(rubbernecker.SupportRota(map[string]*rubbernecker.Support{
+				"in-hours-comms": {
+					Type:   "PaaS team rota - comms lead (in Hours)",
+					Member: "-",
+				},
 				"out-of-hours": {
 					Type:   "PaaS team rota - out of hours",
 					Member: "X",
+				},
+				"out-of-hours-comms": {
+					Type:   "PaaS team rota - comms lead (OOH)",
+					Member: "-",
 				},
 				"in-hours": {
 					Type:   "PaaS team rota - in hours",
