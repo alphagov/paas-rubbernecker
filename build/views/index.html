@@ -69,12 +69,20 @@
             <p class="govuk-body">
               <strong>In hours</strong>:
               {{(index .SupportRota "in-hours").Member}}
+              <small class="govuk-body-s" style="display: block;">
+                <strong>Comms</strong>:
+                {{(index .SupportRota "in-hours-comms").Member}}
+              </small>
             </p>
           </div>
           <div class="govuk-grid-column-one-third">
             <p class="govuk-body">
               <strong>Out of hours</strong>:
               {{(index .SupportRota "out-of-hours").Member}}
+              <small class="govuk-body-s" style="display: block;">
+                <strong>Comms</strong>:
+                {{(index .SupportRota "out-of-hours-comms").Member}}
+              </small>
             </p>
           </div>
           <div class="govuk-grid-column-one-third">

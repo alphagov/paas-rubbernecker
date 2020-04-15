@@ -168,9 +168,11 @@ func fetchUsers(pt *pivotal.Tracker) error {
 
 func formatSupportNames(s rubbernecker.SupportRota) rubbernecker.SupportRota {
 	return rubbernecker.SupportRota{
-		"in-hours":     s.Get("PaaS team rota - in hours"),
-		"out-of-hours": s.Get("PaaS team rota - out of hours"),
-		"escalations":  s.Get("TechOps RE Incident Escalation"),
+		"in-hours":           s.Get("PaaS team rota - in hours"),
+		"in-hours-comms":     s.Get("PaaS team rota - comms lead (in Hours)"),
+		"out-of-hours":       s.Get("PaaS team rota - out of hours"),
+		"out-of-hours-comms": s.Get("PaaS team rota - comms lead (OOH)"),
+		"escalations":        s.Get("TechOps RE Incident Escalation"),
 	}
 }
 
