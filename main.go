@@ -99,7 +99,9 @@ func fetchStories(pt *pivotal.Tracker) error {
 		}
 
 		for i, a := range story.Assignees {
-			(c[s].Assignees)[i] = members[a.ID]
+			if member, ok := members[a.ID]; ok {
+				(c[s].Assignees)[i] = member
+			}
 		}
 	}
 
