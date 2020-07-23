@@ -17,7 +17,11 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
           <div class="labels">
-            <p class="govuk-body">{{.Elapsed}} day{{if ne .Elapsed 1}}s{{end}}</p>
+            {{if gt .Elapsed 1 }}
+              <p class="govuk-body">{{.Elapsed}} days</p>
+            {{- else -}}
+              <p class="govuk-body"><mark>NEW</mark></p>
+            {{- end -}}
           </div>
         </div>
 
