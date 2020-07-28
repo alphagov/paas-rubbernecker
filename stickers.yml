@@ -65,3 +65,7 @@
   regex: '^knowledge-share$'
   image: /img/brain.svg
   title: 'knowledge-share'
+
+- name: zero-points
+  image: /img/0.png
+  title: 'zero-point-estimate'

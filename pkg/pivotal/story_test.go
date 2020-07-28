@@ -29,7 +29,7 @@ var _ = Describe("Pivotal Stories", func() {
 		var (
 			pt rubbernecker.ProjectManagementService
 
-			apiURL   = `https://www.pivotaltracker.com/services/v5/projects/123/stories?fields=owner_ids,blockers,transitions,current_state,labels,name,url,created_at,story_type&filter=state:started`
+			apiURL   = `https://www.pivotaltracker.com/services/v5/projects/123/stories?fields=owner_ids,blockers,transitions,current_state,labels,name,url,created_at,story_type,estimate&filter=state:started`
 			response = `[{"blockers": [{"name":1234}],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[{"name":"test"}]}]`
 		)
 
@@ -53,6 +53,9 @@ var _ = Describe("Pivotal Stories", func() {
 				},
 				rubbernecker.Sticker{
 					Name: "knowledge-share",
+				},
+				rubbernecker.Sticker{
+					Name: "zero-points",
 				},
 			})
 		})
@@ -253,6 +256,20 @@ var _ = Describe("Pivotal Stories", func() {
 			Expect(ok).To(BeTrue())
 
 			_, ok = cards[0].Stickers.Get("scheduled")
+			Expect(ok).To(BeTrue())
+		})
+
+		It("a zero point story should add a sticker", func() {
+			response = `[{"estimate": 0, "blockers": [],"transitions": [],"name": "Test Rubbernecker","current_state": "started","url": "http://localhost/story/show/561","owner_ids":[1234],"labels":[]}]`
+			httpmock.RegisterResponder("GET", apiURL, httpmock.NewStringResponder(200, response))
+
+			err := pt.FetchCards(rubbernecker.StatusDoing, map[string]string{})
+			Expect(err).NotTo(HaveOccurred())
+
+			cards, err := pt.FlattenStories()
+			Expect(err).NotTo(HaveOccurred())
+
+			_, ok := cards[0].Stickers.Get("zero-points")
 			Expect(ok).To(BeTrue())
 		})
 	})

@@ -39,6 +39,7 @@ type Card struct {
 	Title     string   `json:"title"`
 	URL       string   `json:"url"`
 	StoryType string   `json:"story_type"`
+	Estimate  *float64 `json:"estimate"`
 }
 
 // Cards will be a rubbernecker representative of all cards.

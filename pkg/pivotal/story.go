@@ -37,7 +37,7 @@ func (t *Tracker) AcceptStickers(stickers rubbernecker.Stickers) {
 // FetchCards will fetch the stories from PivotalTracker.
 func (t *Tracker) FetchCards(status rubbernecker.Status, params map[string]string) error {
 	p := []string{
-		"fields=owner_ids,blockers,transitions,current_state,labels,name,url,created_at,story_type",
+		"fields=owner_ids,blockers,transitions,current_state,labels,name,url,created_at,story_type,estimate",
 	}
 
 	for key, value := range params {
@@ -78,6 +78,15 @@ func (t *Tracker) FlattenStories() (rubbernecker.Cards, error) {
 	for _, s := range t.stories {
 		stickers := rubbernecker.Stickers{}
 
+		if s.Estimate != nil {
+			estimate := *s.Estimate
+			if estimate == 0 {
+				if zeroPointsSticker, ok := t.stickers.Get("zero-points"); ok {
+					stickers = append(stickers, zeroPointsSticker)
+				}
+			}
+		}
+
 		for _, l := range s.Labels {
 			if sticker, ok := t.stickers.Get(l.Name); ok {
 				stickers = append(stickers, sticker)
@@ -107,6 +116,7 @@ func (t *Tracker) FlattenStories() (rubbernecker.Cards, error) {
 			Title:     s.Name,
 			URL:       s.URL,
 			StoryType: s.StoryType,
+			Estimate:  s.Estimate,
 		})
 	}
 

@@ -34,6 +34,7 @@ type story struct {
 	Transitions []transition `json:"transitions,omitempty"`
 	CreatedAt   *time.Time   `json:"created_at,omitempty"`
 	StoryType   string       `json:"story_type"`
+	Estimate    *float64     `json:"estimate"` // do not omitempty; 0 is useful
 }
 
 type blocker struct {
