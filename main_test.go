@@ -143,7 +143,7 @@ var _ = Describe("Main", func() {
 					Member: "Y",
 				},
 				"escalations": {
-					Type:   "TechOps RE Incident Escalation",
+					Type:   "GaaP SCS Escalation",
 					Member: "Z",
 				},
 			})))
@@ -216,7 +216,7 @@ var _ = Describe("Main", func() {
 		It("should handle when there isn't anyone on call for a certain schedule", func() {
 			resp := `{"oncalls":[
 				{"user":{"summary":"X"},"schedule":{"summary":"PaaS team rota - out of hours"}},
-				{"user":{"summary":"Z"},"schedule":{"summary":"GaaP SCS Escalation}}
+				{"user":{"summary":"Z"},"schedule":{"summary":"GaaP SCS Escalation"}}
 			]}`
 			httpmock.RegisterResponder("GET", apiURLSupport, httpmock.NewStringResponder(200, resp))
 
