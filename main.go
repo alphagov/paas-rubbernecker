@@ -200,6 +200,11 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	filteredCards := cards.FilterBy(filterQueries)
 	filteredDoneCards := doneCards.FilterBy(filterQueries)
 
+	squads := []rubbernecker.Squad{
+		{DisplayText: "PaaS Squad", QueryText: "filter=squad:paas"},
+		{DisplayText: "Disco Squad", QueryText: "filter=squad:disco"},
+	}
+
 	resp.
 		WithConfig(&rubbernecker.Config{
 			ReviewalLimit: 4,
@@ -212,6 +217,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		WithFilters(rubbernecker.DefaultFilterSet()).
 		WithAppliedFilterQueries(filterQueries).
 		WithTextFilters(filterQueries).
+		WithSquads(squads).
 		WithSupport(support)
 
 	if strings.Contains(r.Header.Get("Accept"), "json") {

@@ -110,6 +110,17 @@
             Clear filters
           </a>
 
+          {{- range .Squads}}
+            {{ $buttonClass := "govuk-button--secondary" }}
+            {{- if .IsApplied $.AppliedFilterQueries }}
+              {{ $buttonClass = "" }}
+            {{- end }}
+
+            <a class="govuk-button {{$buttonClass}}" href="?{{safeURL .QueryText}}">
+              {{.DisplayText}}
+            </a>
+          {{- end }}
+
           {{- range .Filters}}
             {{ $buttonClass := "govuk-button--secondary" }}
             {{- if .IsApplied $.AppliedFilterQueries }}
