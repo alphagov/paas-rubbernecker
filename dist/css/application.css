@@ -29,6 +29,20 @@
   text-decoration: none;
 }
 
+.card .labels ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card .labels ul li {
+  border: 2px solid #000;
+  display: inline-block;
+  margin-right: 5px;
+  padding: 5px;
+  text-transform: uppercase;
+}
+
 .stickers {
   display: flex;
   flex-direction: row-reverse;
@@ -48,7 +62,8 @@
 }
 
 mark {
+  border: 2px solid #000;
   background-color: black;
   color: ghostwhite;
-  padding: 0.15em;
+  padding: 5px;
 }

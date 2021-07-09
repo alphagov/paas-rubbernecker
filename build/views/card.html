@@ -22,6 +22,15 @@
             {{- else -}}
               <p class="govuk-body"><mark>NEW</mark></p>
             {{- end -}}
+            <ul class="govuk-list">
+              {{range .Stickers}}
+                {{if .Label}}
+                  <li class="{{.Class}}">
+                    {{.Title}}
+                  </li>
+                {{end}}
+              {{end}}
+            </ul>
           </div>
         </div>
 

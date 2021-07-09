@@ -13,6 +13,7 @@ type Sticker struct {
 	Aliases  []string
 	Class    string
 	Priority int
+	Value    string
 }
 
 // Matches will check if the sticker matches the query provided by the extension.
@@ -25,6 +26,7 @@ func (s Sticker) Matches(query string) (Sticker, bool) {
 			sticker.Image = reg.ReplaceAllString(query, sticker.Image)
 			sticker.Content = reg.ReplaceAllString(query, sticker.Content)
 			sticker.Class = reg.ReplaceAllString(query, sticker.Class)
+			sticker.Value = reg.ReplaceAllString(query, sticker.Value)
 			return sticker, true
 		}
 	}
