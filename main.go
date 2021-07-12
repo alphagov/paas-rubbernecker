@@ -25,9 +25,11 @@ var (
 	doneCards rubbernecker.Cards
 	members   rubbernecker.Members
 	support   = rubbernecker.SupportRota{
-		"in-hours":     &rubbernecker.Support{},
-		"out-of-hours": &rubbernecker.Support{},
-		"escalations":  &rubbernecker.Support{},
+		"in-hours":           &rubbernecker.Support{},
+		"in-hours-comms":     &rubbernecker.Support{},
+		"out-of-hours":       &rubbernecker.Support{},
+		"out-of-hours-comms": &rubbernecker.Support{},
+		"escalations":        &rubbernecker.Support{},
 	}
 
 	verbose = kingpin.Flag("verbose", "Will enable the DEBUG logging level.").Default("false").Short('v').OverrideDefaultFromEnvar("DEBUG").Bool()
