@@ -89,6 +89,10 @@
             <p class="govuk-body">
               <strong>Escalations</strong>:
               {{(index .SupportRota "escalations").Member}}
+              <small class="govuk-body-s" style="display: block;">
+                <strong>Our m8</strong>:
+                {{(index .SupportRota "autom8").Member}}
+              </small>
             </p>
           </div>
         </div>
