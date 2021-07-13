@@ -7,7 +7,7 @@
   <title>Rubbernecker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="css/application.css">
-  <!-- <meta http-equiv="refresh" content="300">
+  <meta http-equiv="refresh" content="300">
   <script type="text/javascript">
 		setInterval(() => {
 			console.info('About to update with new Rubbernecker data')
@@ -29,7 +29,7 @@
 				console.info('Updated document body with new Rubbernecker data')
 			})
 		}, 15 * 1000)
-  </script> -->
+  </script>
 </head>
 
   <body>
@@ -124,14 +124,16 @@
         </header>
         <div class="board">
           <div class="board__next">
-            <h2 class="heading heading--sticky">Doing ({{len $doing}})</h2>
+            <h2 class="heading board__heading heading--sticky">
+              <span>Doing ({{len $doing}})</span>
+            </h2>
             {{range $doing}}
               {{template "card" .}}
             {{end}}
           </div>
           <div class="board__reviewing">
-            <h2 class="heading heading--sticky">
-              Reviewing ({{len $reviewing}}  / {{.Config.ReviewalLimit}})
+            <h2 class="board__heading heading heading--sticky">
+              <span>Reviewing ({{len $reviewing}}  / {{.Config.ReviewalLimit}})</span>
             </h2>
             {{range $reviewing}}
               {{template "card" .}}
@@ -140,8 +142,8 @@
           
           {{ if gt (len $approving) 0 }}
             <div class="board__approving">
-              <h2 class="heading heading--sticky">
-                Approving ({{len $approving}}/{{.Config.ApprovalLimit}})
+              <h2 class="board__heading heading heading--sticky">
+                <span>Approving ({{len $approving}}/{{.Config.ApprovalLimit}})</span>
               </h2>
               {{range $approving}}
                 {{template "card" .}}
@@ -150,14 +152,16 @@
           {{end}}
           {{ if gt (len $rejected) 0 }}
             <div class="board__rejected">
-              <h2 class="heading heading--sticky">Rejected</h2>
+              <h2 class="board__heading heading heading--sticky">
+                <span>Rejected<span></h2>
               {{range $rejected}}
                 {{template "card" .}}
               {{end}}
             </div>
           {{end}}
           <div class="board__done">
-            <h2 class="heading heading--sticky">Done ({{ len $done }})</h2>
+            <h2 class="board__heading heading heading--sticky">
+              <span>Done ({{ len $done }})</span></h2>
             {{range $done}}
               {{template "card" .}}
             {{end}}
@@ -165,7 +169,7 @@
           
         </div>
 
-        <h2 class="heading heading--sticky">Next</h2>
+        <h2 class="board__heading heading heading--sticky"><span>Next</span></h2>
         <div class="board board--next">
           {{range $next}}
             {{template "card" .}}

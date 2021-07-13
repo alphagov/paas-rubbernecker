@@ -43,11 +43,12 @@ h3 {
 }
 
 .heading--sticky {
-  padding-bottom: .5em;
+
   position: sticky;
   top: 0;
-  background-color: white;
+ 
 }
+
 
 h1 span {
   font-size: 1.3rem;
@@ -60,6 +61,26 @@ h1 span {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 1em;
   margin-bottom: 3em;
+}
+.board__heading span {
+  position: relative;
+  text-align: center;
+  margin-bottom: 1em;
+  display: block;
+  padding: .5em 0;
+  background-color: white;
+}
+
+.board__heading span:before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  top: 50%;
+  bottom: 0;
+  left: 25%;
+  right: 25%;
+  border-radius: 100px / 10px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 60%);
 }
 
 .rotas {
@@ -130,7 +151,6 @@ h1 span {
   background: #fAfAfA;
   min-height: 100px;
   margin-bottom: 5px;
-  margin-right: 5px;
   padding: 10px;
   border: 1px solid #aaa;
 }
@@ -253,4 +273,3 @@ input:focus {
   white-space: inherit!important;
   outline: 3px solid #fd0;
 }
-
