@@ -1,15 +1,13 @@
 <!doctype html>
-<html lang="en" class="govuk-template ">
-
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="theme-color" content="#0b0c0c" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Rubbernecker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="css/govuk-frontend-3.0.0.min.css">
   <link rel="stylesheet" href="css/application.css">
-  <meta http-equiv="refresh" content="300">
+  <!-- <meta http-equiv="refresh" content="300">
   <script type="text/javascript">
 		setInterval(() => {
 			console.info('About to update with new Rubbernecker data')
@@ -31,166 +29,149 @@
 				console.info('Updated document body with new Rubbernecker data')
 			})
 		}, 15 * 1000)
-  </script>
+  </script> -->
 </head>
 
-<body class="govuk-template__body ">
-  <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <header class="govuk-header " role="banner" data-module="header">
-    <div class="govuk-header__container govuk-width-container">
-
-      <div class="govuk-header__logo">
-        <a href="/" class="govuk-header__link govuk-header__link--homepage">
-          <span class="govuk-header__logotype">
-            <span class="govuk-header__logotype-text">
-              Rubbernecker
-            </span>
-          </span>
-        </a>
+    <header class="site-header">
+      <div class="width-container">
+        <h1>Rubbernecker
+          <span>GOV.UK PaaS team sprint board</span>
+        </h1>
       </div>
-    </div>
-  </header>
+    </header>
+    <div class="width-container">
+      <main class="govuk-main-wrapper " id="main-content" role="main">
+        {{$next := .Cards.Filter "next"}}
+        {{$doing := .Cards.Filter "doing"}}
+        {{$reviewing := .Cards.Filter "reviewing"}}
+        {{$approving := .Cards.Filter "approving"}}
+        {{$rejected := .Cards.Filter "rejected"}}
+        {{$done := .Cards.Filter "done"}}
 
-  <div class="govuk-width-container">
-    <main class="govuk-main-wrapper " id="main-content" role="main">
-      {{$next := .Cards.Filter "next"}}
-      {{$doing := .Cards.Filter "doing"}}
-      {{$reviewing := .Cards.Filter "reviewing"}}
-      {{$approving := .Cards.Filter "approving"}}
-      {{$rejected := .Cards.Filter "rejected"}}
-      {{$done := .Cards.Filter "done"}}
-
-      <header class="text-center">
-        <ul>
-        </ul>
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-third">
-            <p class="govuk-body">
-              <strong>In hours</strong>:
-              {{(index .SupportRota "in-hours").Member}}
-              <small class="govuk-body-s" style="display: block;">
+        <header>
+          <div class="rotas">
+            <div class="rotas__content">
+              <p>
+                <strong>In hours</strong>:
+                {{(index .SupportRota "in-hours").Member}}
+              </p>
+              <p>
                 <strong>Comms</strong>:
                 {{(index .SupportRota "in-hours-comms").Member}}
-              </small>
-            </p>
-          </div>
-          <div class="govuk-grid-column-one-third">
-            <p class="govuk-body">
-              <strong>Out of hours</strong>:
-              {{(index .SupportRota "out-of-hours").Member}}
-              <small class="govuk-body-s" style="display: block;">
-                <strong>Comms</strong>:
-                {{(index .SupportRota "out-of-hours-comms").Member}}
-              </small>
-            </p>
-          </div>
-          <div class="govuk-grid-column-one-third">
-            <p class="govuk-body">
-              <strong>Escalations</strong>:
-              {{(index .SupportRota "escalations").Member}}
-              <small class="govuk-body-s" style="display: block;">
+              </p>
+            </div>
+            <div class="rotas__content">
+              <p>
+                <strong>Out of hours</strong>:
+                {{(index .SupportRota "out-of-hours").Member}}
+              </p>
+              <p>
+                  <strong>Comms</strong>:
+                  {{(index .SupportRota "out-of-hours-comms").Member}}
+              </p>
+            </div>
+            <div class="rotas__content">
+              <p>
+                <strong>Escalations</strong>:
+                {{(index .SupportRota "escalations").Member}}
+              </p>
+              <p>
                 <strong>Our m8</strong>:
                 {{(index .SupportRota "autom8").Member}}
-              </small>
-            </p>
+              </p>
+            </div>
           </div>
-        </div>
 
+          <form class="card-search" method="GET">
+              <input class="govuk-input"
+                    style="text-align: center"
+                    name="filter"
+                    value="{{ range .AppliedFilterQueries }}{{.}}{{" "}}{{end}}"
+                    placeholder="Filters e.g. title:cve person:towers"
+                    type="text"/>
+          </form>
 
-        <form method="GET">
-          <div class="govuk-form-group">
-            <input class="govuk-input"
-                   style="text-align: center"
-                   name="filter"
-                   value="{{ range .AppliedFilterQueries }}{{.}}{{" "}}{{end}}"
-                   placeholder="Filters e.g. title:cve person:towers"
-                   type="text"/>
-          </div>
-        </form>
+          <div class="filters">
+            <a class="filter" href="?">
+              Clear filters
+            </a>
 
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <a class="govuk-button govuk-button--secondary" href="?">
-            Clear filters
-          </a>
+            {{- range .Squads}}
+              {{ $filterClass := "filter" }}
+              {{- if .IsApplied $.AppliedFilterQueries }}
+                {{ $filterClass = "filter--active" }}
+              {{- end }}
 
-          {{- range .Squads}}
-            {{ $buttonClass := "govuk-button--secondary" }}
-            {{- if .IsApplied $.AppliedFilterQueries }}
-              {{ $buttonClass = "" }}
+              <a class="filter {{$filterClass}}" href="?{{safeURL .QueryText}}">
+                {{.DisplayText}}
+              </a>
             {{- end }}
 
-            <a class="govuk-button {{$buttonClass}}" href="?{{safeURL .QueryText}}">
-              {{.DisplayText}}
-            </a>
-          {{- end }}
+            {{- range .Filters}}
+              {{ $filterClass := "filter" }}
+              {{- if .IsApplied $.AppliedFilterQueries }}
+                {{ $filterClass = "filter--active" }}
+              {{- end }}
 
-          {{- range .Filters}}
-            {{ $buttonClass := "govuk-button--secondary" }}
-            {{- if .IsApplied $.AppliedFilterQueries }}
-              {{ $buttonClass = "" }}
+              <a class="filter {{$filterClass}}" href="?{{safeURL .QueryText}}">
+                {{.DisplayText}}
+              </a>
             {{- end }}
-
-            <a class="govuk-button {{$buttonClass}}" href="?{{safeURL .QueryText}}">
-              {{.DisplayText}}
-            </a>
-          {{- end }}
-        </div>
-      </header>
-
-			<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third">
-          <h1 class="text-center govuk-heading-l">Doing ({{len $doing}})</h1>
-          {{range $doing}}
-            {{template "card" .}}
+          </div>
+        </header>
+        <div class="board">
+          <div class="board__next">
+            <h2 class="heading heading--sticky">Doing ({{len $doing}})</h2>
+            {{range $doing}}
+              {{template "card" .}}
+            {{end}}
+          </div>
+          <div class="board__reviewing">
+            <h2 class="heading heading--sticky">
+              Reviewing ({{len $reviewing}}  / {{.Config.ReviewalLimit}})
+            </h2>
+            {{range $reviewing}}
+              {{template "card" .}}
+            {{end}}
+          </div>
+          
+          {{ if gt (len $approving) 0 }}
+            <div class="board__approving">
+              <h2 class="heading heading--sticky">
+                Approving ({{len $approving}}/{{.Config.ApprovalLimit}})
+              </h2>
+              {{range $approving}}
+                {{template "card" .}}
+              {{end}}
+            </div>
           {{end}}
+          {{ if gt (len $rejected) 0 }}
+            <div class="board__rejected">
+              <h2 class="heading heading--sticky">Rejected</h2>
+              {{range $rejected}}
+                {{template "card" .}}
+              {{end}}
+            </div>
+          {{end}}
+          <div class="board__done">
+            <h2 class="heading heading--sticky">Done ({{ len $done }})</h2>
+            {{range $done}}
+              {{template "card" .}}
+            {{end}}
+          </div>
+          
+        </div>
 
-          <hr class="govuk-section-break govuk-section-break--m">
-
-          <h1 class="text-center govuk-heading-l">Next</h1>
+        <h2 class="heading heading--sticky">Next</h2>
+        <div class="board board--next">
           {{range $next}}
             {{template "card" .}}
           {{end}}
         </div>
-
-        <div class="govuk-grid-column-one-third">
-          <h1 class="text-center govuk-heading-l">
-            Reviewing ({{len $reviewing}}  / {{.Config.ReviewalLimit}})
-          </h1>
-          {{range $reviewing}}
-            {{template "card" .}}
-          {{end}}
-        </div>
-
-        <div class="govuk-grid-column-one-third">
-          {{ if gt (len $rejected) 0 }}
-            <h1 class="text-center govuk-heading-l">Rejected</h1>
-            {{range $rejected}}
-              {{template "card" .}}
-            {{end}}
-
-            <hr class="govuk-section-break govuk-section-break--m">
-          {{end}}
-
-          <h1 class="text-center govuk-heading-l">
-            Approving ({{len $approving}}/{{.Config.ApprovalLimit}})
-          </h1>
-          {{range $approving}}
-            {{template "card" .}}
-          {{end}}
-
-          <hr class="govuk-section-break govuk-section-break--m">
-
-          <h1 class="text-center govuk-heading-l">Done ({{ len $done }})</h1>
-          {{range $done}}
-            {{template "card" .}}
-          {{end}}
-        </div>
-      </div>
-    </main>
-  </div>
-</body>
-
+      </main>
+    </div>
+  </body>
 </html>
