@@ -1,28 +1,27 @@
 {{define "card"}}
   {{ if eq .StoryType "release"}}
     <hr class="govuk-section-break govuk-section-break--m">
-    <h2 class="text-center govuk-heading-l">{{.Title}}</h2>
+    <h2 class="heading">{{.Title}}</h2>
   {{ else -}}
     <div id="{{.ID}}" class="card {{.Status}} type-{{.StoryType}}">
-      <h3 class="govuk-heading-s">
-        <a class="govuk-link" href="{{.URL}}" target="_blank">{{.Title}}</a>
+      <h3 class="card__heading heading">
+        <a href="{{.URL}}" target="_blank">{{.Title}}</a>
       </h3>
 
-      <ul class="govuk-list">
+      <ul>
         {{range .Assignees -}}
           {{if .}}<li>{{.Name}}</li>{{end}}
         {{- end}}
       </ul>
 
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-half">
+      <div class="card__details">
           <div class="labels">
             {{if gt .Elapsed 1 }}
-              <p class="govuk-body">{{.Elapsed}} days</p>
+              <p class="labels__duration">{{.Elapsed}} days</p>
             {{- else -}}
-              <p class="govuk-body"><mark>NEW</mark></p>
+              <p><mark>NEW</mark></p>
             {{- end -}}
-            <ul class="govuk-list">
+            <ul>
               {{range .Stickers}}
                 {{if .Label}}
                   <li class="{{.Class}}">
@@ -32,9 +31,6 @@
               {{end}}
             </ul>
           </div>
-        </div>
-
-        <div class="govuk-grid-column-one-half">
           <div class="stickers">
             {{range .Stickers}}
               {{if not .Label}}
@@ -42,7 +38,6 @@
               {{end}}
             {{end}}
           </div>
-        </div>
       </div>
     </div>
  {{- end}}

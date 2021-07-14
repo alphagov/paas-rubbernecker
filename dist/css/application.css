@@ -1,19 +1,166 @@
-.govuk-width-container {
-  max-width: 95%;
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
 }
 
-.text-center {
+p {
+  padding: 0;
+  margin: 0;
+}
+
+p + p {
+  margin-bottom: .5em;
+}
+
+.site-header {
+  background-color: #ffcd4e;
+  padding: 1em 0;
+  border-bottom: 5px solid #f78932;
+}
+
+.width-container {
+  max-width: 95%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+.heading {
+  margin: 0;
+  padding: 0;
+}
+
+.heading--sticky {
+
+  position: sticky;
+  top: 0;
+ 
+}
+
+
+h1 span {
+  font-size: 1.3rem;
+  display: block;
+  font-weight: 500;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 1em;
+  margin-bottom: 3em;
+}
+.board__heading span {
+  position: relative;
   text-align: center;
+  margin-bottom: 1em;
+  display: block;
+  padding: .5em 0;
+  background-color: white;
+}
+
+.board__heading span:before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  top: 50%;
+  bottom: 0;
+  left: 25%;
+  right: 25%;
+  border-radius: 100px / 10px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 60%);
+}
+
+.rotas {
+  padding: 2.5em 0 2em;
+  text-align: center;
+}
+
+@media all and (min-width: 48em) {
+  .rotas {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+}
+
+
+.rotas__content {
+  align-items: center;
+}
+
+.card-search {
+  display: block;
+  max-width: 300px;
+  margin: 1em auto;
+}
+
+.card-search input {
+  font-weight: 400;
+  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.25;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  height: 40px;
+  height: 2.5rem;
+  margin-top: 0;
+  padding: 5px;
+  border: 2px solid #0b0c0c;
+  border-radius: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.filters {
+  padding: 1em 0 3em;
+  text-align: center;
+}
+
+.filter {
+  font-weight: 400;
+  font-size: 16px;
+  font-size: 1rem;
+  text-decoration: underline;
+  text-decoration-thickness: max(3px, .1875rem, .12em);
+  text-underline-offset: .1em;
+  display: inline-block;
+  padding: .5em;
+  color: #000;
+}
+
+.filter--active {
+  text-decoration-color: #f78932;
 }
 
 .card {
   background: #fAfAfA;
   min-height: 100px;
-  width: 100%;
   margin-bottom: 5px;
-  margin-right: 5px;
   padding: 10px;
   border: 1px solid #aaa;
+}
+
+@media all and (min-width: 30em) {
+  .card__details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+  }
 }
 
 .card.type-feature {
@@ -21,17 +168,21 @@
 }
 
 .card.type-bug, .card.type-chore {
-  border-top: 5px solid #ffbf47;
+  border-top: 5px solid #f78932;
 }
 
-.card h2 a, .card h3 a.govuk-link {
+.card__heading {
+  margin-bottom: 1em;
+}
+
+.card__heading a {
   color: inherit;
   text-decoration: none;
 }
 
-.card .labels ul {
+.card ul {
   list-style: none;
-  margin: 0;
+  margin: 0 0 .5em 0;
   padding: 0;
 }
 
@@ -41,6 +192,10 @@
   margin-right: 5px;
   padding: 5px;
   text-transform: uppercase;
+}
+
+.card .labels__duration {
+  margin-bottom: .5em;
 }
 
 .stickers {
@@ -66,4 +221,55 @@ mark {
   background-color: black;
   color: ghostwhite;
   padding: 5px;
+  display: inline-block;
+  margin-bottom: .5em
+}
+
+.skip-link {
+  position: absolute!important;
+  width: 1px!important;
+  height: 1px!important;
+  margin: 0!important;
+  overflow: hidden!important;
+  clip: rect(0 0 0 0)!important;
+  -webkit-clip-path: inset(50%)!important;
+  clip-path: inset(50%)!important;
+  white-space: nowrap!important;
+  color: #000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+  font-size: .875rem;
+  line-height: 1.14286;
+  display: block;
+  padding: 10px 15px;
+}
+
+a:focus {
+  outline: 3px solid transparent;
+  color: #0b0c0c;
+  background-color: #fd0;
+  -webkit-box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+  box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+  text-decoration: none;
+}
+
+input:focus {
+  outline: 3px solid #fd0;
+  outline-offset: 0;
+  -webkit-box-shadow: inset 0 0 0 2px;
+  box-shadow: inset 0 0 0 2px;
+}
+
+.skip-link:active, .skip-link:focus {
+  position: static!important;
+  width: auto!important;
+  height: auto!important;
+  margin: inherit!important;
+  overflow: visible!important;
+  clip: auto!important;
+  -webkit-clip-path: none!important;
+  clip-path: none!important;
+  white-space: inherit!important;
+  outline: 3px solid #fd0;
 }
