@@ -105,7 +105,10 @@ func composeState(status rubbernecker.Status) string {
 
 	switch status {
 	case rubbernecker.StatusScheduled:
-		state = pt.StoryStateUnstarted
+		state = strings.Join([]string{
+			pt.StoryStateUnstarted,
+			pt.StoryStatePlanned,
+		}, ",")
 	case rubbernecker.StatusDoing:
 		state = pt.StoryStateStarted
 	case rubbernecker.StatusReviewal:
@@ -119,6 +122,7 @@ func composeState(status rubbernecker.Status) string {
 	default:
 		state = strings.Join([]string{
 			pt.StoryStateUnstarted,
+			pt.StoryStatePlanned,
 			pt.StoryStateStarted,
 			pt.StoryStateFinished,
 			pt.StoryStateDelivered,
@@ -142,6 +146,8 @@ func convertState(state string) string {
 	case pt.StoryStateRejected:
 		return rubbernecker.StatusRejected.String()
 	case pt.StoryStateUnstarted:
+		return rubbernecker.StatusScheduled.String()
+	case pt.StoryStatePlanned:
 		return rubbernecker.StatusScheduled.String()
 	default:
 		return "unknown"
