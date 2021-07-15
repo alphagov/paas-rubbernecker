@@ -26,7 +26,7 @@ var _ = Describe("Main", func() {
 			year, month, day = time.Now().Date()
 			past             = time.Date(year, month, day, 0, 0, 0, 0, time.UTC).AddDate(0, 0, -5).UnixNano() / int64(time.Millisecond)
 
-			apiURL          = `https://www.pivotaltracker.com/services/v5/projects/123456/stories?fields=owner_ids,blockers,transitions,current_state,labels,name,url,created_at,story_type,estimate&filter=state:unstarted,started,finished,delivered,rejected`
+			apiURL          = `https://www.pivotaltracker.com/services/v5/projects/123456/stories?fields=owner_ids,blockers,transitions,current_state,labels,name,url,created_at,story_type,estimate&filter=state:unstarted,planned,started,finished,delivered,rejected`
 			apiURLAccepted  = fmt.Sprintf(`https://www.pivotaltracker.com/services/v5/projects/123456/stories?fields=owner_ids,blockers,transitions,current_state,labels,name,url,created_at,story_type,estimate&accepted_after=%d`, past)
 			apiURLMembers   = `https://www.pivotaltracker.com/services/v5/projects/123456/memberships`
 			apiURLSupport   = `https://api.pagerduty.com/oncalls`
