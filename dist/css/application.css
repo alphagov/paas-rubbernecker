@@ -173,6 +173,9 @@ h1 span {
 
 .card__heading {
   margin-bottom: 1em;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .card__heading a {
@@ -190,6 +193,7 @@ h1 span {
   border: 2px solid #000;
   display: inline-block;
   margin-right: 5px;
+  margin-bottom: .5em;
   padding: 5px;
   text-transform: uppercase;
 }
