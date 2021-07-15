@@ -143,7 +143,7 @@ var _ = Describe("Main", func() {
 					Member: "Y",
 				},
 				"autom8": {
-					Type: "Techops Autom8",
+					Type:   "Techops Autom8",
 					Member: "-",
 				},
 				"escalations": {
@@ -211,7 +211,7 @@ var _ = Describe("Main", func() {
 					Member: "Y",
 				},
 				"autom8": {
-					Type: "Techops Autom8",
+					Type:   "Techops Autom8",
 					Member: "-",
 				},
 				"escalations": {
@@ -249,7 +249,7 @@ var _ = Describe("Main", func() {
 					Member: "-",
 				},
 				"autom8": {
-					Type: "Techops Autom8",
+					Type:   "Techops Autom8",
 					Member: "-",
 				},
 				"escalations": {
