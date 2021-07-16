@@ -123,7 +123,7 @@
           </div>
         </header>
         <div class="board">
-          <div class="board__next">
+          <div class="board__column">
             <h2 class="heading board__heading heading--sticky">
               <span>Doing ({{len $doing}})</span>
             </h2>
@@ -131,7 +131,7 @@
               {{template "card" .}}
             {{end}}
           </div>
-          <div class="board__reviewing">
+          <div class="board__column">
             <h2 class="board__heading heading heading--sticky">
               <span>Reviewing ({{len $reviewing}}  / {{.Config.ReviewalLimit}})</span>
             </h2>
@@ -141,7 +141,7 @@
           </div>
           
           {{ if gt (len $approving) 0 }}
-            <div class="board__approving">
+            <div class="board__column">
               <h2 class="board__heading heading heading--sticky">
                 <span>Approving ({{len $approving}}/{{.Config.ApprovalLimit}})</span>
               </h2>
@@ -151,7 +151,7 @@
             </div>
           {{end}}
           {{ if gt (len $rejected) 0 }}
-            <div class="board__rejected">
+            <div class="board__column">
               <h2 class="board__heading heading heading--sticky">
                 <span>Rejected<span></h2>
               {{range $rejected}}
@@ -159,7 +159,7 @@
               {{end}}
             </div>
           {{end}}
-          <div class="board__done">
+          <div class="board__column">
             <h2 class="board__heading heading heading--sticky">
               <span>Done ({{ len $done }})</span></h2>
             {{range $done}}

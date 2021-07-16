@@ -62,6 +62,13 @@ h1 span {
   grid-gap: 1em;
   margin-bottom: 3em;
 }
+
+.board__column {
+  display: grid;
+  grid-row-gap: 1em;
+  place-content: baseline;
+}
+
 .board__heading span {
   position: relative;
   text-align: center;
@@ -150,7 +157,6 @@ h1 span {
 .card {
   background: #fAfAfA;
   min-height: 100px;
-  margin-bottom: 5px;
   padding: 10px;
   border: 1px solid #aaa;
 }
