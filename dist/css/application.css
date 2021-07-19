@@ -67,6 +67,7 @@ h1 span {
   display: grid;
   grid-row-gap: 1em;
   place-content: baseline;
+  grid-template-columns: 1fr;
 }
 
 .board__heading span {
