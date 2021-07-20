@@ -123,23 +123,26 @@
           </div>
         </header>
         <div class="board">
-          <div class="board__column">
-            <h2 class="heading board__heading heading--sticky">
-              <span>Doing ({{len $doing}})</span>
-            </h2>
-            {{range $doing}}
-              {{template "card" .}}
-            {{end}}
-          </div>
-          <div class="board__column">
-            <h2 class="board__heading heading heading--sticky">
-              <span>Reviewing ({{len $reviewing}}  / {{.Config.ReviewalLimit}})</span>
-            </h2>
-            {{range $reviewing}}
-              {{template "card" .}}
-            {{end}}
-          </div>
-          
+          {{ if gt (len $doing) 0 }}
+            <div class="board__column">
+              <h2 class="heading board__heading heading--sticky">
+                <span>Doing ({{len $doing}})</span>
+              </h2>
+              {{range $doing}}
+                {{template "card" .}}
+              {{end}}
+            </div>
+          {{end}}
+          {{ if gt (len $reviewing) 0 }}
+            <div class="board__column">
+              <h2 class="board__heading heading heading--sticky">
+                <span>Reviewing ({{len $reviewing}}  / {{.Config.ReviewalLimit}})</span>
+              </h2>
+              {{range $reviewing}}
+                {{template "card" .}}
+              {{end}}
+            </div>
+          {{end}}
           {{ if gt (len $approving) 0 }}
             <div class="board__column">
               <h2 class="board__heading heading heading--sticky">
@@ -160,22 +163,24 @@
               {{end}}
             </div>
           {{end}}
-          <div class="board__column">
-            <h2 class="board__heading heading heading--sticky">
-              <span>Done ({{ len $done }})</span></h2>
-            {{range $done}}
+          {{ if gt (len $done) 0 }}
+            <div class="board__column">
+              <h2 class="board__heading heading heading--sticky">
+                <span>Done ({{ len $done }})</span></h2>
+              {{range $done}}
+                {{template "card" .}}
+              {{end}}
+            </div>
+          {{end}}
+        </div>
+        {{ if gt (len $next) 0 }}
+          <h2 class="board__heading heading heading--sticky"><span>Next</span></h2>
+          <div class="board board--next">
+            {{range $next}}
               {{template "card" .}}
             {{end}}
           </div>
-          
-        </div>
-
-        <h2 class="board__heading heading heading--sticky"><span>Next</span></h2>
-        <div class="board board--next">
-          {{range $next}}
-            {{template "card" .}}
-          {{end}}
-        </div>
+        {{end}}
       </main>
     </div>
   </body>
