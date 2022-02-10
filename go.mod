@@ -11,8 +11,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
 	github.com/carlescere/scheduler v0.0.0-20170109141437-ee74d2f83d82
-	github.com/golang/protobuf v1.3.1 // indirect
-	github.com/google/go-querystring v0.0.0-20170111101155-53e6ce116135 // indirect
+	github.com/google/go-github/v42 v42.0.0
 	github.com/gorilla/context v0.0.0-20160226214623-1ea25387ff6f // indirect
 	github.com/gorilla/mux v1.6.0
 	github.com/kr/pretty v0.1.0 // indirect
@@ -23,9 +22,7 @@ require (
 	github.com/sergi/go-diff v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.4.2 // indirect
 	github.com/stretchr/testify v1.3.0 // indirect
-	golang.org/x/crypto v0.0.0-20171113213409-9f005a07e0d3 // indirect
-	golang.org/x/net v0.0.0-20171115151908-9dfe39835686 // indirect
-	golang.org/x/text v0.0.0-20171102192421-88f656faf3f3 // indirect
+	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/alecthomas/kingpin.v2 v2.2.5
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect

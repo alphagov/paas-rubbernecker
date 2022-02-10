@@ -45,6 +45,7 @@
     <div class="width-container">
       <main class="govuk-main-wrapper " id="main-content" role="main">
         {{$next := .Cards.Filter "next"}}
+        {{$prs := .PullRequests}}
         {{$doing := .Cards.Filter "doing"}}
         {{$reviewing := .Cards.Filter "reviewing"}}
         {{$approving := .Cards.Filter "approving"}}
@@ -173,6 +174,14 @@
             </div>
           {{end}}
         </div>
+        {{ if gt (len $prs) 0 }}
+          <h2 class="board__heading heading heading--sticky"><span>Pull Requests</span></h2>
+          <div class="board board--pull-requests">
+            {{range $prs}}
+              {{template "pullRequest" .}}
+            {{end}}
+          </div>
+        {{end}}
         {{ if gt (len $next) 0 }}
           <h2 class="board__heading heading heading--sticky"><span>Next</span></h2>
           <div class="board board--next">

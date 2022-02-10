@@ -7,24 +7,26 @@ import (
 	"html/template"
 	"net/http"
 	"path"
+	"sort"
 	"strings"
 )
 
 // Response will be a standard outcome returned when hitting rubbernecker app.
 type Response struct {
-	Card                 *Card       `json:"card,omitempty"`
-	Cards                Cards       `json:"cards,omitempty"`
-	SampleCard           *Card       `json:"sample_card,omitempty"`
-	Config               *Config     `json:"config,omitempty"`
-	Error                string      `json:"error,omitempty"`
-	Message              string      `json:"message,omitempty"`
-	SupportRota          SupportRota `json:"support,omitempty"`
-	TeamMembers          Members     `json:"team_members,omitempty"`
-	FreeTeamMembers      Members     `json:"free_team_members,omitempty"`
-	Filters              []Filter    `json:"filers,omitempty"`
-	Squads               []Squad     `json:"squad,omitempty"`
-	AppliedFilterQueries []string    `json:"applied_filters,omitempty"`
-	TextFilters          string      `json:"text_filters,omitempty"`
+	Card                 *Card        `json:"card,omitempty"`
+	Cards                Cards        `json:"cards,omitempty"`
+	SampleCard           *Card        `json:"sample_card,omitempty"`
+	Config               *Config      `json:"config,omitempty"`
+	Error                string       `json:"error,omitempty"`
+	Message              string       `json:"message,omitempty"`
+	SupportRota          SupportRota  `json:"support,omitempty"`
+	TeamMembers          Members      `json:"team_members,omitempty"`
+	FreeTeamMembers      Members      `json:"free_team_members,omitempty"`
+	Filters              []Filter     `json:"filers,omitempty"`
+	PullRequests         PullRequests `json:"pull_requests,omitempty"`
+	Squads               []Squad      `json:"squad,omitempty"`
+	AppliedFilterQueries []string     `json:"applied_filters,omitempty"`
+	TextFilters          string       `json:"text_filters,omitempty"`
 }
 
 // JSON function will execute the response to our HTTP writer.
@@ -103,6 +105,14 @@ func (r *Response) WithConfig(config *Config) *Response {
 // WithError will set an error for the current response.
 func (r *Response) WithError(err error) *Response {
 	r.Error = err.Error()
+	return r
+}
+
+func (r *Response) WithPullRequests(pullRequests PullRequests) *Response {
+	sort.Slice(pullRequests, func(i, j int) bool {
+		return pullRequests[i].OpenForDays > pullRequests[j].OpenForDays
+	})
+	r.PullRequests = pullRequests
 	return r
 }
 

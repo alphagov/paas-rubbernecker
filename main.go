@@ -10,6 +10,7 @@ import (
 	"time"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/alphagov/paas-rubbernecker/pkg/github"
 	"github.com/alphagov/paas-rubbernecker/pkg/pagerduty"
 	"github.com/alphagov/paas-rubbernecker/pkg/pivotal"
 	"github.com/alphagov/paas-rubbernecker/pkg/rubbernecker"
@@ -20,11 +21,13 @@ import (
 )
 
 var (
-	etag      time.Time
-	cards     rubbernecker.Cards
-	doneCards rubbernecker.Cards
-	members   rubbernecker.Members
-	support   = rubbernecker.SupportRota{
+	etag         time.Time
+	cards        rubbernecker.Cards
+	doneCards    rubbernecker.Cards
+	members      rubbernecker.Members
+	repositories rubbernecker.Repositories
+	pullRequests rubbernecker.PullRequests
+	support      = rubbernecker.SupportRota{
 		"in-hours":           &rubbernecker.Support{},
 		"in-hours-comms":     &rubbernecker.Support{},
 		"out-of-hours":       &rubbernecker.Support{},
@@ -39,6 +42,7 @@ var (
 	pivotalProjectID   = kingpin.Flag("pivotal-project", "Pivotal Tracker project ID rubbernecker will be using.").OverrideDefaultFromEnvar("PIVOTAL_TRACKER_PROJECT_ID").Int64()
 	pivotalAPIToken    = kingpin.Flag("pivotal-token", "Pivotal Tracker API token rubbernecker will use to communicate with Pivotal API.").OverrideDefaultFromEnvar("PIVOTAL_TRACKER_API_TOKEN").String()
 	pagerdutyAuthToken = kingpin.Flag("pagerduty-token", "PagerDuty auth token rubbernecker will use to communicate with PagerDuty API.").OverrideDefaultFromEnvar("PAGERDUTY_AUTHTOKEN").String()
+	githubToken        = kingpin.Flag("github-token", "GitHub token rubbernecker will use to communicate with GitHub API.").OverrideDefaultFromEnvar("GITHUB_TOKEN").String()
 )
 
 func setupLogger() {
@@ -150,6 +154,56 @@ func fetchSupport(pd *pagerduty.Schedule) error {
 	return nil
 }
 
+func fetchRepositories(gh *github.Schedule) error {
+	if gh.Client == nil {
+		return fmt.Errorf("GITHUB_TOKEN is not set, repositories will not be fetched")
+	}
+
+	err := gh.FetchRepositories()
+	if err != nil {
+		return err
+	}
+
+	repos, err := gh.FlattenRepositories()
+	if err != nil {
+		return err
+	}
+
+	if !reflect.DeepEqual(repositories, repos) {
+		repositories = repos
+		etag = time.Now()
+	}
+
+	log.Debug("Repositories have been fetched.")
+
+	return nil
+}
+
+func fetchPullRequests(gh *github.Schedule) error {
+	if gh.Client == nil {
+		return fmt.Errorf("GITHUB_TOKEN is not set, pull requests will not be fetched")
+	}
+
+	err := gh.FetchPullRequests()
+	if err != nil {
+		return err
+	}
+
+	prs, err := gh.FlattenPullRequests()
+	if err != nil {
+		return err
+	}
+
+	if !reflect.DeepEqual(pullRequests, prs) {
+		pullRequests = prs
+		etag = time.Now()
+	}
+
+	log.Debug("Pull Requests have been fetched.")
+
+	return nil
+}
+
 func fetchUsers(pt *pivotal.Tracker) error {
 	err := pt.FetchMembers()
 	if err != nil {
@@ -216,6 +270,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		}).
 		WithCards(combineCards(filteredCards, filteredDoneCards), false).
 		WithSampleCard(&rubbernecker.Card{}).
+		WithPullRequests(pullRequests).
 		WithTeamMembers(members).
 		WithFreeTeamMembers().
 		WithFilters(rubbernecker.DefaultFilterSet()).
@@ -232,6 +287,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		err = resp.Template(http.StatusOK, w,
 			"./build/views/sticker.html",
 			"./build/views/card.html",
+			"./build/views/pull_request.html",
 			"./build/views/index.html",
 		)
 	}
@@ -257,6 +313,13 @@ func main() {
 		log.Fatal(err)
 	}
 
+	var gh = &github.Schedule{
+		Client: nil,
+	}
+	if githubToken != nil && *githubToken != "" {
+		gh = github.New(*githubToken)
+	}
+
 	stickers, err := ioutil.ReadFile("stickers.yml")
 	if err != nil {
 		log.Fatal(err)
@@ -275,6 +338,11 @@ func main() {
 		log.Error(err)
 	}
 
+	// We should pull the repositories before we attempt to check out what pull requests are open for each of them
+	if err := fetchRepositories(gh); err != nil {
+		log.Error(err)
+	}
+
 	scheduler.Every(1).Hours().NotImmediately().Run(func() {
 		if err := fetchUsers(pt); err != nil {
 			log.Error(err)
@@ -289,6 +357,18 @@ func main() {
 
 	scheduler.Every(20).Seconds().Run(func() {
 		if err := fetchStories(pt); err != nil {
+			log.Error(err)
+		}
+	})
+
+	scheduler.Every(4).Hours().NotImmediately().Run(func() {
+		if err := fetchRepositories(gh); err != nil {
+			log.Error(err)
+		}
+	})
+
+	scheduler.Every(5).Minutes().Run(func() {
+		if err := fetchPullRequests(gh); err != nil {
 			log.Error(err)
 		}
 	})

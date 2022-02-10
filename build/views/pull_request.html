@@ -1,0 +1,26 @@
+{{define "pullRequest"}}
+  <div id="{{.Repository.Organisation}}/{{.Repository.Name}}#{{.Number}}" class="card pull-request">
+    <h3 class="card__heading heading">
+      #{{.Number}}
+      <small>{{.Repository.Organisation}}/{{.Repository.Name}}</small><br />
+      <a href="{{.URL}}" target="_blank">
+        {{if .Draft}}[DRAFT]{{end}}
+        {{.Title}}
+      </a>
+    </h3>
+
+    <ul>
+      <li>{{.Author}}</li>
+    </ul>
+
+    <div class="card__details">
+        <div class="labels">
+          {{if gt .OpenForDays 1 }}
+            <p class="labels__duration">{{.OpenForDays}} days</p>
+          {{- else -}}
+            <p><mark>NEW</mark></p>
+          {{- end -}}
+        </div>
+    </div>
+  </div>
+{{end}}
