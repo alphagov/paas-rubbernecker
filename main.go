@@ -177,7 +177,6 @@ func formatSupportNames(s rubbernecker.SupportRota) rubbernecker.SupportRota {
 		"in-hours-comms":     s.Get("PaaS team rota - comms lead (in Hours)"),
 		"out-of-hours":       s.Get("PaaS team rota - out of hours"),
 		"out-of-hours-comms": s.Get("PaaS team rota - comms lead (OOH)"),
-		"autom8":             s.Get("Techops Autom8"),
 		"escalations":        s.Get("GaaP SCS Escalation"),
 	}
 }
