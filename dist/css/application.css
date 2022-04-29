@@ -58,8 +58,8 @@ h1 span {
 
 .board {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 1em;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-gap: 10px;
   margin-bottom: 3em;
 }
 
