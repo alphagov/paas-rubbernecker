@@ -30,7 +30,6 @@ var (
 		"out-of-hours":       &rubbernecker.Support{},
 		"out-of-hours-comms": &rubbernecker.Support{},
 		"escalations":        &rubbernecker.Support{},
-		"autom8":             &rubbernecker.Support{},
 	}
 
 	verbose = kingpin.Flag("verbose", "Will enable the DEBUG logging level.").Default("false").Short('v').OverrideDefaultFromEnvar("DEBUG").Bool()

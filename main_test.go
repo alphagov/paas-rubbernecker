@@ -142,10 +142,6 @@ var _ = Describe("Main", func() {
 					Type:   "PaaS team rota - in hours",
 					Member: "Y",
 				},
-				"autom8": {
-					Type:   "Techops Autom8",
-					Member: "-",
-				},
 				"escalations": {
 					Type:   "GaaP SCS Escalation",
 					Member: "Z",
@@ -210,10 +206,6 @@ var _ = Describe("Main", func() {
 					Type:   "PaaS team rota - in hours",
 					Member: "Y",
 				},
-				"autom8": {
-					Type:   "Techops Autom8",
-					Member: "-",
-				},
 				"escalations": {
 					Type:   "GaaP SCS Escalation",
 					Member: "Z",
@@ -246,10 +238,6 @@ var _ = Describe("Main", func() {
 				},
 				"in-hours": {
 					Type:   "PaaS team rota - in hours",
-					Member: "-",
-				},
-				"autom8": {
-					Type:   "Techops Autom8",
 					Member: "-",
 				},
 				"escalations": {
