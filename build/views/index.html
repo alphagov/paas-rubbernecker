@@ -8,28 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="css/application.css">
   <meta http-equiv="refresh" content="300">
-  <script type="text/javascript">
-		setInterval(() => {
-			console.info('About to update with new Rubbernecker data')
-			fetch('')
-			.then(response => {
-				if (response.status != 200) {
-					console.error(
-						'Request to Rubbernecker server did not response with 200',
-						response
-					)
-				}
-				return response.text()
-			})
-			.then(responseContents => {
-				let elem = document.createElement('html')
-				elem.innerHTML = responseContents
-				let body = elem.querySelector('body')
-				document.querySelector('body').innerHTML = body.innerHTML
-				console.info('Updated document body with new Rubbernecker data')
-			})
-		}, 15 * 1000)
-  </script>
+ 
 </head>
 
   <body>
@@ -119,6 +98,16 @@
           </div>
         </header>
         <div class="board">
+          {{ if gt (len $next) 0 }}
+            <div class="board__column">
+              <h2 class="board__heading heading heading--sticky">
+                <span>Next</span>
+              </h2>
+              {{range $next}}
+                {{template "card" .}}
+              {{end}}
+            </div>
+          {{end}}
           {{ if gt (len $doing) 0 }}
             <div class="board__column">
               <h2 class="heading board__heading heading--sticky">
@@ -169,14 +158,6 @@
             </div>
           {{end}}
         </div>
-        {{ if gt (len $next) 0 }}
-          <h2 class="board__heading heading heading--sticky"><span>Next</span></h2>
-          <div class="board board--next">
-            {{range $next}}
-              {{template "card" .}}
-            {{end}}
-          </div>
-        {{end}}
       </main>
     </div>
   </body>
