@@ -140,6 +140,9 @@ $RECYCLE.BIN/
 # VSCode
 .vscode/
 
+# GoLand
+.idea
+
 # Binaries
 bin/
 
