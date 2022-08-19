@@ -26,6 +26,7 @@ var (
 	members   rubbernecker.Members
 	support   = rubbernecker.SupportRota{
 		"in-hours":           &rubbernecker.Support{},
+		"in-hours-secondary": &rubbernecker.Support{},
 		"in-hours-comms":     &rubbernecker.Support{},
 		"out-of-hours":       &rubbernecker.Support{},
 		"out-of-hours-comms": &rubbernecker.Support{},
@@ -173,6 +174,7 @@ func fetchUsers(pt *pivotal.Tracker) error {
 func formatSupportNames(s rubbernecker.SupportRota) rubbernecker.SupportRota {
 	return rubbernecker.SupportRota{
 		"in-hours":           s.Get("PaaS team rota - in hours"),
+		"in-hours-secondary": s.Get("PaaS team rota - secondary in hours"),
 		"in-hours-comms":     s.Get("PaaS team rota - comms lead (in Hours)"),
 		"out-of-hours":       s.Get("PaaS team rota - out of hours"),
 		"out-of-hours-comms": s.Get("PaaS team rota - comms lead (OOH)"),

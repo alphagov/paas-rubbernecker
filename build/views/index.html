@@ -56,8 +56,12 @@
           <div class="rotas">
             <div class="rotas__content">
               <p>
-                <strong>In hours</strong>:
+                <strong>In hours primary</strong>:
                 {{(index .SupportRota "in-hours").Member}}
+              </p>
+              <p>
+                <strong>In hours secondary</strong>:
+                {{(index .SupportRota "in-hours-secondary").Member}}
               </p>
               <p>
                 <strong>Comms</strong>:
