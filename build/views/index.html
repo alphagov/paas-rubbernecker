@@ -96,17 +96,6 @@
               Clear filters
             </a>
 
-            {{- range .Squads}}
-              {{ $filterClass := "filter" }}
-              {{- if .IsApplied $.AppliedFilterQueries }}
-                {{ $filterClass = "filter--active" }}
-              {{- end }}
-
-              <a class="filter {{$filterClass}}" href="?{{safeURL .QueryText}}">
-                {{.DisplayText}}
-              </a>
-            {{- end }}
-
             {{- range .Filters}}
               {{ $filterClass := "filter" }}
               {{- if .IsApplied $.AppliedFilterQueries }}
