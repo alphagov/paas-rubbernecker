@@ -94,4 +94,26 @@ var _ = Describe("Filter", func() {
 			Expect(actual).To(BeTrue())
 		})
 	})
+
+	Describe("core-work filter", func() {
+		It("is applied when the queries contain 'sticker:core-work'", func() {
+			queries := []string{"bar", "sticker:core-work", "foo"}
+
+			filter := rubbernecker.CoreWorkFilter{}
+			actual := filter.IsApplied(queries)
+
+			Expect(actual).To(BeTrue())
+		})
+	})
+
+	Describe("decommission filter", func() {
+		It("is applied when the queries contain 'sticker:decommission'", func() {
+			queries := []string{"bar", "sticker:decommission", "foo"}
+
+			filter := rubbernecker.DecommissionFilter{}
+			actual := filter.IsApplied(queries)
+
+			Expect(actual).To(BeTrue())
+		})
+	})
 })

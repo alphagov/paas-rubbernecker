@@ -23,10 +23,12 @@
             {{- end -}}
             <ul>
               {{range .Stickers}}
-                {{if .Label}}
-                  <li class="{{.Class}}">
-                    {{.Title}}
-                  </li>
+                {{if .Label }}
+                  {{if ne .Name "core-work"}}{{if ne .Name "decommission"}}
+                    <li class="{{.Class}}">
+                      {{.Title}}
+                    </li>
+                  {{end}}{{end}}
                 {{end}}
               {{end}}
             </ul>

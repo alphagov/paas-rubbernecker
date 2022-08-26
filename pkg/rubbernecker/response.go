@@ -22,7 +22,6 @@ type Response struct {
 	TeamMembers          Members     `json:"team_members,omitempty"`
 	FreeTeamMembers      Members     `json:"free_team_members,omitempty"`
 	Filters              []Filter    `json:"filers,omitempty"`
-	Squads               []Squad     `json:"squad,omitempty"`
 	AppliedFilterQueries []string    `json:"applied_filters,omitempty"`
 	TextFilters          string      `json:"text_filters,omitempty"`
 }
@@ -145,12 +144,6 @@ func (r *Response) WithFreeTeamMembers() *Response {
 // WithFilters will set the filters param for the current response
 func (r *Response) WithFilters(filters []Filter) *Response {
 	r.Filters = filters
-	return r
-}
-
-// WithSquads will set the teams param for the current response
-func (r *Response) WithSquads(squads []Squad) *Response {
-	r.Squads = squads
 	return r
 }
 

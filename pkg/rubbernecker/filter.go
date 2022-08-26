@@ -12,6 +12,8 @@ type Filter interface {
 
 func DefaultFilterSet() []Filter {
 	return []Filter{
+		&DecommissionFilter{},
+		&CoreWorkFilter{},
 		&BlockedFilter{},
 		&ScheduledFilter{},
 		&CommentsToResolveFilter{},
@@ -133,6 +135,34 @@ func (*TechFilter) DisplayText() string {
 
 func (*TechFilter) IsApplied(queries []string) bool {
 	return isApplied(queries, "not-sticker:non-tech")
+}
+
+type DecommissionFilter struct{}
+
+func (*DecommissionFilter) QueryText() string {
+	return "filter=sticker:decommission"
+}
+
+func (*DecommissionFilter) DisplayText() string {
+	return "Decommission"
+}
+
+func (*DecommissionFilter) IsApplied(queries []string) bool {
+	return isApplied(queries, "sticker:decommission")
+}
+
+type CoreWorkFilter struct{}
+
+func (*CoreWorkFilter) QueryText() string {
+	return "filter=sticker:core-work"
+}
+
+func (*CoreWorkFilter) DisplayText() string {
+	return "Core work"
+}
+
+func (*CoreWorkFilter) IsApplied(queries []string) bool {
+	return isApplied(queries, "sticker:core-work")
 }
 
 func isApplied(queries []string, term string) bool {

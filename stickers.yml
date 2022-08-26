@@ -34,13 +34,6 @@
   image: '/img/pear_please.svg'
   title: 'Please pair on this'
 
-- name: squad
-  label: true
-  regex: '^squad:?\s*([a-zA-Z0-9\s]+)'
-  title: '$1'
-  class: 'squad squad-$1'
-  value: '$1'
-
 - name: lead
   label: true
   regex: '^lead:?\s*([a-zA-Z0-9\s]+)'
@@ -52,6 +45,18 @@
   regex: 'non-tech'
   title: 'non-tech'
   class: 'non-tech'
+
+- name: decommission
+  label: true
+  regex: 'decommission'
+  title: 'decommission'
+  class: 'decommission'
+
+- name: core-work
+  label: true
+  regex: 'core-work'
+  title: 'core-work'
+  class: 'core-work'
 
 - name: documentation
   regex: '^.*(docs)|(documentation).*$'
