@@ -53,6 +53,18 @@
   title: 'non-tech'
   class: 'non-tech'
 
+- name: decommission
+  label: true
+  regex: 'decommission'
+  title: 'decommission'
+  class: 'decommission'
+
+- name: core-work
+  label: true
+  regex: 'core-work'
+  title: 'core-work'
+  class: 'core-work'
+
 - name: documentation
   regex: '^.*(docs)|(documentation).*$'
   image: /img/documentation.svg
