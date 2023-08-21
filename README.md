@@ -3,17 +3,6 @@
 An application that converts various tools the GOV.UK PaaS team is using into a
 friendly kanban wall used for standup and quick reference of what's going on.
 
-## Dependencies
-
-There are various dependencies for Node as well as Golang that would need to be
-installed before compilation of the code.
-
-The make file has a target for them all:
-
-```sh
-make dependencies
-```
-
 ## Building
 
 The repo comes in with a make file which makes it easier to build the project
@@ -42,6 +31,8 @@ following:
 ```sh
 ./bin/rubbernecker
 ```
+
+You should be able to view the application at [http://localhost:8080](http://localhost:8080)
 
 ### Requirements
 

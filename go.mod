@@ -1,6 +1,6 @@
 module github.com/alphagov/paas-rubbernecker
 
-go 1.18
+go 1.20
 
 require (
 	github.com/PagerDuty/go-pagerduty v0.0.0-20170914160704-078a3284fb0e
