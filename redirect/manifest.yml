@@ -1,0 +1,9 @@
+---
+applications:
+  - name: paas-rubbernecker-redirect
+    buildpack: nginx_buildpack
+    memory: 32M
+    instances: 2
+
+    env:
+      REDIRECT_DOMAIN: rubbernecker.cloudapps.digital
