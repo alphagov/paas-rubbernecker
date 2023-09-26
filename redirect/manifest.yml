@@ -6,4 +6,4 @@ applications:
     instances: 2
 
     env:
-      REDIRECT_DOMAIN: rubbernecker.cloudapps.digital
+      REDIRECT_DOMAIN: rubbernecker.london.cloudapps.digital
