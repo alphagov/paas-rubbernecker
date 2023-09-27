@@ -4,6 +4,7 @@ applications:
     buildpack: nginx_buildpack
     memory: 32M
     instances: 2
-
+    routes:
+      - route: rubbernecker.cloudapps.digital
     env:
       REDIRECT_DOMAIN: rubbernecker.london.cloudapps.digital
